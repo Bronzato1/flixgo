@@ -1,0 +1,21 @@
+.DS_STORE
+Thumbs.db
+
+.idea
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Dependencies
+node_modules
+
+# Compiled files
+/scripts
+/src/environment.js
+/src/environment.ts
+/font-awesome
+/publish
+secret.ts
+.chrome

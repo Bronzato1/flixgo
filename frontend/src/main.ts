@@ -3,7 +3,7 @@ import environment from './environment';
 
 import 'nouislider/nouislider.css';
 
-// Bootstrap
+// Bootstrap.
 //import 'bootstrap/css/bootstrap.css';
 import 'bootstrap';
 

@@ -8,7 +8,7 @@ import * as Plyr from 'plyr';
 import * as PhotoSwipe from 'photoswipe';
 import * as PhotoSwipeUI_Default from 'photoswipe/dist/photoswipe-ui-default';
 
-export class Post {
+export class Post1 {
   attached() {
     this.initializePlayer();
     this.initializePhotoSwipeFromDOM();

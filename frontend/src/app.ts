@@ -8,7 +8,7 @@ export class App {
       { route: 'index', name: 'index', moduleId: './pages/home/index', title: 'Index' },
       { route: 'catalogGrid', name: 'catalogGrid', moduleId: './pages/catalog-grid/catalog', title: 'Catalog grid' },
       { route: 'catalogList', name: 'catalogList', moduleId: './pages/catalog-list/catalog', title: 'Catalog list' },
-      { route: 'post', name: 'post', moduleId: './pages/post/post', title: 'Post' },
+      { route: 'post1', name: 'post1', moduleId: './pages/post/post1', title: 'Post 1' },
       { route: 'post2', name: 'post2', moduleId: './pages/post/post2', title: 'Post 2' }
     ]);
     config.mapUnknownRoutes('./pages/not-found/not-found');

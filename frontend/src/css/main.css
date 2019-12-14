@@ -1500,6 +1500,27 @@ ul {
   -webkit-text-fill-color: transparent;
   color: #ff5860;
 }
+.card__stat {
+  font-size: 15px;
+  font-weight: normal;
+  color: rgba(255,255,255,0.7);
+  position: relative;
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 2px;
+}
+.card__stat i {
+  text-shadow: 0 0 6px rgba(255,88,96,0.5);
+  margin-right: 5px;
+}
+.card__stat i:before {
+  background-image: -webkit-linear-gradient(0deg, #ff55a5 0%, #ff5860 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #ff5860;
+}
 .card__list {
   display: none;
 }
@@ -1616,6 +1637,9 @@ ul {
 .card--details .card__rate {
   margin-top: 0;
 }
+.card--details .card__stat {
+  margin-top: 0;
+}
 @media (min-width: 576px) {
   .card--list .card__content {
     margin-top: 0;
@@ -1625,11 +1649,14 @@ ul {
   }
   .card--list .card__title {
     font-size: 20px;
-    line-height: 24px;
+    line-height: 25px;
     margin-bottom: 5px;
     margin-top: -4px;
   }
   .card--list .card__rate {
+    margin-top: 0;
+  }
+  .card--list .card__stat {
     margin-top: 0;
   }
   .card--details .card__content {
@@ -1709,10 +1736,10 @@ ul {
     margin: 2px 0 0 5px;
   }
   .card--big .card__title {
-    font-size: 22px;
+    font-size: 20px;
   }
   .card--list .card__title {
-    font-size: 22px;
+    font-size: 20px;
   }
   .card--list .card__content {
     height: 237px;

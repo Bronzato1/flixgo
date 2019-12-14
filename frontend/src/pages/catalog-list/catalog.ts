@@ -2,7 +2,9 @@ import * as noUiSlider from 'nouislider';
 import * as wNumb from 'wnumb';
 
 export class Catalog {
-  attached() { 
+  private activate() {
+  }
+  private attached() { 
     this.initializeFirstSlider();
     this.initializeSecondSlider();
     this.initializeThirdSlider();

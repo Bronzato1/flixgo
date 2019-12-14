@@ -9,7 +9,14 @@ export class App {
       { route: 'catalogGrid', name: 'catalogGrid', moduleId: './pages/catalog-grid/catalog', title: 'Catalog grid' },
       { route: 'catalogList', name: 'catalogList', moduleId: './pages/catalog-list/catalog', title: 'Catalog list' },
       { route: 'post1', name: 'post1', moduleId: './pages/post/post1', title: 'Post 1' },
-      { route: 'post2', name: 'post2', moduleId: './pages/post/post2', title: 'Post 2' }
+      { route: 'post2', name: 'post2', moduleId: './pages/post/post2', title: 'Post 2' },
+      { route: 'pricing', name: 'pricing', moduleId: './pages/pricing/pricing', title: 'Pricing' },
+      { route: 'faq', name: 'faq', moduleId: './pages/help/faq', title: 'Faq' },
+      { route: 'about', name: 'about', moduleId: './pages/about/about', title: 'About' },
+      { route: 'profile', name: 'profile', moduleId: './pages/profile/profile', title: 'Profile' },
+      {route: 'signin', name: 'signin', moduleId: './pages/signin/signin', title: 'Signin' },
+      {route: 'signup', name: 'signup', moduleId: './pages/signup/signup', title: 'Signup' },
+      { route: 'notFound', name: 'notFound', moduleId: './pages/not-found/not-found', title: 'Not found' }
     ]);
     config.mapUnknownRoutes('./pages/not-found/not-found');
   }

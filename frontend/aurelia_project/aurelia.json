@@ -103,6 +103,17 @@
               "./distribute/nouislider.css"
             ]
           },
+          { 
+            "name": "moment", 
+            "path": "../node_modules/moment", 
+            "main": "moment",
+            "resources": ["locale/fr.js"]
+          },
+          {
+            "name": "moment-duration-format",
+            "path": "../node_modules/moment-duration-format/lib",
+            "main": "moment-duration-format"
+          },
           "plyr",
           "owl.carousel",
           "wnumb",

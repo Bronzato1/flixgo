@@ -16,7 +16,7 @@
                   </a>
                 </div>
                 <div class="card__wrap">
-                    <span class="card__stat">149 k vues · il y a 3 mois</span>
+                    <span class="card__stat">${nFormatter(video.statistics.viewCount,1)} vues · ${video.publishedAt | humanize}</span>
                   </div>
               </div>
 
@@ -24,8 +24,7 @@
                 <div class="card__content">
                   <h3 class="card__title"><a href="#">${video.title}</a></h3>
                   <span class="card__category">
-                    <a href="#">Action</a>
-                    <a href="#">Triler</a>
+                    <a href="#">${video.channelTitle}</a>
                   </span>
 
                   <div class="card__wrap">

@@ -1,10 +1,18 @@
+import { Router, activationStrategy } from 'aurelia-router';
 import * as noUiSlider from 'nouislider';
 import * as wNumb from 'wnumb';
 
 export class Catalog {
-  private activate() {
+  private searchTerms: string = 'init';
+  private determineActivationStrategy() {
+    return activationStrategy.replace;
+}
+  private activate(params) {
+    if (params.searchTerms) {
+      this.searchTerms = params.searchTerms;
+    }
   }
-  private attached() { 
+  private attached() {
     this.initializeFirstSlider();
     this.initializeSecondSlider();
     this.initializeThirdSlider();
@@ -37,63 +45,63 @@ export class Catalog {
     return false;
   }
   private initializeSecondSlider() {
-		if ($('#filter__imbd').length) {
-			var secondSlider = document.getElementById('filter__imbd');
-			noUiSlider.create(secondSlider, {
-				range: {
-					'min': 0,
-					'max': 10
-				},
-				step: 0.1,
-				connect: true,
-				start: [2.5, 8.6],
-				format: wNumb({
-					decimals: 1,
-				})
-			});
+    if ($('#filter__imbd').length) {
+      var secondSlider = document.getElementById('filter__imbd');
+      noUiSlider.create(secondSlider, {
+        range: {
+          'min': 0,
+          'max': 10
+        },
+        step: 0.1,
+        connect: true,
+        start: [2.5, 8.6],
+        format: wNumb({
+          decimals: 1,
+        })
+      });
 
-			var secondValues = [
-				document.getElementById('filter__imbd-start'),
-				document.getElementById('filter__imbd-end')
-			];
+      var secondValues = [
+        document.getElementById('filter__imbd-start'),
+        document.getElementById('filter__imbd-end')
+      ];
 
-			(<any>secondSlider).noUiSlider.on('update', function( values, handle ) {
-				secondValues[handle].innerHTML = values[handle];
-			});
+      (<any>secondSlider).noUiSlider.on('update', function (values, handle) {
+        secondValues[handle].innerHTML = values[handle];
+      });
 
-			$('.filter__item-menu--range').on('click.bs.dropdown', function (e) {
-				e.stopPropagation();
-				e.preventDefault();
-			});
-		} else {
-			return false;
-		}
-		return false;
+      $('.filter__item-menu--range').on('click.bs.dropdown', function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+      });
+    } else {
+      return false;
+    }
+    return false;
   }
   private initializeThirdSlider() {
-		if ($('#slider__rating').length) {
-			var thirdSlider = document.getElementById('slider__rating');
-			noUiSlider.create(thirdSlider, {
-				range: {
-					'min': 0,
-					'max': 10
-				},
-				connect: [true, false],
-				step: 0.1,
-				start: 8.6,
-				format: wNumb({
-					decimals: 1,
-				})
-			});
+    if ($('#slider__rating').length) {
+      var thirdSlider = document.getElementById('slider__rating');
+      noUiSlider.create(thirdSlider, {
+        range: {
+          'min': 0,
+          'max': 10
+        },
+        connect: [true, false],
+        step: 0.1,
+        start: 8.6,
+        format: wNumb({
+          decimals: 1,
+        })
+      });
 
-			var thirdValue = document.getElementById('form__slider-value');
+      var thirdValue = document.getElementById('form__slider-value');
 
-			(<any>thirdSlider).noUiSlider.on('update', function( values, handle ) {
-				thirdValue.innerHTML = values[handle];
-			});
-		} else {
-			return false;
-		}
-		return false;
-	}  
+      (<any>thirdSlider).noUiSlider.on('update', function (values, handle) {
+        thirdValue.innerHTML = values[handle];
+      });
+    } else {
+      return false;
+    }
+    return false;
+  }
 }

@@ -1,6 +1,6 @@
 import { YoutubeGateway } from './../../gateways/youtube-gateway';
 import { Youtube } from '../../models/youtube-model';
-import { autoinject } from 'aurelia-framework';
+import { autoinject, bindable } from 'aurelia-framework';
 
 @autoinject()
 export class SectionCatalog {
@@ -8,9 +8,13 @@ export class SectionCatalog {
     this.youtubeGateway = youtubeGateway;
   }
   private youtubeGateway: YoutubeGateway;
+  private searchTerms: string;
   private videos: Youtube[];
   private created() {
-    this.youtubeGateway.searchVideos().then(items => {
+  }
+  private bind(bindingContext) {
+    this.searchTerms = bindingContext.searchTerms;
+    this.youtubeGateway.searchVideos(this.searchTerms).then(items => {
       this.videos = items || null;
     });
   }

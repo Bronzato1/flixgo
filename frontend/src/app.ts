@@ -7,7 +7,7 @@ export class App {
       { route: '', redirect: 'index' },
       { route: 'index', name: 'index', moduleId: './pages/home/index', title: 'Index' },
       { route: 'catalogGrid', name: 'catalogGrid', moduleId: './pages/catalog-grid/catalog', title: 'Catalog grid' },
-      { route: 'catalogList', name: 'catalogList', moduleId: './pages/catalog-list/catalog', title: 'Catalog list' },
+      { route: 'catalogList/:searchTerms', name: 'catalogList', moduleId: './pages/catalog-list/catalog', title: 'Catalog list' },
       { route: 'post1', name: 'post1', moduleId: './pages/post/post1', title: 'Post 1' },
       { route: 'post2', name: 'post2', moduleId: './pages/post/post2', title: 'Post 2' },
       { route: 'pricing', name: 'pricing', moduleId: './pages/pricing/pricing', title: 'Pricing' },

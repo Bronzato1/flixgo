@@ -10,9 +10,9 @@ export class YoutubeGateway {
     this.httpClient = new HttpClient();
   }
   private httpClient: HttpClient;
-  public searchVideos() {
+  public searchVideos(searchTerms: string) {
     return this.httpClient
-      .fetch(`${environment.youtubeUrl}search?part=snippet&type=video&maxResults=6&q=japan&key=${secret.youtubeKey}`)
+      .fetch(`${environment.youtubeUrl}search?part=snippet&type=video&maxResults=6&q=${searchTerms}&key=${secret.youtubeKey}`)
       .then(response => response.json())
       .then(data => {
         var result1: Youtube[] = data.items.map(Youtube.fromSearch);

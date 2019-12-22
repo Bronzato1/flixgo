@@ -10,21 +10,33 @@ export class YoutubeGateway {
     this.httpClient = new HttpClient();
   }
   private httpClient: HttpClient;
-  public searchVideos(searchTerms: string) {
+  public searchVideos(searchTerms: string, pageToken: string = null) {
+
+    var url = `${environment.youtubeUrl}search?part=snippet&type=video&maxResults=50&q=${searchTerms}&key=${secret.youtubeKey}`;
+
+    if (pageToken)
+      url += `&pageToken=${pageToken}`;
+
     return this.httpClient
-      .fetch(`${environment.youtubeUrl}search?part=snippet&type=video&maxResults=6&q=${searchTerms}&key=${secret.youtubeKey}`)
+      .fetch(url)
       .then(response => response.json())
       .then(data => {
         var result1: Youtube[] = data.items.map(Youtube.fromSearch);
         var ids = data.items.map(x => x.id.videoId);
+
         return this.videoStatistics(ids).then(items => {
           var result2: Youtube[] = items.map(Youtube.fromStatistics);
           var merged: Youtube[] = [];
+
           for (var i = 0; i < result1.length; i++) {
             var obj = { ...result1[i], ...result2[i] };
             merged.push(obj);
           }
-          return merged;
+
+          return {
+            nextPageToken: data.nextPageToken,
+            items: merged
+          };
         });
       })
       .catch(error => console.log(error));

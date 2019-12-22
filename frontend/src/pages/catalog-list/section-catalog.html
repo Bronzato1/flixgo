@@ -5,26 +5,26 @@
     <div class="container">
       <div class="row">
         <!-- card -->
-        <div class="col-6 col-sm-12 col-lg-6" repeat.for="video of videos">
+        <div class="col-6 col-sm-12 col-lg-6" repeat.for="item of items">
           <div class="card card--list">
             <div class="row">
               <div class="col-12 col-sm-5">
                 <div class="card__cover">
-                  <img src="${video.thumbnails.medium.url}" alt="">
+                  <img src="${item.thumbnails.medium.url}" alt="">
                   <a href="#" class="card__play">
                     <i class="icon ion-ios-play"></i>
                   </a>
                 </div>
                 <div class="card__wrap">
-                    <span class="card__stat">${nFormatter(video.statistics.viewCount,1)} vues · ${video.publishedAt | humanize}</span>
+                    <span class="card__stat">${nFormatter(item.statistics.viewCount,1)} vues · ${item.publishedAt | humanize}</span>
                   </div>
               </div>
 
               <div class="col-12 col-sm-7">
                 <div class="card__content">
-                  <h3 class="card__title"><a href="#">${video.title}</a></h3>
+                  <h3 class="card__title"><a href="#">${item.title}</a></h3>
                   <span class="card__category">
-                    <a href="#">${video.channelTitle}</a>
+                    <a href="#">${item.channelTitle}</a>
                   </span>
 
                   <div class="card__wrap">
@@ -37,7 +37,7 @@
                   </div>
 
                   <div class="card__description">
-                    <p>${video.description}</p>
+                    <p>${item.description}</p>
                   </div>
                 </div>
               </div>
@@ -48,16 +48,22 @@
 
         <!-- paginator -->
         <div class="col-12">
-          <ul class="paginator paginator--list">
+          <ul class="paginator paginator--list" show.bind="pager.pages.length>0">
+
             <li class="paginator__item paginator__item--prev">
-              <a href="#"><i class="icon ion-ios-arrow-back"></i></a>
+              <a href="#" click.trigger="setPage(pager.currentPage - 1)">
+                <i class="icon ion-ios-arrow-back"></i>
+              </a>
             </li>
-            <li class="paginator__item"><a href="#">1</a></li>
-            <li class="paginator__item paginator__item--active"><a href="#">2</a></li>
-            <li class="paginator__item"><a href="#">3</a></li>
-            <li class="paginator__item"><a href="#">4</a></li>
+            
+            <li class="paginator__item ${pager.currentPage === page ? 'paginator__item--active' : ''} " repeat.for="page of pager.pages">
+              <a href="#" click.trigger="setPage(page)">${page}</a>
+            </li>
+            
             <li class="paginator__item paginator__item--next">
-              <a href="#"><i class="icon ion-ios-arrow-forward"></i></a>
+              <a href="#" click.trigger="setPage(pager.currentPage + 1)">
+                <i class="icon ion-ios-arrow-forward"></i>
+              </a>
             </li>
           </ul>
         </div>

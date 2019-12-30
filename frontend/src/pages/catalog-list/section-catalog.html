@@ -1,99 +1,102 @@
 <template>
 
   <!-- catalog -->
-  <div class="catalog">
-    <div class="container">
-      <div class="row">
-        <!-- card -->
-        <div class="col-6 col-sm-12 col-lg-6" repeat.for="item of items">
-          <div class="card card--list">
-            <div class="row">
-              <div class="col-12 col-sm-5">
-                <div class="card__cover">
-                  <img src="https://i.ytimg.com/vi/${item.snippet.resourceId.videoId}/movieposter.jpg" alt="">
-                  <a click.trigger="showMovie(item.contentDetails.videoId)" href="#" class="card__play">
-                    <i class="icon ion-ios-play"></i>
-                  </a>
+  <section class="section--catalog">
+    <div class="catalog">
+      <div class="container">
+        <div class="row">
+          <!-- card -->
+          <div class="col-6 col-sm-12 col-lg-6" repeat.for="item of items">
+            <div class="card card--list">
+              <div class="row">
+                <div class="col-12 col-sm-5">
+                  <div class="card__cover">
+                    <img src="https://i.ytimg.com/vi/${item.snippet.resourceId.videoId}/movieposter.jpg" alt="">
+                    <a click.trigger="showMovie(item.contentDetails.videoId)" href="#" class="card__play">
+                      <i class="icon ion-ios-play"></i>
+                    </a>
+                  </div>
                 </div>
-              </div>
 
-              <div class="col-12 col-sm-7">
-                <div class="card__content">
-                  <h3 class="card__title"><a click.trigger="showMovie(item.contentDetails.videoId)" href="#">${item.snippet.title}</a></h3>
-                  <ul class="card__list">
-                    <li>HD</li>
-                    <li>16+</li>
-                  </ul>
-                  <span class="card__category">
-                    <a href="#">${item.snippet.channelTitle}</a>
-                  </span>
-                  
-                  <div class="card__wrap">
-                    <span class="card__rate">
-                      <i class="icon ion-md-thumbs-up"></i>${item.statistics.likeCount}
-                      &nbsp;&nbsp;
-                      <i class="icon ion-md-thumbs-down"></i>${item.statistics.dislikeCount}
+                <div class="col-12 col-sm-7">
+                  <div class="card__content">
+                    <h3 class="card__title"><a click.trigger="showMovie(item.contentDetails.videoId)"
+                        href="#">${item.snippet.title}</a></h3>
+                    <ul class="card__list">
+                      <li>HD</li>
+                      <li>16+</li>
+                    </ul>
+                    <span class="card__category">
+                      <a href="#">${item.snippet.channelTitle}</a>
                     </span>
-                    &nbsp;&nbsp;
-                    <span class="card__stat">· Sorti ${item.contentDetails.videoPublishedAt | humanize}</span>
-                  </div>
 
-                  <div class="card__description">
-                    <p>${item.snippet.description}</p>
-                  </div>
+                    <div class="card__wrap">
+                      <span class="card__rate">
+                        <i class="icon ion-md-thumbs-up"></i>${item.statistics.likeCount}
+                        &nbsp;&nbsp;
+                        <i class="icon ion-md-thumbs-down"></i>${item.statistics.dislikeCount}
+                      </span>
+                      &nbsp;&nbsp;
+                      <span class="card__stat">· Sorti ${item.contentDetails.videoPublishedAt | humanize}</span>
+                    </div>
 
-                  
+                    <div class="card__description">
+                      <p>${item.snippet.description}</p>
+                    </div>
+
+
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+          <!-- end card -->
+
+          <!-- paginator -->
+          <div class="col-12">
+
+            <p show.bind="pager.pages.length==0" class="section__text section__text--last-with-margin">
+              Aucun résultat trouvé.
+            </p>
+
+            <ul class="paginator paginator--list" show.bind="pager.pages.length>0">
+
+              <li class="paginator__item">
+                <a href="#" click.trigger="setPage(1)">
+                  <i class="icon ion-ios-skip-backward"></i>
+                </a>
+              </li>
+
+              <li class="paginator__item paginator__item--prev">
+                <a href="#" click.trigger="setPage(pager.currentPage - 1)" style="transform: rotate(58deg);">
+                  <i class="icon ion-ios-play"></i>
+                </a>
+              </li>
+
+              <li class="paginator__item ${pager.currentPage === page ? 'paginator__item--active' : ''} "
+                repeat.for="page of pager.pages">
+                <a href="#" click.trigger="setPage(page)">${page}</a>
+              </li>
+
+              <li class="paginator__item paginator__item--next">
+                <a href="#" click.trigger="setPage(pager.currentPage + 1)">
+                  <i class="icon ion-ios-play"></i>
+                </a>
+              </li>
+
+              <li class="paginator__item">
+                <a href="#" click.trigger="setPage(pager.totalPages)">
+                  <i class="icon ion-ios-skip-forward"></i>
+                </a>
+              </li> -->
+
+            </ul>
+          </div>
+          <!-- end paginator -->
         </div>
-        <!-- end card -->
-
-        <!-- paginator -->
-        <div class="col-12">
-
-          <p show.bind="pager.pages.length==0" class="section__text section__text--last-with-margin">
-            Aucun résultat trouvé.
-          </p>
-
-          <ul class="paginator paginator--list" show.bind="pager.pages.length>0">
-
-            <li class="paginator__item">
-              <a href="#" click.trigger="setPage(1)">
-                <i class="icon ion-ios-skip-backward"></i>
-              </a>
-            </li>
-
-            <li class="paginator__item paginator__item--prev">
-              <a href="#" click.trigger="setPage(pager.currentPage - 1)" style="transform: rotate(58deg);">
-                <i class="icon ion-ios-play"></i>
-              </a>
-            </li>
-
-            <li class="paginator__item ${pager.currentPage === page ? 'paginator__item--active' : ''} "
-              repeat.for="page of pager.pages">
-              <a href="#" click.trigger="setPage(page)">${page}</a>
-            </li>
-
-            <li class="paginator__item paginator__item--next">
-              <a href="#" click.trigger="setPage(pager.currentPage + 1)">
-                <i class="icon ion-ios-play"></i>
-              </a>
-            </li>
-
-            <li class="paginator__item">
-              <a href="#" click.trigger="setPage(pager.totalPages)">
-                <i class="icon ion-ios-skip-forward"></i>
-              </a>
-            </li> -->
-
-          </ul>
-        </div>
-        <!-- end paginator -->
       </div>
     </div>
-  </div>
+  </section>
   <!-- end catalog -->
 
 </template>

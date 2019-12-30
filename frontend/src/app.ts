@@ -48,8 +48,8 @@ export class App {
           $(this).css({
             'background': 'url(' + $(this).data('bg') + ')',
             'background-position': 'center center',
-            'background-repeat': 'no-repeat',
-            'background-size': 'cover'
+            //'background-repeat': 'no-repeat',
+            //'background-size': 'cover'
           });
         }
       });

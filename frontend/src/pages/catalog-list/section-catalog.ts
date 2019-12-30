@@ -24,24 +24,14 @@ export class SectionCatalog {
   private ea: EventAggregator;
   private subscription: Subscription;
   private youtubeGateway: YoutubeGateway;
-  private searchTerms: string;
   private items: Youtube[];
   private allItems: Youtube[];
-
-
-  private pageSize: number = 10;
-  private sortOrder: string;
-  private releaseYear: number;
-  
-  
+  private filters: IFilter = {};
   private pager: IPager;
   private nextPageToken: string = '';
-  private filterSearchTerms: string
   private created() {
   }
   private bind(bindingContext) {
-
-    this.searchTerms = bindingContext.searchTerms;
     this.allItems = JSON.parse(localStorage.getItem('allItems'));
     this.items = JSON.parse(sessionStorage.getItem('items'));
     this.pager = JSON.parse(sessionStorage.getItem('pager'));
@@ -64,19 +54,7 @@ export class SectionCatalog {
   }
   private filteringSubscription() {
     this.subscription = this.ea.subscribe('filtering', (response: IFilter) => {
-      //debugger;
-      if (response.searchTerms != null)
-        this.filterSearchTerms = response.searchTerms;
-
-      if (response.pageSize != null)
-        this.pageSize = response.pageSize;
-
-      if (response.releaseYear != null)
-        this.releaseYear = response.releaseYear;
-
-      if (response.sortOrder != null)
-        this.sortOrder = response.sortOrder;
-
+      this.filters = response;
       this.setPage(1);
     });
   }
@@ -120,15 +98,15 @@ export class SectionCatalog {
     return Array.from(new Array(end - start), (x, i) => i + start)
   }
   private setPage(page) {
-
+    //debugger;
     var self = this;
 
-    if (page < 1 || (this.pager && (page > this.pager.totalPages))) {
-      return;
-    }
+    // if (page < 1 || (this.pager && (page > this.pager.totalPages))) {
+    //   return;
+    // }
 
     // get pager object from service
-    this.pager = this.getPager(this.filteredItems.length, page, this.pageSize);
+    this.pager = this.getPager(this.filteredItems.length, page, this.filters.pageSizeValue);
 
     // get current page of items
     this.items = this.filteredItems.slice(this.pager.startIndex, this.pager.endIndex + 1);
@@ -186,18 +164,19 @@ export class SectionCatalog {
     sessionStorage.setItem('pager', JSON.stringify(this.pager));
     this.router.navigateToRoute('detail1', { videoId: videoId });
   }
+  @computedFrom('filters')
   private get filteredItems() {
+
     var filteredItems: Youtube[] = this.allItems.slice();
 
-    if (this.filterSearchTerms)
-      filteredItems = filteredItems.filter(x => x.snippet.title.toLocaleLowerCase().includes(this.filterSearchTerms.toLocaleLowerCase()));
+    if (this.filters.searchTerms)
+      filteredItems = filteredItems.filter(x => x.snippet.title.toLocaleLowerCase().includes(this.filters.searchTerms.toLocaleLowerCase()));
 
-    if (this.releaseYear) {
-      debugger;
-      filteredItems = filteredItems.filter(x => moment(x.contentDetails.videoPublishedAt).year() == this.releaseYear);
-    }
+    if (this.filters.releaseYearValue)
+      filteredItems = filteredItems.filter(x => moment(x.contentDetails.videoPublishedAt).year() == this.filters.releaseYearValue);
 
-    if (this.sortOrder == 'title') {
+
+    if (this.filters.sortOrderValue == 'title') {
       filteredItems = filteredItems.sort((n1, n2) => {
         if (n1.snippet.title > n2.snippet.title) {
           return 1;
@@ -209,7 +188,7 @@ export class SectionCatalog {
       });
     }
 
-    if (this.sortOrder == 'videoPublishedAt') {
+    if (this.filters.sortOrderValue == 'videoPublishedAt') {
       filteredItems = filteredItems.sort((n1, n2) => {
         if (n1.contentDetails.videoPublishedAt < n2.contentDetails.videoPublishedAt) {
           return 1;
@@ -221,7 +200,7 @@ export class SectionCatalog {
       });
     }
 
-    if (this.sortOrder == 'commentCount') {
+    if (this.filters.sortOrderValue == 'commentCount') {
       filteredItems = filteredItems.sort((n1, n2) => {
         if (+n1.statistics.commentCount < +n2.statistics.commentCount) {
           return 1;
@@ -233,7 +212,7 @@ export class SectionCatalog {
       });
     }
 
-    if (this.sortOrder == 'likeCount') {
+    if (this.filters.sortOrderValue == 'likeCount') {
       filteredItems = filteredItems.sort((n1, n2) => {
         if (+n1.statistics.likeCount < +n2.statistics.likeCount) {
           return 1;

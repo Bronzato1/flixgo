@@ -1,31 +1,43 @@
 import { IFilter } from './../../interfaces/filter-interface';
 import { Subscription, EventAggregator } from 'aurelia-event-aggregator';
-import { bindable, observable, autoinject } from 'aurelia-framework';
+import { BindingEngine, bindable, observable, autoinject } from 'aurelia-framework';
 import 'malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css';
 import 'malihu-custom-scrollbar-plugin';
 import 'jquery.mousewheel';
 
 @autoinject()
 export class SectionFilter {
-  constructor(eventAgregator: EventAggregator) {
+  constructor(bindingEngine: BindingEngine, eventAgregator: EventAggregator) {
+    this.be = bindingEngine;
     this.ea = eventAgregator;
   }
+  private be: BindingEngine;
   private ea: EventAggregator;
   private subscription: Subscription;
-  private filterSearchTerms: string;
   private observers: MutationObserver[] = [];
+
   @bindable
-  private pageSize = '10 éléments';
-  @bindable
-  private sortOrder = 'Pertinence';
-  @bindable
-  private releaseYear = 'N\'importe quand';
+  private filters: IFilter = { 
+    pageSizeText: '10 éléments', 
+    pageSizeValue: 10, 
+    sortOrderText: 'Pertinence', 
+    sortOrderValue: null,
+    releaseYearText: 'N\'importe quand',
+    releaseYearValue: null
+  };
+  private bind() {
+    this.be.propertyObserver(this.filters, 'searchTerms').subscribe(() => { this.searchTermsChanged(); });
+    this.be.propertyObserver(this.filters, 'pageSizeText').subscribe(() => { this.pageSizeTextChanged(); });
+    this.be.propertyObserver(this.filters, 'sortOrderText').subscribe(() => { this.sortOrderTextChanged(); });
+    this.be.propertyObserver(this.filters, 'releaseYearText').subscribe(() => { this.releaseYearTextChanged(); });
+  } 
   private attached() {
     this.filteringSubscription();
     this.prepareFilters();
-    this.observeDOM('pageSize');
-    this.observeDOM('sortOrder');
-    this.observeDOM('releaseYear');
+    this.observeDOM('pageSizeText');
+    this.observeDOM('sortOrderText');
+    this.observeDOM('releaseYearText');
+    this.resetFilters();
   }
   private detach() {
     // L'observation peut être arrêtée par la suite
@@ -51,24 +63,26 @@ export class SectionFilter {
     });
   }
   private resetFilters() {
-    //debugger;
-    this.pageSize = '10 éléments';
-    this.sortOrder = 'Pertinence';
-    this.releaseYear = 'N\'importe quand';
+    this.filters.searchTerms = null;
+
+    this.filters.pageSizeText = '10 éléments';
+    this.filters.pageSizeValue = 10;
+
+    this.filters.sortOrderText = 'Pertinence';
+    this.filters.sortOrderValue = null;
+
+    this.filters.releaseYearText = 'N\'importe quand';
+    this.filters.releaseYearValue = null;
   }
   private filteringSubscription() {
     this.subscription = this.ea.subscribe('filtering', (response: IFilter) => {
-      if (response.searchTerms != null)
-        this.filterSearchTerms = response.searchTerms;
+      this.filters = response;
     });
   }
   private resetSearchTerms() {
-    //debugger;
-    this.filterSearchTerms = '';
-    this.ea.publish('filtering', { searchTerms: this.filterSearchTerms });
+    this.filters.searchTerms = null;
   }
   private observeDOM(elm) {
-    //debugger;
     // Selectionne le noeud dont les mutations seront observées
     var targetNode = document.getElementById(elm);
     // Options de l'observateur (quelles sont les mutations à observer)
@@ -81,61 +95,68 @@ export class SectionFilter {
     var self = this;
     // Fonction callback à éxécuter quand une mutation est observée
     function callback() {
-      self[elm] = $('#' + elm).val();
+      if (self.filters[elm])
+        self.filters[elm] = $('#' + elm).val();
+      else
+        self[elm] = $('#' + elm).val();
     }
   }
   private get showResetFiltersButton() {
     return true;
   }
-  private pageSizeChanged() {
-    //debugger;
-    var nbr: number = +this.pageSize.substr(0, 2);
-    var data: IFilter = { pageSize: nbr };
-    if (this.ea) this.ea.publish('filtering', data);
+  private searchTermsChanged() {
+    this.filtersChanged();
   }
-  private sortOrderChanged() {
-    var data: IFilter = {};
-    switch (this.sortOrder) {
+  private pageSizeTextChanged() {
+    var nbr: number = +this.filters.pageSizeText.substr(0, 2);
+    this.filters.pageSizeValue = nbr;
+    this.filtersChanged();
+  }
+  private sortOrderTextChanged() {
+    switch (this.filters.sortOrderText) {
       case 'Pertinence':
-        data.sortOrder = '';
+        this.filters.sortOrderValue = '';
         break;
       case 'Titre du film':
-        data.sortOrder = 'title'
+        this.filters.sortOrderValue = 'title'
         break;
       case 'Mise en ligne':
-        data.sortOrder = 'videoPublishedAt';
+        this.filters.sortOrderValue = 'videoPublishedAt';
         break;
       case 'Nombre de com':
-        data.sortOrder = 'commentCount';
+        this.filters.sortOrderValue = 'commentCount';
         break;
       case 'Nombre de likes':
-        data.sortOrder = 'likeCount';
+        this.filters.sortOrderValue = 'likeCount';
         break;
     }
 
-    if (this.ea) this.ea.publish('filtering', data);
+    this.filtersChanged();
+    //if (this.ea) this.ea.publish('filtering', data);
   }
-  private releaseYearChanged() {
-    //debugger;
+  private releaseYearTextChanged() {
+
     var data: IFilter = {};
-    switch (this.releaseYear) {
-      case '':
-        data.releaseYear = null;
+    switch (this.filters.releaseYearText) {
+      case 'N\'importe quand':
+        this.filters.releaseYearValue = null;
         break;
       case 'Cette année':
-        data.releaseYear = new Date().getFullYear()
-                break;
+        this.filters.releaseYearValue = new Date().getFullYear()
+        break;
       case 'Il y a 1 an':
-        data.releaseYear = new Date().getFullYear() - 1;
+        this.filters.releaseYearValue = new Date().getFullYear() - 1;
         break;
       case 'Il y a 2 ans':
-        data.releaseYear = new Date().getFullYear() - 2;
+        this.filters.releaseYearValue = new Date().getFullYear() - 2;
         break;
       case 'Il y a 3 ans':
-        data.releaseYear = new Date().getFullYear() - 3;
+        this.filters.releaseYearValue = new Date().getFullYear() - 3;
         break;
     }
-
-    if (this.ea) this.ea.publish('filtering', data);
+    this.filtersChanged();
+  }
+  private filtersChanged() {
+    if (this.ea) this.ea.publish('filtering', this.filters);
   }
 }

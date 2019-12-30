@@ -13,7 +13,7 @@
 
                 <div class="filter__item-btn dropdown-toggle" role="navigation" id="filter-date" data-toggle="dropdown"
                   aria-haspopup="true" aria-expanded="false">
-                  <input type="button" id="releaseYear" value.bind="releaseYear">
+                  <input type="button" id="releaseYearText" value.bind="filters.releaseYearText">
                   <span></span>
                 </div>
 
@@ -33,7 +33,7 @@
 
                 <div class="filter__item-btn dropdown-toggle" role="navigation" id="filter-page-size"
                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <input type="button" id="pageSize" value.bind="pageSize" >
+                  <input type="button" id="pageSizeText" value.bind="filters.pageSizeText" >
                   <span></span>
                 </div>
 
@@ -74,7 +74,7 @@
 
                 <div class="filter__item-btn dropdown-toggle" role="navigation" id="filter-sort" data-toggle="dropdown"
                   aria-haspopup="true" aria-expanded="false">
-                  <input type="button" id="sortOrder" value.bind="sortOrder">
+                  <input type="button" id="sortOrderText" value.bind="filters.sortOrderText">
                   <span></span>
                 </div>
 
@@ -89,11 +89,11 @@
               <!-- end filter item -->
 
               <!-- filter item -->
-              <div if.bind="filterSearchTerms" class="filter__item" id="filter__terms">
+              <div if.bind="filters.searchTerms" class="filter__item" id="filter__terms">
                 <span class="filter__item-label">CHERCHER:</span>
 
                 <div class="filter__item-btn" id="filter-search-terms" aria-haspopup="true" aria-expanded="true">
-                  <input type="button" value.bind="filterSearchTerms">
+                  <input type="button" value.bind="filters.searchTerms">
                   <span click.trigger="resetSearchTerms()"></span>
                 </div>
 

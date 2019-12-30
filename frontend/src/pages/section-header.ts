@@ -11,7 +11,7 @@ export class SectionHeader {
   }
   private ea: EventAggregator;
   private subscription: Subscription;
-  private filterSearchTerms: string;
+  private filters: IFilter;
   private router: Router;
   private attached() {
 
@@ -43,11 +43,10 @@ export class SectionHeader {
   }
   private filteringSubscription() {
     this.subscription = this.ea.subscribe('filtering', (response: IFilter) => {
-      this.filterSearchTerms = response.searchTerms;
+      this.filters = response;
     });
   }
   private submitSearch() {
-    var data: IFilter = { searchTerms: this.filterSearchTerms };
-    this.ea.publish('filtering', data);
+    this.ea.publish('filtering', this.filters);
   }
 }

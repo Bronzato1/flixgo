@@ -1,8 +1,15 @@
 export interface IFilter {
+  
   searchTerms?: string;
-  pageSize?: number;
-  sortOrder?: string;
-  releaseYear?: number;
+  
+  pageSizeText?: string;
+  pageSizeValue?: number;
+
+  sortOrderText?: string;
+  sortOrderValue?: string;
+
+  releaseYearText?: string;
+  releaseYearValue?: number;
 }
 
 export interface IPager {

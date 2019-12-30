@@ -1,16 +1,13 @@
+import { bindable } from 'aurelia-framework';
 import { Router, activationStrategy } from 'aurelia-router';
 import * as noUiSlider from 'nouislider';
 import * as wNumb from 'wnumb';
 
 export class Catalog {
-  private searchTerms: string = 'init';
   private determineActivationStrategy() {
     return activationStrategy.replace;
-}
-  private activate(params) {
-    if (params.searchTerms) {
-      this.searchTerms = params.searchTerms;
-    }
+  }
+  private activate() {
   }
   private attached() {
     this.initializeFirstSlider();
@@ -45,24 +42,24 @@ export class Catalog {
     return false;
   }
   private initializeSecondSlider() {
-    if ($('#filter__imbd').length) {
-      var secondSlider = document.getElementById('filter__imbd');
+    if ($('#filter__views').length) {
+      var secondSlider = document.getElementById('filter__views');
       noUiSlider.create(secondSlider, {
         range: {
           'min': 0,
-          'max': 10
+          'max': 900
         },
-        step: 0.1,
+        step: 1,
         connect: true,
-        start: [2.5, 8.6],
+        start: [0, 900],
         format: wNumb({
-          decimals: 1,
+          decimals: 0,
         })
       });
 
       var secondValues = [
-        document.getElementById('filter__imbd-start'),
-        document.getElementById('filter__imbd-end')
+        document.getElementById('filter__views-start'),
+        document.getElementById('filter__views-end')
       ];
 
       (<any>secondSlider).noUiSlider.on('update', function (values, handle) {

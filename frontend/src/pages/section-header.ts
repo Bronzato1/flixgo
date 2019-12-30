@@ -1,14 +1,21 @@
-import { autoinject } from 'aurelia-framework';
+import { autoinject, bindable } from 'aurelia-framework';
+import { Subscription, EventAggregator } from 'aurelia-event-aggregator';
 import { Router } from 'aurelia-router';
+import { IFilter } from '../interfaces/filter-interface';
 
 @autoinject()
 export class SectionHeader {
-  constructor(router: Router) {
+  constructor(router: Router, eventAgregator: EventAggregator) {
     this.router = router;
+    this.ea = eventAgregator;
   }
-  private searchInput: string;
+  private ea: EventAggregator;
+  private subscription: Subscription;
+  private filterSearchTerms: string;
   private router: Router;
-  attached() {
+  private attached() {
+
+    this.filteringSubscription();
 
     $(document).ready(function () {
       $('.header__btn').on('click', function () {
@@ -34,7 +41,13 @@ export class SectionHeader {
       }
     });
   }
+  private filteringSubscription() {
+    this.subscription = this.ea.subscribe('filtering', (response: IFilter) => {
+      this.filterSearchTerms = response.searchTerms;
+    });
+  }
   private submitSearch() {
-    this.router.navigate('#/catalogList/' + this.searchInput);
+    var data: IFilter = { searchTerms: this.filterSearchTerms };
+    this.ea.publish('filtering', data);
   }
 }

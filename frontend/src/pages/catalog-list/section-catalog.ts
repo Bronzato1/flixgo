@@ -1,30 +1,101 @@
 import { YoutubeGateway } from './../../gateways/youtube-gateway';
 import { Youtube } from '../../models/youtube-model';
-import { autoinject, bindable } from 'aurelia-framework';
-import { debug } from 'util';
+import { IFilter, IPager } from '../../interfaces/filter-interface';
+import { autoinject, bindable, computedFrom } from 'aurelia-framework';
+import { EventAggregator, Subscription } from 'aurelia-event-aggregator';
+import { Router } from 'aurelia-router';
+import moment = require('moment');
+
+const PLAYLIST_BOX_OFFICE = 'PLHPTxTxtC0iZaTf4DEe-eQ2_sTWuyVFs_';
+const PLAYLIST_MOST_POPULAR = 'PLHPTxTxtC0iY65VCtQssLFRTQwV1ScueG';
+const PLAYLIST_NEW_TO_RENT = 'PLHPTxTxtC0iY91P_GT7TzcLY_bF-2VOuy';
+const PLAYLIST_TOP_RATED = 'PLHPTxTxtC0iY7Q9hbREwkLOxkFpaKnhc6';
+const PLAYLIST_NEW_RELEASES = 'PLHPTxTxtC0iYAzVsEjJG3_qXPQ12YcTI1';
+const PLAYLIST_TOPSELLING = 'PLHPTxTxtC0iZUGnexGOfXIIN_tCQrOU67';
 
 @autoinject()
 export class SectionCatalog {
-  constructor(youtubeGateway: YoutubeGateway) {
+  constructor(router: Router, eventAgregator: EventAggregator, youtubeGateway: YoutubeGateway) {
+    this.router = router;
+    this.ea = eventAgregator;
     this.youtubeGateway = youtubeGateway;
   }
+  private router: Router;
+  private ea: EventAggregator;
+  private subscription: Subscription;
   private youtubeGateway: YoutubeGateway;
   private searchTerms: string;
   private items: Youtube[];
   private allItems: Youtube[];
-  private pager: ObjPager;
+
+
+  private pageSize: number = 10;
+  private sortOrder: string;
+  private releaseYear: number;
+  
+  
+  private pager: IPager;
   private nextPageToken: string = '';
+  private filterSearchTerms: string
   private created() {
   }
   private bind(bindingContext) {
+
     this.searchTerms = bindingContext.searchTerms;
-    this.youtubeGateway.searchVideos(this.searchTerms).then(data => {
-      this.nextPageToken = (<any>data).nextPageToken;
-      this.allItems = (<any>data).items || null;
+    this.allItems = JSON.parse(localStorage.getItem('allItems'));
+    this.items = JSON.parse(sessionStorage.getItem('items'));
+    this.pager = JSON.parse(sessionStorage.getItem('pager'));
+
+    sessionStorage.removeItem('items');
+    sessionStorage.removeItem('pager');
+
+    if (!this.allItems)
+      this.fetchFirstMovies();
+    else
+      if (!this.pager)
+        this.setPage(1);
+  }
+  private attached() {
+    this.filteringSubscription();
+    this.fetchAllMovies();
+  }
+  private detached() {
+    this.subscription.dispose();
+  }
+  private filteringSubscription() {
+    this.subscription = this.ea.subscribe('filtering', (response: IFilter) => {
+      //debugger;
+      if (response.searchTerms != null)
+        this.filterSearchTerms = response.searchTerms;
+
+      if (response.pageSize != null)
+        this.pageSize = response.pageSize;
+
+      if (response.releaseYear != null)
+        this.releaseYear = response.releaseYear;
+
+      if (response.sortOrder != null)
+        this.sortOrder = response.sortOrder;
+
       this.setPage(1);
     });
   }
-  private attached() {
+  private fetchFirstMovies() {
+    return this.youtubeGateway.searchMoviesByPlaylist(PLAYLIST_NEW_TO_RENT).then(data => {
+      this.nextPageToken = data.nextPageToken;
+      this.allItems = data.items || null;
+      this.setPage(1);
+    });
+  }
+  private fetchAllMovies() {
+    if (localStorage.getItem('allItems')) return;
+    return this.youtubeGateway.searchAllMoviesByPlaylist(PLAYLIST_NEW_TO_RENT, this.nextPageToken).then(data => {
+      this.nextPageToken = null;
+      this.allItems = data;
+      localStorage.setItem('allItems', JSON.stringify(this.allItems));
+    }).catch(error => {
+      debugger;
+    });
   }
   private nFormatter(num, digits) {
     var si = [
@@ -52,27 +123,19 @@ export class SectionCatalog {
 
     var self = this;
 
-    if (page < 1 || (this.pager && page > this.pager.totalPages)) {
+    if (page < 1 || (this.pager && (page > this.pager.totalPages))) {
       return;
     }
 
     // get pager object from service
-    this.pager = this.getPager(999, page, 6);
+    this.pager = this.getPager(this.filteredItems.length, page, this.pageSize);
 
-    // fetch if required pages are not yet present
-    if (this.pager.endIndex > this.allItems.length) {
-      this.youtubeGateway.searchVideos(this.searchTerms, this.nextPageToken).then(data => {
-        // append new data in array
-        self.allItems = self.allItems.concat((<any>data).items);
-        // get current page of items
-        self.items = self.allItems.slice(self.pager.startIndex, self.pager.endIndex + 1);
-      });
-    } else {
-      // get current page of items
-      this.items = this.allItems.slice(this.pager.startIndex, this.pager.endIndex + 1);
-    }
+    // get current page of items
+    this.items = this.filteredItems.slice(this.pager.startIndex, this.pager.endIndex + 1);
+
+    wait(300, scrollToTop);
   }
-  private getPager(totalItems, currentPage, pageSize): ObjPager {
+  private getPager(totalItems, currentPage, pageSize): IPager {
     // default to first page
     currentPage = currentPage || 1;
 
@@ -90,7 +153,7 @@ export class SectionCatalog {
         startPage = 1;
         endPage = 5;
       } else if (currentPage + 3 >= totalPages) {
-        startPage = totalPages - 3;
+        startPage = totalPages - 4;
         endPage = totalPages;
       } else {
         startPage = currentPage - 2;
@@ -118,16 +181,79 @@ export class SectionCatalog {
       pages: pages
     };
   }
+  private showMovie(videoId) {
+    sessionStorage.setItem('items', JSON.stringify(this.items));
+    sessionStorage.setItem('pager', JSON.stringify(this.pager));
+    this.router.navigateToRoute('detail1', { videoId: videoId });
+  }
+  private get filteredItems() {
+    var filteredItems: Youtube[] = this.allItems.slice();
+
+    if (this.filterSearchTerms)
+      filteredItems = filteredItems.filter(x => x.snippet.title.toLocaleLowerCase().includes(this.filterSearchTerms.toLocaleLowerCase()));
+
+    if (this.releaseYear) {
+      debugger;
+      filteredItems = filteredItems.filter(x => moment(x.contentDetails.videoPublishedAt).year() == this.releaseYear);
+    }
+
+    if (this.sortOrder == 'title') {
+      filteredItems = filteredItems.sort((n1, n2) => {
+        if (n1.snippet.title > n2.snippet.title) {
+          return 1;
+        }
+
+        if (n1.snippet.title < n2.snippet.title) {
+          return -1;
+        }
+      });
+    }
+
+    if (this.sortOrder == 'videoPublishedAt') {
+      filteredItems = filteredItems.sort((n1, n2) => {
+        if (n1.contentDetails.videoPublishedAt < n2.contentDetails.videoPublishedAt) {
+          return 1;
+        }
+
+        if (n1.contentDetails.videoPublishedAt > n2.contentDetails.videoPublishedAt) {
+          return -1;
+        }
+      });
+    }
+
+    if (this.sortOrder == 'commentCount') {
+      filteredItems = filteredItems.sort((n1, n2) => {
+        if (+n1.statistics.commentCount < +n2.statistics.commentCount) {
+          return 1;
+        }
+
+        if (+n1.statistics.commentCount > +n2.statistics.commentCount) {
+          return -1;
+        }
+      });
+    }
+
+    if (this.sortOrder == 'likeCount') {
+      filteredItems = filteredItems.sort((n1, n2) => {
+        if (+n1.statistics.likeCount < +n2.statistics.likeCount) {
+          return 1;
+        }
+
+        if (+n1.statistics.likeCount > +n2.statistics.likeCount) {
+          return -1;
+        }
+      });
+    }
+
+    return filteredItems;
+  }
 }
 
-interface ObjPager {
-  totalItems: number;
-  currentPage: number;
-  pageSize: number;
-  totalPages: number;
-  startPage: number;
-  endPage: number;
-  startIndex: number;
-  endIndex: number;
-  pages: Array<number>;
-}
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+const wait = (delay, fct) => {
+  window.setTimeout(fct, delay);
+};
+

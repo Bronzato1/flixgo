@@ -10,35 +10,39 @@
             <div class="row">
               <div class="col-12 col-sm-5">
                 <div class="card__cover">
-                  <img src="${item.thumbnails.medium.url}" alt="">
-                  <a href="#" class="card__play">
+                  <img src="https://i.ytimg.com/vi/${item.snippet.resourceId.videoId}/movieposter.jpg" alt="">
+                  <a click.trigger="showMovie(item.contentDetails.videoId)" href="#" class="card__play">
                     <i class="icon ion-ios-play"></i>
                   </a>
                 </div>
-                <div class="card__wrap">
-                    <span class="card__stat">${nFormatter(item.statistics.viewCount,1)} vues · ${item.publishedAt | humanize}</span>
-                  </div>
               </div>
 
               <div class="col-12 col-sm-7">
                 <div class="card__content">
-                  <h3 class="card__title"><a href="#">${item.title}</a></h3>
+                  <h3 class="card__title"><a click.trigger="showMovie(item.contentDetails.videoId)" href="#">${item.snippet.title}</a></h3>
+                  <ul class="card__list">
+                    <li>HD</li>
+                    <li>16+</li>
+                  </ul>
                   <span class="card__category">
-                    <a href="#">${item.channelTitle}</a>
+                    <a href="#">${item.snippet.channelTitle}</a>
                   </span>
-
+                  
                   <div class="card__wrap">
-                    <span class="card__rate"><i class="icon ion-ios-star"></i>8.4</span>
-
-                    <ul class="card__list">
-                      <li>HD</li>
-                      <li>16+</li>
-                    </ul>
+                    <span class="card__rate">
+                      <i class="icon ion-md-thumbs-up"></i>${item.statistics.likeCount}
+                      &nbsp;&nbsp;
+                      <i class="icon ion-md-thumbs-down"></i>${item.statistics.dislikeCount}
+                    </span>
+                    &nbsp;&nbsp;
+                    <span class="card__stat">· Sorti ${item.contentDetails.videoPublishedAt | humanize}</span>
                   </div>
 
                   <div class="card__description">
-                    <p>${item.description}</p>
+                    <p>${item.snippet.description}</p>
                   </div>
+
+                  
                 </div>
               </div>
             </div>
@@ -48,23 +52,42 @@
 
         <!-- paginator -->
         <div class="col-12">
+
+          <p show.bind="pager.pages.length==0" class="section__text section__text--last-with-margin">
+            Aucun résultat trouvé.
+          </p>
+
           <ul class="paginator paginator--list" show.bind="pager.pages.length>0">
 
-            <li class="paginator__item paginator__item--prev">
-              <a href="#" click.trigger="setPage(pager.currentPage - 1)">
-                <i class="icon ion-ios-arrow-back"></i>
+            <li class="paginator__item">
+              <a href="#" click.trigger="setPage(1)">
+                <i class="icon ion-ios-skip-backward"></i>
               </a>
             </li>
-            
-            <li class="paginator__item ${pager.currentPage === page ? 'paginator__item--active' : ''} " repeat.for="page of pager.pages">
+
+            <li class="paginator__item paginator__item--prev">
+              <a href="#" click.trigger="setPage(pager.currentPage - 1)" style="transform: rotate(58deg);">
+                <i class="icon ion-ios-play"></i>
+              </a>
+            </li>
+
+            <li class="paginator__item ${pager.currentPage === page ? 'paginator__item--active' : ''} "
+              repeat.for="page of pager.pages">
               <a href="#" click.trigger="setPage(page)">${page}</a>
             </li>
-            
+
             <li class="paginator__item paginator__item--next">
               <a href="#" click.trigger="setPage(pager.currentPage + 1)">
-                <i class="icon ion-ios-arrow-forward"></i>
+                <i class="icon ion-ios-play"></i>
               </a>
             </li>
+
+            <li class="paginator__item">
+              <a href="#" click.trigger="setPage(pager.totalPages)">
+                <i class="icon ion-ios-skip-forward"></i>
+              </a>
+            </li> -->
+
           </ul>
         </div>
         <!-- end paginator -->

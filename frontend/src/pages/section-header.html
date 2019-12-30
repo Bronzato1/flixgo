@@ -33,8 +33,7 @@
                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Catalog</a>
   
                     <ul class="dropdown-menu header__dropdown-menu" aria-labelledby="dropdownMenuCatalog">
-                      <li><a route-href="route: post1">Details Movie</a></li>
-                      <li><a route-href="route: post2">Details TV Serie</a></li>
+                      <li><a route-href="route: detail2">Details TV Serie</a></li>
                     </ul>
                   </li>
                   <!-- end dropdown -->
@@ -110,8 +109,8 @@
           <div class="row">
             <div class="col-12">
               <div class="header__search-content">
-                <input type="text" placeholder="Search for a movie, TV Series that you are looking for" value.bind="searchInput">
-                <button type="submit" click.trigger="submitSearch()">search</button>
+                <input type="text" value.bind="filterSearchTerms" placeholder="Search for a movie, TV Series that you are looking for">
+                <button type="submit" click.trigger="submitSearch()">CHERCHER</button>
               </div>
             </div>
           </div>

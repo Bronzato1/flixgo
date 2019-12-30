@@ -14,7 +14,7 @@
     "@types/moment": "^2.13.0",
     "@types/moment-duration-format": "^2.2.2",
     "aurelia-animator-css": "^1.0.4",
-    "aurelia-bootstrapper": "^2.3.0",
+    "aurelia-bootstrapper": "^2.3.3",
     "aurelia-fetch-client": "^1.8.2",
     "bluebird": "^3.5.2",
     "bootstrap": "4.1.3",
@@ -32,7 +32,7 @@
   },
   "peerDependencies": {},
   "devDependencies": {
-    "aurelia-cli": "^1.0.0-beta.9",
+    "aurelia-cli": "^1.2.3",
     "aurelia-testing": "^1.0.0",
     "aurelia-tools": "^2.0.0",
     "gulp": "^4.0.0",

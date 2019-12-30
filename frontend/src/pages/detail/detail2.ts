@@ -3,16 +3,20 @@
 import 'plyr/plyr.css';
 import 'photoswipe/photoswipe.css'
 import 'photoswipe/default-skin/default-skin.css'
+import 'malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css';
 
 import * as Plyr from 'plyr';
 import * as PhotoSwipe from 'photoswipe';
 import * as PhotoSwipeUI_Default from 'photoswipe/dist/photoswipe-ui-default';
+import 'malihu-custom-scrollbar-plugin';
+import 'jquery.mousewheel';
 
-export class Post1 {
+export class Detail2 {
   attached() {
     this.initializePlayer();
     this.initializePhotoSwipeFromDOM();
     this.initializeMoreLines();
+    this.initializeCustomScrollbar();
   }
   private initializePlayer() {
     if ($('#player').length) {
@@ -229,6 +233,19 @@ export class Post1 {
       buttontxtmore: "",
       buttontxtless: "",
       animationspeed: 400
+    });
+  }
+  private initializeCustomScrollbar() {
+    (<any>$('.scrollbar-dropdown')).mCustomScrollbar({
+      axis: "y",
+      scrollbarPosition: "outside",
+      theme: "custom-bar"
+    });
+
+    (<any>$('.accordion')).mCustomScrollbar({
+      axis: "y",
+      scrollbarPosition: "outside",
+      theme: "custom-bar2"
     });
   }
 }

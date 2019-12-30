@@ -1,21 +1,24 @@
 import { Router, RouterConfiguration, Redirect } from 'aurelia-router';
+import { PipelineSlotName } from 'aurelia-router';
+import { debug } from 'util';
 
 export class App {
   configureRouter(config: RouterConfiguration) {
+    config.addPostRenderStep(PostRenderStep);
     config.title = 'FlixGo';
     config.map([
       { route: '', redirect: 'index' },
       { route: 'index', name: 'index', moduleId: './pages/home/index', title: 'Index' },
       { route: 'catalogGrid', name: 'catalogGrid', moduleId: './pages/catalog-grid/catalog', title: 'Catalog grid' },
-      { route: 'catalogList/:searchTerms', name: 'catalogList', moduleId: './pages/catalog-list/catalog', title: 'Catalog list' },
-      { route: 'post1', name: 'post1', moduleId: './pages/post/post1', title: 'Post 1' },
-      { route: 'post2', name: 'post2', moduleId: './pages/post/post2', title: 'Post 2' },
+      { route: 'catalogList', name: 'catalogList', moduleId: './pages/catalog-list/catalog', title: 'Catalog list' },
+      { route: 'detail1/:videoId', name: 'detail1', moduleId: './pages/detail/detail1', title: 'Detail 1' },
+      { route: 'detail2', name: 'detail2', moduleId: './pages/detail/detail2', title: 'Detail 2' },
       { route: 'pricing', name: 'pricing', moduleId: './pages/pricing/pricing', title: 'Pricing' },
       { route: 'faq', name: 'faq', moduleId: './pages/help/faq', title: 'Faq' },
       { route: 'about', name: 'about', moduleId: './pages/about/about', title: 'About' },
       { route: 'profile', name: 'profile', moduleId: './pages/profile/profile', title: 'Profile' },
-      {route: 'signin', name: 'signin', moduleId: './pages/signin/signin', title: 'Signin' },
-      {route: 'signup', name: 'signup', moduleId: './pages/signup/signup', title: 'Signup' },
+      { route: 'signin', name: 'signin', moduleId: './pages/signin/signin', title: 'Signin' },
+      { route: 'signup', name: 'signup', moduleId: './pages/signup/signup', title: 'Signup' },
       { route: 'notFound', name: 'notFound', moduleId: './pages/not-found/not-found', title: 'Not found' }
     ]);
     config.mapUnknownRoutes('./pages/not-found/not-found');
@@ -51,19 +54,15 @@ export class App {
         }
       });
 
-      /*==============================
-      Filter
-      ==============================*/
-      $('.filter__item-menu li').each(function () {
-        $(this).attr('data-value', $(this).text().toLowerCase());
-      });
-
-      $('.filter__item-menu li').on('click', function () {
-        var text = $(this).text();
-        var item = $(this);
-        var id = item.closest('.filter__item').attr('id');
-        $('#' + id).find('.filter__item-btn input').val(text);
-      });
     });
+  }
+}
+
+class PostRenderStep {
+  run(navigationInstruction, next) {
+    if (navigationInstruction.router.isNavigatingNew) {
+      window.scroll(0, 0);
+    }
+    return next();
   }
 }

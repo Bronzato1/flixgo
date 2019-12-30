@@ -3,20 +3,43 @@
 import 'plyr/plyr.css';
 import 'photoswipe/photoswipe.css'
 import 'photoswipe/default-skin/default-skin.css'
-import 'malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css';
 
 import * as Plyr from 'plyr';
 import * as PhotoSwipe from 'photoswipe';
 import * as PhotoSwipeUI_Default from 'photoswipe/dist/photoswipe-ui-default';
-import 'malihu-custom-scrollbar-plugin';
-import 'jquery.mousewheel';
 
-export class Post2 {
+import { autoinject } from 'aurelia-framework';
+import { bindable } from 'aurelia-framework';
+
+@autoinject()
+export class Detail1 {
+  constructor() {
+  }
+  private videoId: string;
+  activate(params) {
+    this.videoId = params.videoId;
+  }
   attached() {
     this.initializePlayer();
     this.initializePhotoSwipeFromDOM();
-    this.initializeMoreLines();
-    this.initializeCustomScrollbar();
+    this.observeDOM();
+  }
+  private observeDOM() {
+    // Selectionne le noeud dont les mutations seront observées
+    var targetNode = document.getElementsByClassName('card__description--details')[0];
+    // Options de l'observateur (quelles sont les mutations à observer)
+    var config = { attributes: true, childList: true };
+    // Créé une instance de l'observateur lié à la fonction de callback
+    var observer = new MutationObserver(callback);
+    // Commence à observer le noeud cible pour les mutations précédemment configurées
+    observer.observe(targetNode, config);
+    var self = this;
+    // Fonction callback à éxécuter quand une mutation est observée
+    function callback() {
+      self.initializeMoreLines();
+      // L'observation peut être arrêtée par la suite
+      observer.disconnect();
+    }
   }
   private initializePlayer() {
     if ($('#player').length) {
@@ -233,19 +256,6 @@ export class Post2 {
       buttontxtmore: "",
       buttontxtless: "",
       animationspeed: 400
-    });
-  }
-  private initializeCustomScrollbar() {
-    (<any>$('.scrollbar-dropdown')).mCustomScrollbar({
-      axis: "y",
-      scrollbarPosition: "outside",
-      theme: "custom-bar"
-    });
-
-    (<any>$('.accordion')).mCustomScrollbar({
-      axis: "y",
-      scrollbarPosition: "outside",
-      theme: "custom-bar2"
     });
   }
 }

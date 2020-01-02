@@ -108,7 +108,6 @@ export class YoutubeGateway {
         if (data.nextPageToken)
           return getData(data.nextPageToken);
         else {
-          debugger;
           return Promise.resolve(allItems);
         }
       }).catch(error => {

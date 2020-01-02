@@ -1252,7 +1252,7 @@ ul {
 }
 @media (min-width: 768px) {
   .section {
-    padding: 60px 0;
+    padding: 0 0; /*  TLA: 60px 0; */
   }
   .section__title {
     font-size: 32px;
@@ -1270,7 +1270,11 @@ ul {
     margin: 20px auto 15px;
   }
   .section--first {
+    padding: 60px 0; /* TLA */
     margin-top: 90px;
+  }
+  .section--partners {
+    padding: 60px 0; /* TLA */
   }
 }
 @media (min-width: 992px) {
@@ -2248,7 +2252,9 @@ ul {
 .catalog {
   padding: 0 0 20px;
 }
-.section--catalog:after {
+
+
+.section--premiere:before {
   content: '';
   height: 2px;
   display: block;
@@ -2259,6 +2265,11 @@ ul {
   -webkit-box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
   box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
 }
+
+.section--premiere:before {
+  margin-bottom: 60px;
+}
+
 @media (min-width: 768px) {
   .catalog {
     padding: 0 0 45px;

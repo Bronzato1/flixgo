@@ -14,8 +14,7 @@ export class SectionHeader {
   private filters: IFilter;
   private router: Router;
   private attached() {
-
-    this.filteringSubscription();
+    this.eventAggregatorSubscription();
 
     $(document).ready(function () {
       $('.header__btn').on('click', function () {
@@ -41,7 +40,7 @@ export class SectionHeader {
       }
     });
   }
-  private filteringSubscription() {
+  private eventAggregatorSubscription() {
     this.subscription = this.ea.subscribe('filtering', (response: IFilter) => {
       this.filters = response;
     });

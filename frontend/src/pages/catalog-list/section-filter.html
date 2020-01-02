@@ -9,20 +9,21 @@
             <div class="filter__items">
               <!-- filter item -->
               <div class="filter__item" id="filter__date">
-                <span class="filter__item-label">DATE DE SORTIE:</span>
+                <span class="filter__item-label">LISTE DE LECTURE:</span>
 
                 <div class="filter__item-btn dropdown-toggle" role="navigation" id="filter-date" data-toggle="dropdown"
                   aria-haspopup="true" aria-expanded="false">
-                  <input type="button" id="releaseYearText" value.bind="filters.releaseYearText">
+                  <input type="button" id="playlistText" value.bind="filters.playlistText">
                   <span></span>
                 </div>
 
                 <ul class="filter__item-menu dropdown-menu scrollbar-dropdown" aria-labelledby="filter-date">
-                  <li>N'importe quand</li>
-                  <li>Cette année</li>
-                  <li>Il y a 1 an</li>
-                  <li>Il y a 2 ans</li>
-                  <li>Il y a 3 ans</li>
+                  <li>Box office</li>
+                  <li>Populaires</li>
+                  <li>Nouveauté à louer</li>
+                  <li>Mieux notés</li>
+                  <li>Nouvelles sorties</li>
+                  <li>Top des ventes</li>
                 </ul>
               </div>
               <!-- end filter item -->
@@ -47,23 +48,20 @@
               <!-- end filter item -->
 
               <!-- filter item -->
-              <div class="filter__item" id="filter__view">
-                <span class="filter__item-label">NOMBRE DE VUES:</span>
+              <div class="filter__item" id="filter__releaseYear">
+                <span class="filter__item-label">DATE DE SORTIE:</span>
 
-                <div class="filter__item-btn dropdown-toggle" role="button" id="filter-view" data-toggle="dropdown"
+                <div class="filter__item-btn dropdown-toggle" role="button" id="filter-releaseYears" data-toggle="dropdown"
                   aria-haspopup="true" aria-expanded="false">
                   <div class="filter__range">
-                    <div id="filter__views-start"></div>
-                    <div id="filter__views-end"></div>
+                    <div id="releaseYearStart" innerhtml.two-way="filters.releaseYearStart"></div>
+                    <div id="releaseYearEnd" innerhtml.two-way="filters.releaseYearEnd"></div>
                   </div>
                   <span></span>
                 </div>
 
-                <div class="filter__item-menu filter__item-menu--range dropdown-menu" aria-labelledby="filter-view">
-                  <i class="section__text section__text--last-with-margin">
-                    En million de vues
-                  </i>
-                  <div id="filter__views"></div>
+                <div class="filter__item-menu filter__item-menu--range dropdown-menu" aria-labelledby="filter-releaseYears">
+                  <div id="filter__releaseYears"></div>
                 </div>
               </div>
               <!-- end filter item -->

@@ -1,7 +1,7 @@
 import { YoutubeGateway } from './../../gateways/youtube-gateway';
 import { Youtube } from '../../models/youtube-model';
 import { IFilter, IPager } from '../../interfaces/filter-interface';
-import { autoinject, bindable, computedFrom } from 'aurelia-framework';
+import { BindingEngine, autoinject, bindable, Disposable, computedFrom } from 'aurelia-framework';
 import { EventAggregator, Subscription } from 'aurelia-event-aggregator';
 import { Router } from 'aurelia-router';
 import moment = require('moment');
@@ -24,53 +24,75 @@ export class SectionCatalog {
   private ea: EventAggregator;
   private subscription: Subscription;
   private youtubeGateway: YoutubeGateway;
-  private items: Youtube[];
-  private allItems: Youtube[];
+  private playlistItems: Youtube[];
   private filters: IFilter = {};
   private pager: IPager;
+  private items: Youtube[];
   private nextPageToken: string = '';
   private created() {
   }
   private bind(bindingContext) {
-    this.allItems = JSON.parse(localStorage.getItem('allItems'));
-    this.items = JSON.parse(sessionStorage.getItem('items'));
-    this.pager = JSON.parse(sessionStorage.getItem('pager'));
-
-    sessionStorage.removeItem('items');
-    sessionStorage.removeItem('pager');
-
-    if (!this.allItems)
-      this.fetchFirstMovies();
-    else
-      if (!this.pager)
-        this.setPage(1);
+    this.eventAggregatorSubscription();
+  }
+  private unbind() {
+    this.eventAggregatorUnsubscription();
   }
   private attached() {
-    this.filteringSubscription();
-    this.fetchAllMovies();
   }
   private detached() {
+  }
+  private eventAggregatorSubscription() {
+
+    this.subscription = this.ea.subscribe('filtering', (response: IFilter) => {
+      // Attention: impossible de mettre un debugger ici car l'appel se fait déjà avant...
+      this.filters = response;
+      debounceRefresh(this);
+    });
+
+    var needToRefresh: boolean;
+
+    function debounceRefresh(self) {
+      if (needToRefresh) return;
+      needToRefresh = true;
+      window.setTimeout(() => {
+        needToRefresh = false;
+        self.refreshData();
+      }, 100);
+    }
+  }
+  private eventAggregatorUnsubscription() {
     this.subscription.dispose();
   }
-  private filteringSubscription() {
-    this.subscription = this.ea.subscribe('filtering', (response: IFilter) => {
-      this.filters = response;
-      this.setPage(1);
-    });
+  private refreshData() {
+
+    this.playlistItems = JSON.parse(localStorage.getItem(this.filters.playlistValue));
+
+    if (!this.playlistItems)
+      this.fetchFirstMovies().then(() => { this.fetchAllMovies(); });
+    else {
+      if (sessionStorage.getItem('items')) {
+        this.items = JSON.parse(sessionStorage.getItem('items'));
+        this.pager = JSON.parse(sessionStorage.getItem('pager'));
+        sessionStorage.removeItem('items');
+        sessionStorage.removeItem('pager');
+      } else {
+        this.setPage(1);
+      }
+    }
   }
   private fetchFirstMovies() {
-    return this.youtubeGateway.searchMoviesByPlaylist(PLAYLIST_NEW_TO_RENT).then(data => {
+    return this.youtubeGateway.searchMoviesByPlaylist(this.filters.playlistValue).then(data => {
       this.nextPageToken = data.nextPageToken;
-      this.allItems = data.items || null;
+      this.playlistItems = data.items || null;
       this.setPage(1);
     });
   }
   private fetchAllMovies() {
-    if (localStorage.getItem('allItems')) return;
-    return this.youtubeGateway.searchAllMoviesByPlaylist(PLAYLIST_NEW_TO_RENT, this.nextPageToken).then(data => {
+    if (localStorage.getItem(this.filters.playlistValue)) return;
+    return this.youtubeGateway.searchAllMoviesByPlaylist(this.filters.playlistValue, this.nextPageToken).then(data => {
       this.nextPageToken = null;
-      this.allItems = data;
-      localStorage.setItem('allItems', JSON.stringify(this.allItems));
+      this.playlistItems = this.playlistItems.concat(data);
+      localStorage.setItem(this.filters.playlistValue, JSON.stringify(this.playlistItems));
     }).catch(error => {
       debugger;
     });
@@ -162,19 +184,24 @@ export class SectionCatalog {
   private showMovie(videoId) {
     sessionStorage.setItem('items', JSON.stringify(this.items));
     sessionStorage.setItem('pager', JSON.stringify(this.pager));
+    sessionStorage.setItem('filters', JSON.stringify(this.filters));
     this.router.navigateToRoute('detail1', { videoId: videoId });
   }
   @computedFrom('filters')
   private get filteredItems() {
 
-    var filteredItems: Youtube[] = this.allItems.slice();
+    if (!this.playlistItems) return [];
+
+    var filteredItems: Youtube[] = this.playlistItems.slice();
 
     if (this.filters.searchTerms)
       filteredItems = filteredItems.filter(x => x.snippet.title.toLocaleLowerCase().includes(this.filters.searchTerms.toLocaleLowerCase()));
 
-    if (this.filters.releaseYearValue)
-      filteredItems = filteredItems.filter(x => moment(x.contentDetails.videoPublishedAt).year() == this.filters.releaseYearValue);
+    if (this.filters.releaseYearStart)
+      filteredItems = filteredItems.filter(x => moment(x.contentDetails.videoPublishedAt).year() >= this.filters.releaseYearStart);
 
+    if (this.filters.releaseYearEnd)
+      filteredItems = filteredItems.filter(x => moment(x.contentDetails.videoPublishedAt).year() <= this.filters.releaseYearEnd);
 
     if (this.filters.sortOrderValue == 'title') {
       filteredItems = filteredItems.sort((n1, n2) => {

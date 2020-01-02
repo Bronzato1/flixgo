@@ -1,6 +1,6 @@
 import { IFilter } from './../../interfaces/filter-interface';
 import { Subscription, EventAggregator } from 'aurelia-event-aggregator';
-import { BindingEngine, bindable, observable, autoinject } from 'aurelia-framework';
+import { BindingEngine, bindable, observable, Disposable, autoinject } from 'aurelia-framework';
 import 'malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css';
 import 'malihu-custom-scrollbar-plugin';
 import 'jquery.mousewheel';
@@ -14,33 +14,43 @@ export class SectionFilter {
   private be: BindingEngine;
   private ea: EventAggregator;
   private subscription: Subscription;
+  private disposables: Disposable[] = [];
   private observers: MutationObserver[] = [];
-
-  @bindable
-  private filters: IFilter = { 
-    pageSizeText: '10 éléments', 
-    pageSizeValue: 10, 
-    sortOrderText: 'Pertinence', 
-    sortOrderValue: null,
-    releaseYearText: 'N\'importe quand',
-    releaseYearValue: null
-  };
+  private filters: IFilter = {};
   private bind() {
-    this.be.propertyObserver(this.filters, 'searchTerms').subscribe(() => { this.searchTermsChanged(); });
-    this.be.propertyObserver(this.filters, 'pageSizeText').subscribe(() => { this.pageSizeTextChanged(); });
-    this.be.propertyObserver(this.filters, 'sortOrderText').subscribe(() => { this.sortOrderTextChanged(); });
-    this.be.propertyObserver(this.filters, 'releaseYearText').subscribe(() => { this.releaseYearTextChanged(); });
-  } 
+    this.resetFilters();
+    this.restoreFilters();
+    this.propertyObserverSubscription();
+    this.eventAggregatorSubscription();
+  }
+  private unbind() {
+    this.propertyOberverUnsubscription();
+    this.eventAggregatorUnsubscription();
+  }
   private attached() {
-    this.filteringSubscription();
+    this.startObserveDOM();
     this.prepareFilters();
+    this.filtersChanged();
+  }
+  private detached() {
+    this.stopObserveDOM();
+  }
+  private restoreFilters() {
+    // Après être passé dans la page détail d'un film, on restore les filtres 
+    if (JSON.parse(sessionStorage.getItem('filters'))) {
+      this.filters = JSON.parse(sessionStorage.getItem('filters'));
+      sessionStorage.removeItem('filters');
+    }
+  }
+  private startObserveDOM() {
+    this.observeDOM('playlistText');
     this.observeDOM('pageSizeText');
     this.observeDOM('sortOrderText');
-    this.observeDOM('releaseYearText');
-    this.resetFilters();
+    this.observeDOM('releaseYearStart');
+    this.observeDOM('releaseYearEnd');
   }
-  private detach() {
-    // L'observation peut être arrêtée par la suite
+  private stopObserveDOM() {
+    // à l'origine de MutationObserver
     this.observers.forEach(x => x.disconnect());
   }
   private prepareFilters() {
@@ -65,19 +75,38 @@ export class SectionFilter {
   private resetFilters() {
     this.filters.searchTerms = null;
 
+    this.filters.playlistText = 'Nouveauté à louer';
+    this.filters.playlistValue = 'PLHPTxTxtC0iY91P_GT7TzcLY_bF-2VOuy';
+
     this.filters.pageSizeText = '10 éléments';
     this.filters.pageSizeValue = 10;
 
     this.filters.sortOrderText = 'Pertinence';
     this.filters.sortOrderValue = null;
 
-    this.filters.releaseYearText = 'N\'importe quand';
-    this.filters.releaseYearValue = null;
+    this.filters.releaseYearStart = 2017;
+    this.filters.releaseYearEnd = 2020;
   }
-  private filteringSubscription() {
+  private propertyObserverSubscription() {
+    this.disposables.push(this.be.propertyObserver(this.filters, 'searchTerms').subscribe(() => { this.searchTermsChanged(); }));
+    this.disposables.push(this.be.propertyObserver(this.filters, 'pageSizeText').subscribe(() => { this.pageSizeTextChanged(); }));
+    this.disposables.push(this.be.propertyObserver(this.filters, 'sortOrderText').subscribe(() => { this.sortOrderTextChanged(); }));
+    this.disposables.push(this.be.propertyObserver(this.filters, 'playlistText').subscribe(() => { this.playlistTextChanged(); }));
+    this.disposables.push(this.be.propertyObserver(this.filters, 'releaseYearStart').subscribe(() => { this.releaseYearStartChanged(); }));
+    this.disposables.push(this.be.propertyObserver(this.filters, 'releaseYearEnd').subscribe(() => { this.releaseYearEndChanged(); }));
+  }
+  private propertyOberverUnsubscription() {
+    // à l'origine des BindingEngine
+    this.disposables.forEach(x => x.dispose());
+  }
+  private eventAggregatorSubscription() {
     this.subscription = this.ea.subscribe('filtering', (response: IFilter) => {
       this.filters = response;
     });
+  }
+  private eventAggregatorUnsubscription() {
+    // à l'origine de EventAggregator
+    this.subscription.dispose();
   }
   private resetSearchTerms() {
     this.filters.searchTerms = null;
@@ -95,10 +124,11 @@ export class SectionFilter {
     var self = this;
     // Fonction callback à éxécuter quand une mutation est observée
     function callback() {
+      let value = ($('#' + elm).is('input')) ? $('#' + elm).val() : $('#' + elm).text();
       if (self.filters[elm])
-        self.filters[elm] = $('#' + elm).val();
+        self.filters[elm] = value;
       else
-        self[elm] = $('#' + elm).val();
+        self[elm] = value;
     }
   }
   private get showResetFiltersButton() {
@@ -130,33 +160,41 @@ export class SectionFilter {
         this.filters.sortOrderValue = 'likeCount';
         break;
     }
-
     this.filtersChanged();
-    //if (this.ea) this.ea.publish('filtering', data);
   }
-  private releaseYearTextChanged() {
+  private playlistTextChanged() {
 
     var data: IFilter = {};
-    switch (this.filters.releaseYearText) {
-      case 'N\'importe quand':
-        this.filters.releaseYearValue = null;
+    switch (this.filters.playlistText) {
+      case 'Box office':
+        this.filters.playlistValue = 'PLHPTxTxtC0iZaTf4DEe-eQ2_sTWuyVFs_';
         break;
-      case 'Cette année':
-        this.filters.releaseYearValue = new Date().getFullYear()
+      case 'Populaires':
+        this.filters.playlistValue = 'PLHPTxTxtC0iY65VCtQssLFRTQwV1ScueG';
         break;
-      case 'Il y a 1 an':
-        this.filters.releaseYearValue = new Date().getFullYear() - 1;
+      case 'Nouveauté à louer':
+        this.filters.playlistValue = 'PLHPTxTxtC0iY91P_GT7TzcLY_bF-2VOuy';
         break;
-      case 'Il y a 2 ans':
-        this.filters.releaseYearValue = new Date().getFullYear() - 2;
+      case 'Mieux notés':
+        this.filters.playlistValue = 'PLHPTxTxtC0iY7Q9hbREwkLOxkFpaKnhc6';
         break;
-      case 'Il y a 3 ans':
-        this.filters.releaseYearValue = new Date().getFullYear() - 3;
+      case 'Nouvelles sorties':
+        this.filters.playlistValue = 'PLHPTxTxtC0iYAzVsEjJG3_qXPQ12YcTI1';
+        break;
+      case 'Top des ventes':
+        this.filters.playlistValue = 'PLHPTxTxtC0iZUGnexGOfXIIN_tCQrOU67';
         break;
     }
     this.filtersChanged();
   }
+  private releaseYearStartChanged() {
+    this.filtersChanged();
+  }
+  private releaseYearEndChanged() {
+    this.filtersChanged();
+  }
   private filtersChanged() {
+    //debugger;
     if (this.ea) this.ea.publish('filtering', this.filters);
   }
 }

@@ -1,6 +1,4 @@
 import { Router, RouterConfiguration, Redirect } from 'aurelia-router';
-import { PipelineSlotName } from 'aurelia-router';
-import { debug } from 'util';
 
 export class App {
   configureRouter(config: RouterConfiguration) {
@@ -38,20 +36,6 @@ export class App {
         var item = $(this);
         var id = item.closest('.content__mobile-tabs').attr('id');
         $('#' + id).find('.content__mobile-tabs-btn input').val(text);
-      });
-
-      /*==============================
-      Section bg
-      ==============================*/
-      $('.section--bg, .details__bg').each(function () {
-        if ($(this).attr("data-bg")) {
-          $(this).css({
-            'background': 'url(' + $(this).data('bg') + ')',
-            'background-position': 'center center',
-            //'background-repeat': 'no-repeat',
-            //'background-size': 'cover'
-          });
-        }
       });
 
     });

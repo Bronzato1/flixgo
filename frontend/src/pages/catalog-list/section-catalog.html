@@ -9,12 +9,9 @@
           <div class="col-6 col-sm-12 col-lg-6" repeat.for="item of items">
             <div class="card card--list">
               <div class="row">
-                <div class="col-12 col-sm-5">
-                  <div class="card__cover">
-                    <img src="https://i.ytimg.com/vi/${item.snippet.resourceId.videoId}/movieposter.jpg" alt="">
-                    <a click.trigger="showMovie(item.contentDetails.videoId)" href="#" class="card__play">
-                      <i class="icon ion-ios-play"></i>
-                    </a>
+                <div class="col-12 col-sm-5 left-section">
+                  <div>
+                    <img src="${item.snippet.thumbnails.medium.url}" click.trigger="showMovie(item.contentDetails.videoId)" alt="">
                   </div>
                 </div>
 

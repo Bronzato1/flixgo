@@ -1,6 +1,7 @@
 import { IFilter } from './../../interfaces/filter-interface';
 import { Subscription, EventAggregator } from 'aurelia-event-aggregator';
 import { BindingEngine, bindable, observable, Disposable, autoinject } from 'aurelia-framework';
+import { Playlists } from 'playlists';
 import 'malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css';
 import 'malihu-custom-scrollbar-plugin';
 import 'jquery.mousewheel';
@@ -75,8 +76,8 @@ export class SectionFilter {
   private resetFilters() {
     this.filters.searchTerms = null;
 
-    this.filters.playlistText = 'Nouveauté à louer';
-    this.filters.playlistValue = 'PLHPTxTxtC0iY91P_GT7TzcLY_bF-2VOuy';
+    this.filters.playlistText = Playlists.AroundTheWorld.find(x => x.name == 'Monor').name;
+    this.filters.playlistValue = Playlists.AroundTheWorld.find(x => x.name == 'Monor').id;
 
     this.filters.pageSizeText = '10 éléments';
     this.filters.pageSizeValue = 10;
@@ -165,26 +166,36 @@ export class SectionFilter {
   private playlistTextChanged() {
 
     var data: IFilter = {};
-    switch (this.filters.playlistText) {
-      case 'Box office':
-        this.filters.playlistValue = 'PLHPTxTxtC0iZaTf4DEe-eQ2_sTWuyVFs_';
-        break;
-      case 'Populaires':
-        this.filters.playlistValue = 'PLHPTxTxtC0iY65VCtQssLFRTQwV1ScueG';
-        break;
-      case 'Nouveauté à louer':
-        this.filters.playlistValue = 'PLHPTxTxtC0iY91P_GT7TzcLY_bF-2VOuy';
-        break;
-      case 'Mieux notés':
-        this.filters.playlistValue = 'PLHPTxTxtC0iY7Q9hbREwkLOxkFpaKnhc6';
-        break;
-      case 'Nouvelles sorties':
-        this.filters.playlistValue = 'PLHPTxTxtC0iYAzVsEjJG3_qXPQ12YcTI1';
-        break;
-      case 'Top des ventes':
-        this.filters.playlistValue = 'PLHPTxTxtC0iZUGnexGOfXIIN_tCQrOU67';
-        break;
-    }
+    var playlist = Playlists.AroundTheWorld.find(x => x.name == this.filters.playlistText);
+
+    if (playlist)
+      this.filters.playlistValue = playlist.id;
+    else
+      debugger;
+
+    // switch (this.filters.playlistText) {
+    //   case 'Box office':
+    //     this.filters.playlistValue = 'PLHPTxTxtC0iZaTf4DEe-eQ2_sTWuyVFs_';
+    //     break;
+    //   case 'Populaires':
+    //     this.filters.playlistValue = 'PLHPTxTxtC0iY65VCtQssLFRTQwV1ScueG';
+    //     break;
+    //   case 'Nouveauté à louer':
+    //     this.filters.playlistValue = 'PLHPTxTxtC0iY91P_GT7TzcLY_bF-2VOuy';
+    //     break;
+    //   case 'Mieux notés':
+    //     this.filters.playlistValue = 'PLHPTxTxtC0iY7Q9hbREwkLOxkFpaKnhc6';
+    //     break;
+    //   case 'Nouvelles sorties':
+    //     this.filters.playlistValue = 'PLHPTxTxtC0iYAzVsEjJG3_qXPQ12YcTI1';
+    //     break;
+    //   case 'Top des ventes':
+    //     this.filters.playlistValue = 'PLHPTxTxtC0iZUGnexGOfXIIN_tCQrOU67';
+    //     break;
+    //   case 'Monor':
+    //     this.filters.playlistValue = 'PLLoXF47FunjOwLjF4IRNVx3gaMq2UM0dz';
+    //     break;
+    // }
     this.filtersChanged();
   }
   private releaseYearStartChanged() {

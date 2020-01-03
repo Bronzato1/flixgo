@@ -6,12 +6,13 @@ import { EventAggregator, Subscription } from 'aurelia-event-aggregator';
 import { Router } from 'aurelia-router';
 import moment = require('moment');
 
-const PLAYLIST_BOX_OFFICE = 'PLHPTxTxtC0iZaTf4DEe-eQ2_sTWuyVFs_';
-const PLAYLIST_MOST_POPULAR = 'PLHPTxTxtC0iY65VCtQssLFRTQwV1ScueG';
-const PLAYLIST_NEW_TO_RENT = 'PLHPTxTxtC0iY91P_GT7TzcLY_bF-2VOuy';
-const PLAYLIST_TOP_RATED = 'PLHPTxTxtC0iY7Q9hbREwkLOxkFpaKnhc6';
-const PLAYLIST_NEW_RELEASES = 'PLHPTxTxtC0iYAzVsEjJG3_qXPQ12YcTI1';
-const PLAYLIST_TOPSELLING = 'PLHPTxTxtC0iZUGnexGOfXIIN_tCQrOU67';
+// const PLAYLIST_BOX_OFFICE = 'PLHPTxTxtC0iZaTf4DEe-eQ2_sTWuyVFs_';
+// const PLAYLIST_MOST_POPULAR = 'PLHPTxTxtC0iY65VCtQssLFRTQwV1ScueG';
+// const PLAYLIST_NEW_TO_RENT = 'PLHPTxTxtC0iY91P_GT7TzcLY_bF-2VOuy';
+// const PLAYLIST_TOP_RATED = 'PLHPTxTxtC0iY7Q9hbREwkLOxkFpaKnhc6';
+// const PLAYLIST_NEW_RELEASES = 'PLHPTxTxtC0iYAzVsEjJG3_qXPQ12YcTI1';
+// const PLAYLIST_TOPSELLING = 'PLHPTxTxtC0iZUGnexGOfXIIN_tCQrOU67';
+// const PLAYLIST_MONOR = 'PLLoXF47FunjOwLjF4IRNVx3gaMq2UM0dz';
 
 @autoinject()
 export class SectionCatalog {

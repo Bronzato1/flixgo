@@ -73,6 +73,7 @@ export class SectionHome {
     });
   }
   private triggerResize() {
+    // Pas sur que ce soit vraiment utile.
     $(window).trigger('resize');
   }
 }

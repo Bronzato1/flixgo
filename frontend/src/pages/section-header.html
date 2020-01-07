@@ -9,7 +9,7 @@
               <div class="header__content">
                 <!-- header logo -->
                 <a route-href="route: index" class="header__logo">
-                  <img src="images/logo.svg" alt="">
+                  <img src="images/logo.png" alt="">
                 </a>
                 <!-- end header logo -->
   
@@ -54,6 +54,8 @@
   
                     <ul class="dropdown-menu header__dropdown-menu" aria-labelledby="dropdownMenuMore">
                       <li><a route-href="route: about">About</a></li>
+                      <li><a route-href="route: privacy">Privacy policy</a></li>
+                      <li><a route-href="route: termsofuse">Terms of use</a></li>
                       <li><a route-href="route: profile">Profile</a></li>
                       <li><a route-href="route: signin">Sign In</a></li>
                       <li><a route-href="route: signup">Sign Up</a></li>
@@ -78,14 +80,19 @@
                     <ul class="dropdown-menu header__dropdown-menu" aria-labelledby="dropdownMenuLang">
                       <li><a href="#">English</a></li>
                       <li><a href="#">Spanish</a></li>
-                      <li><a href="#">Russian</a></li>
+                      <li><a href="#">Russian</a></li>                    
                     </ul>
                   </div>
                   <!-- end dropdown -->
   
-                  <a href="signin.html" class="header__sign-in">
+                  <a href="#" click.trigger="signIn()" class="header__sign-in" show.bind="!youtubeGateway.isSignedIn">
                     <i class="icon ion-ios-log-in"></i>
-                    <span>sign in</span>
+                    <span>Se connecter</span>
+                  </a>
+
+                  <a href="#" click.trigger="signOut()" class="header__sign-in" show.bind="youtubeGateway.isSignedIn">
+                    <i class="icon ion-ios-log-in"></i>
+                    <span>Se déconnecter</span>
                   </a>
                 </div>
                 <!-- end header auth -->

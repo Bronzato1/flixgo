@@ -17,6 +17,8 @@ export class App {
       { route: 'profile', name: 'profile', moduleId: './pages/profile/profile', title: 'Profile' },
       { route: 'signin', name: 'signin', moduleId: './pages/signin/signin', title: 'Signin' },
       { route: 'signup', name: 'signup', moduleId: './pages/signup/signup', title: 'Signup' },
+      { route: 'privacy', name: 'privacy', moduleId: './pages/privacy/privacy', title: 'Privacy' },
+      { route: 'termsofuse', name: 'termsofuse', moduleId: './pages/terms-of-use/terms-of-use', title: 'Terms of use' },
       { route: 'notFound', name: 'notFound', moduleId: './pages/not-found/not-found', title: 'Not found' }
     ]);
     config.mapUnknownRoutes('./pages/not-found/not-found');

@@ -631,7 +631,7 @@ ul {
     padding: 0;
   }
   .header__logo img {
-    max-width: 127px;
+    max-width: 190px;
   }
   .header__auth {
     margin-right: 54px;
@@ -1950,19 +1950,25 @@ ul {
   }
 }
 /*==============================
-	FAQ
+	FAQ - PRIVACY - TERMS OF USE
 ==============================*/
-.faq {
+.faq,
+.privacy,
+.termsofuse {
   display: block;
   margin-bottom: 40px;
 }
-.faq__title {
+.faq__title,
+.privacy__title,
+.termsofuse__title {
   color: #fff;
   font-weight: 400;
   font-size: 24px;
   margin-bottom: 10px;
 }
-.faq__text {
+.faq__text,
+.privacy__text,
+.termsofuse__text {
   font-size: 16px;
   line-height: 26px;
   margin-bottom: 15px;
@@ -1970,31 +1976,45 @@ ul {
   font-family: 'Open Sans', sans-serif;
   letter-spacing: 0.2px;
 }
-.faq__text b {
+.faq__text b,
+.privacy__text b,
+.termsofuse__text b {
   font-weight: 600;
 }
-.faq__text:last-child {
+.faq__text:last-child,
+.privacy__text:last-child,
+.termsofuse__text:last-child {
   margin-bottom: 0;
 }
 @media (min-width: 768px) {
-  .faq {
+  .faq,
+  .privacy,
+  .termsofuse {
     margin-bottom: 50px;
     margin-top: 15px;
   }
-  .faq:last-child {
+  .faq:last-child,
+  .privacy:last-child,
+  .termsofuse:last-child {
     margin-bottom: 15px;
   }
 }
 @media (min-width: 992px) {
-  .faq {
+  .faq,
+  .privacy,
+  .termsofuse {
     padding: 0 20px 0 0;
   }
 }
 @media (min-width: 1200px) {
-  .faq {
+  .faq,
+  .privacy,
+  .termsofuse {
     margin-bottom: 60px;
   }
-  .faq:last-child {
+  .faq:last-child,
+  .privacy:last-child,
+  .termsofuse:last-child {
     margin-bottom: 15px;
   }
 }

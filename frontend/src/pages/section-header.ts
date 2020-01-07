@@ -1,3 +1,4 @@
+import { YoutubeGateway } from 'gateways/youtube-gateway';
 import { autoinject, bindable } from 'aurelia-framework';
 import { Subscription, EventAggregator } from 'aurelia-event-aggregator';
 import { Router } from 'aurelia-router';
@@ -5,16 +6,26 @@ import { IFilter } from '../interfaces/filter-interface';
 
 @autoinject()
 export class SectionHeader {
-  constructor(router: Router, eventAgregator: EventAggregator) {
+
+  constructor(router: Router, eventAgregator: EventAggregator, youtubeGateway: YoutubeGateway) {
     this.router = router;
     this.ea = eventAgregator;
+    this.youtubeGateway = youtubeGateway;
   }
-  private ea: EventAggregator;
-  private subscription: Subscription;
-  private filters: IFilter;
-  private router: Router;
-  private attached() {
+
+  ea: EventAggregator;
+  subscription: Subscription;
+  youtubeGateway: YoutubeGateway;
+  filters: IFilter;
+  router: Router;
+  
+  bind() {
     this.eventAggregatorSubscription();
+  }
+  unbind() {
+    this.eventAggregatorUnsubscription();
+  }
+  attached() {
 
     $(document).ready(function () {
       $('.header__btn').on('click', function () {
@@ -40,12 +51,21 @@ export class SectionHeader {
       }
     });
   }
-  private eventAggregatorSubscription() {
+  eventAggregatorSubscription() {
     this.subscription = this.ea.subscribe('filtering', (response: IFilter) => {
       this.filters = response;
     });
   }
-  private submitSearch() {
+  eventAggregatorUnsubscription() {
+    this.subscription.dispose();
+  }
+  submitSearch() {
     this.ea.publish('filtering', this.filters);
+  }
+  signIn() {
+    this.router.navigate('signIn');
+  }
+  signOut() {
+    this.youtubeGateway.signOut();
   }
 }

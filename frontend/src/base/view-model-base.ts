@@ -1,5 +1,5 @@
 export class ViewModelBase {
-  private attached() {
+  public attached() {
     this.injectBackgroundImage();
   }
   private injectBackgroundImage() {

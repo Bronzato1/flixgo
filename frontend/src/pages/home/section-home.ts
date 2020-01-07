@@ -2,11 +2,12 @@ import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel';
 
 export class SectionHome {
+
   attached() {
     this.initializeCarousel();
     window.setTimeout(this.triggerResize, 500);
   }
-  private initializeCarousel() {
+  initializeCarousel() {
 
     $('.home__bg').owlCarousel({
       animateOut: 'fadeOut',
@@ -72,7 +73,7 @@ export class SectionHome {
       $('.home__bg .item').css("height", itemHeight + "px");
     });
   }
-  private triggerResize() {
+  triggerResize() {
     // Pas sur que ce soit vraiment utile.
     $(window).trigger('resize');
   }

@@ -1,4 +1,4 @@
-import { Youtube } from './../../models/youtube-model';
+import { YoutubeVideo } from '../../models/youtube-video-model';
 import { autoinject, bindable } from 'aurelia-framework';
 import { YoutubeGateway } from 'gateways/youtube-gateway';
 
@@ -9,12 +9,12 @@ export class SectionDetail1 {
   }
   private youtubeGateway: YoutubeGateway;
   private videoId: string;
-  private item: Youtube;
+  private item: YoutubeVideo;
   private created(view) {
     this.videoId = view.container.viewModel.videoId;
   }
   private bind(bindingContext) {
-    return this.youtubeGateway.searchMovieByVideoId(this.videoId).then(data => {
+    return this.youtubeGateway.videos_list_byId(this.videoId).then(data => {
       this.item = data || null;
     });
   }

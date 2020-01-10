@@ -1,60 +1,76 @@
+import { YoutubeGateway } from './../../gateways/youtube-gateway';
 import { IFilter } from './../../interfaces/filter-interface';
 import { Subscription, EventAggregator } from 'aurelia-event-aggregator';
 import { BindingEngine, bindable, observable, Disposable, autoinject } from 'aurelia-framework';
-import { Playlists } from 'playlists';
 import 'malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css';
 import 'malihu-custom-scrollbar-plugin';
 import 'jquery.mousewheel';
+import { YoutubePlaylist } from 'models/youtube-playlist-model';
 
 @autoinject()
 export class SectionFilter {
-  constructor(bindingEngine: BindingEngine, eventAgregator: EventAggregator) {
+
+  constructor(bindingEngine: BindingEngine, eventAgregator: EventAggregator, youtubeGateway: YoutubeGateway) {
     this.be = bindingEngine;
     this.ea = eventAgregator;
+    this.youtubeGateway = youtubeGateway;
   }
-  private be: BindingEngine;
-  private ea: EventAggregator;
-  private subscription: Subscription;
-  private disposables: Disposable[] = [];
-  private observers: MutationObserver[] = [];
-  private filters: IFilter = {};
-  private bind() {
-    this.resetFilters();
-    this.restoreFilters();
+
+  be: BindingEngine;
+  ea: EventAggregator;
+  subscription: Subscription;
+  disposables: Disposable[] = [];
+  observers: MutationObserver[] = [];
+  youtubeGateway: YoutubeGateway;
+  playlists: YoutubePlaylist[];
+  filters: IFilter = {};
+  channelId: string;
+
+  created() {
+  }
+  bind(bindingContext) {
+    this.channelId = bindingContext.channelId;
+
     this.propertyObserverSubscription();
     this.eventAggregatorSubscription();
+
+    this.loadPlaylists().then(() => {
+      this.playlists.forEach(playlist => $('#ul-filter-date').append(`<li>${playlist.snippet.title}</li>`));
+      this.prepareFilters();
+      this.resetFilters();
+      this.restoreFilters();
+      this.filtersChanged();
+    });
+
   }
-  private unbind() {
+  unbind() {
     this.propertyOberverUnsubscription();
     this.eventAggregatorUnsubscription();
   }
-  private attached() {
-    this.startObserveDOM();
-    this.prepareFilters();
-    this.filtersChanged();
+  attached() {
+      this.startObserveDOM();
   }
-  private detached() {
+  detached() {
     this.stopObserveDOM();
   }
-  private restoreFilters() {
-    // Après être passé dans la page détail d'un film, on restore les filtres 
-    if (JSON.parse(sessionStorage.getItem('filters'))) {
-      this.filters = JSON.parse(sessionStorage.getItem('filters'));
-      sessionStorage.removeItem('filters');
-    }
+  loadPlaylists() {
+    return this.youtubeGateway.playlists_list(this.channelId).then(data => {
+      this.playlists = data || null;
+      return Promise.resolve(true);
+    });
   }
-  private startObserveDOM() {
+  startObserveDOM() {
     this.observeDOM('playlistText');
     this.observeDOM('pageSizeText');
     this.observeDOM('sortOrderText');
     this.observeDOM('releaseYearStart');
     this.observeDOM('releaseYearEnd');
   }
-  private stopObserveDOM() {
+  stopObserveDOM() {
     // à l'origine de MutationObserver
     this.observers.forEach(x => x.disconnect());
   }
-  private prepareFilters() {
+  prepareFilters() {
     // Scrollbars sur les listes de filtres
     (<any>$('.scrollbar-dropdown')).mCustomScrollbar({
       axis: "y",
@@ -73,11 +89,18 @@ export class SectionFilter {
       $('#' + id).find('.filter__item-btn input').val(text);
     });
   }
-  private resetFilters() {
+  restoreFilters() {
+    // Après être passé dans la page détail d'un film, on restore les filtres 
+    if (JSON.parse(sessionStorage.getItem('filters'))) {
+      this.filters = JSON.parse(sessionStorage.getItem('filters'));
+      sessionStorage.removeItem('filters');
+    }
+  }
+  resetFilters() {
     this.filters.searchTerms = null;
 
-    this.filters.playlistText = Playlists.AroundTheWorld.find(x => x.name == 'Monor').name;
-    this.filters.playlistValue = Playlists.AroundTheWorld.find(x => x.name == 'Monor').id;
+    this.filters.playlistText = this.playlists[0].snippet.title;
+    this.filters.playlistValue = this.playlists[0].id;
 
     this.filters.pageSizeText = '10 éléments';
     this.filters.pageSizeValue = 10;
@@ -88,7 +111,7 @@ export class SectionFilter {
     this.filters.releaseYearStart = 2017;
     this.filters.releaseYearEnd = 2020;
   }
-  private propertyObserverSubscription() {
+  propertyObserverSubscription() {
     this.disposables.push(this.be.propertyObserver(this.filters, 'searchTerms').subscribe(() => { this.searchTermsChanged(); }));
     this.disposables.push(this.be.propertyObserver(this.filters, 'pageSizeText').subscribe(() => { this.pageSizeTextChanged(); }));
     this.disposables.push(this.be.propertyObserver(this.filters, 'sortOrderText').subscribe(() => { this.sortOrderTextChanged(); }));
@@ -96,23 +119,23 @@ export class SectionFilter {
     this.disposables.push(this.be.propertyObserver(this.filters, 'releaseYearStart').subscribe(() => { this.releaseYearStartChanged(); }));
     this.disposables.push(this.be.propertyObserver(this.filters, 'releaseYearEnd').subscribe(() => { this.releaseYearEndChanged(); }));
   }
-  private propertyOberverUnsubscription() {
+  propertyOberverUnsubscription() {
     // à l'origine des BindingEngine
     this.disposables.forEach(x => x.dispose());
   }
-  private eventAggregatorSubscription() {
+  eventAggregatorSubscription() {
     this.subscription = this.ea.subscribe('filtering', (response: IFilter) => {
       this.filters = response;
     });
   }
-  private eventAggregatorUnsubscription() {
+  eventAggregatorUnsubscription() {
     // à l'origine de EventAggregator
     this.subscription.dispose();
   }
-  private resetSearchTerms() {
+  resetSearchTerms() {
     this.filters.searchTerms = null;
   }
-  private observeDOM(elm) {
+  observeDOM(elm) {
     // Selectionne le noeud dont les mutations seront observées
     var targetNode = document.getElementById(elm);
     // Options de l'observateur (quelles sont les mutations à observer)
@@ -132,18 +155,18 @@ export class SectionFilter {
         self[elm] = value;
     }
   }
-  private get showResetFiltersButton() {
+  get showResetFiltersButton() {
     return true;
   }
-  private searchTermsChanged() {
+  searchTermsChanged() {
     this.filtersChanged();
   }
-  private pageSizeTextChanged() {
+  pageSizeTextChanged() {
     var nbr: number = +this.filters.pageSizeText.substr(0, 2);
     this.filters.pageSizeValue = nbr;
     this.filtersChanged();
   }
-  private sortOrderTextChanged() {
+  sortOrderTextChanged() {
     switch (this.filters.sortOrderText) {
       case 'Pertinence':
         this.filters.sortOrderValue = '';
@@ -163,10 +186,9 @@ export class SectionFilter {
     }
     this.filtersChanged();
   }
-  private playlistTextChanged() {
-
+  playlistTextChanged() {
     var data: IFilter = {};
-    var playlist = Playlists.AroundTheWorld.find(x => x.name == this.filters.playlistText);
+    var playlist = this.playlists.find(x => x.snippet.title == this.filters.playlistText);
 
     if (playlist)
       this.filters.playlistValue = playlist.id;
@@ -198,14 +220,13 @@ export class SectionFilter {
     // }
     this.filtersChanged();
   }
-  private releaseYearStartChanged() {
+  releaseYearStartChanged() {
     this.filtersChanged();
   }
-  private releaseYearEndChanged() {
+  releaseYearEndChanged() {
     this.filtersChanged();
   }
-  private filtersChanged() {
-    //debugger;
+  filtersChanged() {
     if (this.ea) this.ea.publish('filtering', this.filters);
   }
 }

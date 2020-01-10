@@ -1,7 +1,17 @@
+import { autoinject } from 'aurelia-framework';
+import { Router } from 'aurelia-router';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel';
+import { Channels } from 'channels';
 
+@autoinject()
 export class SectionHome {
+
+  constructor(router: Router) {
+    this.router = router;
+  }
+
+  router: Router;
 
   attached() {
     this.initializeCarousel();
@@ -76,5 +86,30 @@ export class SectionHome {
   triggerResize() {
     // Pas sur que ce soit vraiment utile.
     $(window).trigger('resize');
+  }
+  get channels() {
+    return Channels.Items;
+  }
+  nFormatter(num, digits) {
+    var si = [
+      { value: 1, symbol: "" },
+      { value: 1E3, symbol: "k" },
+      { value: 1E6, symbol: "M" },
+      { value: 1E9, symbol: "G" },
+      { value: 1E12, symbol: "T" },
+      { value: 1E15, symbol: "P" },
+      { value: 1E18, symbol: "E" }
+    ];
+    var rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+    var i;
+    for (i = si.length - 1; i > 0; i--) {
+      if (num >= si[i].value) {
+        break;
+      }
+    }
+    return (num / si[i].value).toFixed(digits).replace(rx, "$1") + si[i].symbol;
+  }
+  showCatalogList(channelId) {
+    this.router.navigateToRoute('catalogList', { channelId: channelId });
   }
 }

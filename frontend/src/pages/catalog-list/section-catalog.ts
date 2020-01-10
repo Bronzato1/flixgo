@@ -1,5 +1,5 @@
 import { YoutubeGateway } from './../../gateways/youtube-gateway';
-import { Youtube } from '../../models/youtube-model';
+import { YoutubeVideo } from '../../models/youtube-video-model';
 import { IFilter, IPager } from '../../interfaces/filter-interface';
 import { BindingEngine, autoinject, bindable, Disposable, computedFrom } from 'aurelia-framework';
 import { EventAggregator, Subscription } from 'aurelia-event-aggregator';
@@ -16,33 +16,36 @@ import moment = require('moment');
 
 @autoinject()
 export class SectionCatalog {
+
   constructor(router: Router, eventAgregator: EventAggregator, youtubeGateway: YoutubeGateway) {
     this.router = router;
     this.ea = eventAgregator;
     this.youtubeGateway = youtubeGateway;
   }
-  private router: Router;
-  private ea: EventAggregator;
-  private subscription: Subscription;
-  private youtubeGateway: YoutubeGateway;
-  private playlistItems: Youtube[];
-  private filters: IFilter = {};
-  private pager: IPager;
-  private items: Youtube[];
-  private nextPageToken: string = '';
-  private created() {
+
+  router: Router;
+  ea: EventAggregator;
+  subscription: Subscription;
+  youtubeGateway: YoutubeGateway;
+  playlistItems: YoutubeVideo[];
+  filters: IFilter = {};
+  pager: IPager;
+  items: YoutubeVideo[];
+  nextPageToken: string = '';
+
+  created() {
   }
-  private bind(bindingContext) {
+  bind() {
     this.eventAggregatorSubscription();
   }
-  private unbind() {
+  unbind() {
     this.eventAggregatorUnsubscription();
   }
-  private attached() {
+  attached() {
   }
-  private detached() {
+  detached() {
   }
-  private eventAggregatorSubscription() {
+  eventAggregatorSubscription() {
 
     this.subscription = this.ea.subscribe('filtering', (response: IFilter) => {
       // Attention: impossible de mettre un debugger ici car l'appel se fait déjà avant...
@@ -61,10 +64,10 @@ export class SectionCatalog {
       }, 100);
     }
   }
-  private eventAggregatorUnsubscription() {
+  eventAggregatorUnsubscription() {
     this.subscription.dispose();
   }
-  private refreshData() {
+  refreshData() {
 
     this.playlistItems = JSON.parse(localStorage.getItem(this.filters.playlistValue));
 
@@ -81,16 +84,17 @@ export class SectionCatalog {
       }
     }
   }
-  private fetchFirstMovies() {
-    return this.youtubeGateway.searchMoviesByPlaylist(this.filters.playlistValue).then(data => {
+  fetchFirstMovies() {
+    return this.youtubeGateway.playlistItems_list(this.filters.playlistValue).then(data => {
       this.nextPageToken = data.nextPageToken;
       this.playlistItems = data.items || null;
       this.setPage(1);
     });
   }
-  private fetchAllMovies() {
+  fetchAllMovies() {
     if (localStorage.getItem(this.filters.playlistValue)) return;
-    return this.youtubeGateway.searchAllMoviesByPlaylist(this.filters.playlistValue, this.nextPageToken).then(data => {
+    if (!this.nextPageToken) return;
+    return this.youtubeGateway.playlistItems_list_recursive(this.filters.playlistValue, this.nextPageToken).then(data => {
       this.nextPageToken = null;
       this.playlistItems = this.playlistItems.concat(data);
       localStorage.setItem(this.filters.playlistValue, JSON.stringify(this.playlistItems));
@@ -98,7 +102,7 @@ export class SectionCatalog {
       debugger;
     });
   }
-  private nFormatter(num, digits) {
+  nFormatter(num, digits) {
     var si = [
       { value: 1, symbol: "" },
       { value: 1E3, symbol: "k" },
@@ -117,10 +121,10 @@ export class SectionCatalog {
     }
     return (num / si[i].value).toFixed(digits).replace(rx, "$1") + si[i].symbol;
   }
-  private range(start, end) {
+  range(start, end) {
     return Array.from(new Array(end - start), (x, i) => i + start)
   }
-  private setPage(page) {
+  setPage(page) {
     //debugger;
     var self = this;
 
@@ -136,7 +140,7 @@ export class SectionCatalog {
 
     wait(300, scrollToTop);
   }
-  private getPager(totalItems, currentPage, pageSize): IPager {
+  getPager(totalItems, currentPage, pageSize): IPager {
     // default to first page
     currentPage = currentPage || 1;
 
@@ -182,18 +186,18 @@ export class SectionCatalog {
       pages: pages
     };
   }
-  private showMovie(videoId) {
+  showMovie(videoId) {
     sessionStorage.setItem('items', JSON.stringify(this.items));
     sessionStorage.setItem('pager', JSON.stringify(this.pager));
     sessionStorage.setItem('filters', JSON.stringify(this.filters));
     this.router.navigateToRoute('detail1', { videoId: videoId });
   }
   @computedFrom('filters')
-  private get filteredItems() {
+  get filteredItems() {
 
     if (!this.playlistItems) return [];
 
-    var filteredItems: Youtube[] = this.playlistItems.slice();
+    var filteredItems: YoutubeVideo[] = this.playlistItems.slice();
 
     if (this.filters.searchTerms)
       filteredItems = filteredItems.filter(x => x.snippet.title.toLocaleLowerCase().includes(this.filters.searchTerms.toLocaleLowerCase()));
@@ -263,4 +267,3 @@ const scrollToTop = () => {
 const wait = (delay, fct) => {
   window.setTimeout(fct, delay);
 };
-

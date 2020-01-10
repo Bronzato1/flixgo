@@ -2,117 +2,54 @@
 
   <!-- home -->
   <section class="home">
-      <!-- home bg -->
-      <div class="owl-carousel home__bg">
-        <div class="item home__cover" data-bg="images/home/home__bg.jpg"></div>
-        <div class="item home__cover" data-bg="images/home/home__bg.jpg"></div>
-        <div class="item home__cover" data-bg="images/home/home__bg.jpg"></div>
-        <div class="item home__cover" data-bg="images/home/home__bg.jpg"></div>
-      </div>
-      <!-- end home bg -->
-  
-      <div class="container">
-        <div class="row">
-          <div class="col-12">
-            <h1 class="home__title">ABONNEMENTS <b>YOUTUBE</b></h1>
-  
-            <button class="home__nav home__nav--prev" type="button">
-              <i class="icon ion-ios-arrow-round-back"></i>
-            </button>
-            <button class="home__nav home__nav--next" type="button">
-              <i class="icon ion-ios-arrow-round-forward"></i>
-            </button>
-          </div>
-  
-          <div class="col-12">
-            <div class="owl-carousel home__carousel">
-              <div class="item">
-                <!-- card -->
-                <div class="card card--big">
-                  <div class="card__cover">
-                    <img src="https://yt3.ggpht.com/a/AGF-l7-vtKDGKSDkmwMzleHkkeMxSgdc0INVoQPbIw=s288-c-k-c0xffffffff-no-rj-mo" alt="">
-                    <a href="#" class="card__play">
-                      <i class="icon ion-ios-play"></i>
-                    </a>
-                  </div>
-                  <div class="card__content">
-                    <h3 class="card__title"><a href="#">Monor</a></h3>
-                    <span class="card__category">
-                      <a href="#">Japon</a>
-                      <a href="#">Fanta</a>
-                    </span>
-                    <span class="card__rate"><i class="icon ion-ios-star"></i>8.4</span>
-                  </div>
+    <!-- home bg -->
+    <div class="owl-carousel home__bg">
+      <div class="item home__cover" data-bg="images/home/home__bg.jpg"></div>
+      <div class="item home__cover" data-bg="images/home/home__bg.jpg"></div>
+      <div class="item home__cover" data-bg="images/home/home__bg.jpg"></div>
+      <div class="item home__cover" data-bg="images/home/home__bg.jpg"></div>
+    </div>
+    <!-- end home bg -->
+
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="home__title">ABONNEMENTS <b>YOUTUBE</b></h1>
+
+          <button class="home__nav home__nav--prev" type="button">
+            <i class="icon ion-ios-arrow-round-back"></i>
+          </button>
+          <button class="home__nav home__nav--next" type="button">
+            <i class="icon ion-ios-arrow-round-forward"></i>
+          </button>
+        </div>
+
+        <div class="col-12">
+          <div class="owl-carousel home__carousel">
+            <div class="item" repeat.for="channel of channels">
+              <!-- card -->
+              <div class="card card--big">
+                <div class="card__cover" click.trigger="showCatalogList(channel.id)">
+                  <img src="${channel.thumbnails.medium.url}" alt="">
+                  <a href="#" class="card__play">
+                    <i class="icon ion-ios-play"></i>
+                  </a>
                 </div>
-                <!-- end card -->
-              </div>
-  
-              <div class="item">
-                <!-- card -->
-                <div class="card card--big">
-                  <div class="card__cover">
-                    <img src="https://yt3.ggpht.com/a/AGF-l79ls5NnF8vRXEBgPX_fa1tp7F5CYh6OIzoWnQ=s288-c-k-c0xffffffff-no-rj-mo" alt="">
-                    <a href="#" class="card__play">
-                      <i class="icon ion-ios-play"></i>
-                    </a>
-                  </div>
-                  <div class="card__content">
-                    <h3 class="card__title"><a href="#">Michael - Traverser la frontière</a></h3>
-                    <span class="card__category">
-                      <a href="#">Comedy</a>
-                    </span>
-                    <span class="card__rate"><i class="icon ion-ios-star"></i>7.1</span>
-                  </div>
+                <div class="card__content">
+                  <h3 class="card__title"><a href="#">${channel.title}</a></h3>
+                  <span class="card__category">
+                    <a href="#">${nFormatter(channel.statistics.videoCount,1)} vidéos</a>
+                  </span>
+                  <span class="card__rate"><i class="icon ion-ios-star"></i>8.4</span>
                 </div>
-                <!-- end card -->
               </div>
-  
-              <div class="item">
-                <!-- card -->
-                <div class="card card--big">
-                  <div class="card__cover">
-                    <img src="images/covers/cover.jpg" alt="">
-                    <a href="#" class="card__play">
-                      <i class="icon ion-ios-play"></i>
-                    </a>
-                  </div>
-                  <div class="card__content">
-                    <h3 class="card__title"><a href="#">Whitney</a></h3>
-                    <span class="card__category">
-                      <a href="#">Romance</a>
-                      <a href="#">Drama</a>
-                    </span>
-                    <span class="card__rate"><i class="icon ion-ios-star"></i>6.3</span>
-                  </div>
-                </div>
-                <!-- end card -->
-              </div>
-  
-              <div class="item">
-                <!-- card -->
-                <div class="card card--big">
-                  <div class="card__cover">
-                    <img src="images/covers/cover.jpg" alt="">
-                    <a href="#" class="card__play">
-                      <i class="icon ion-ios-play"></i>
-                    </a>
-                  </div>
-                  <div class="card__content">
-                    <h3 class="card__title"><a href="#">Blindspotting</a></h3>
-                    <span class="card__category">
-                      <a href="#">Comedy</a>
-                      <a href="#">Drama</a>
-                    </span>
-                    <span class="card__rate"><i class="icon ion-ios-star"></i>7.9</span>
-                  </div>
-                </div>
-                <!-- end card -->
-              </div>
+              <!-- end card -->
             </div>
           </div>
         </div>
       </div>
-    </section>
-    <!-- end home -->
-  
+    </div>
+  </section>
+  <!-- end home -->
+
 </template>

@@ -35,6 +35,7 @@ Primary use:	FlixGo Template
 25. Plyr customization
 26. PhotoSwipe customization
 27. mCustomScrollbar customization
+28. Ionicons sizes
 ----------------------------------------*/
 
 /*==============================
@@ -475,8 +476,8 @@ ul {
   background-image: -webkit-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
   background-image: -ms-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
   background-image: linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-  -webkit-box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
-  box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
+  /* -webkit-box-shadow: 0 0 20px 0 rgba(255,88,96,0.5); TLA */
+  /* box-shadow: 0 0 20px 0 rgba(255,88,96,0.5); TLA */
   opacity: 0.85;
   margin-left: 20px;
 }
@@ -489,6 +490,8 @@ ul {
 }
 .header__sign-in:hover {
   opacity: 1;
+  -webkit-box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
+  box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
 }
 .header__btn {
   display: block;
@@ -1200,8 +1203,8 @@ ul {
   background-image: -webkit-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
   background-image: -ms-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
   background-image: linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-  -webkit-box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
-  box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
+  /* -webkit-box-shadow: 0 0 20px 0 rgba(255,88,96,0.5); TLA */
+  /* box-shadow: 0 0 20px 0 rgba(255,88,96,0.5); TLA */
   opacity: 0.85;
   font-size: 13px;
   color: #fff;
@@ -1214,6 +1217,8 @@ ul {
 .section__btn:hover {
   opacity: 1;
   color: #fff;
+  -webkit-box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
+  box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
 }
 .section__wrap {
   display: flex;
@@ -1389,6 +1394,7 @@ ul {
 .card__cover:hover {
   -webkit-box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
   box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
+  cursor: pointer;
 }
 .left-section {
   z-index: 9;
@@ -3552,8 +3558,8 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
   background-image: -webkit-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
   background-image: -ms-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
   background-image: linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-  -webkit-box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
-  box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
+  /* -webkit-box-shadow: 0 0 20px 0 rgba(255,88,96,0.5); TLA */
+  /* box-shadow: 0 0 20px 0 rgba(255,88,96,0.5); TLA */
   opacity: 0.85;
   font-size: 13px;
   color: #fff;
@@ -3565,6 +3571,8 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
 .sign__btn:hover {
   opacity: 1;
   color: #fff;
+  box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
+  -webkit-box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
 }
 .sign__text {
   margin-top: 20px;
@@ -3674,8 +3682,8 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
   background-image: -webkit-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
   background-image: -ms-linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
   background-image: linear-gradient(90deg, #ff55a5 0%, #ff5860 100%);
-  -webkit-box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
-  box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
+  /* -webkit-box-shadow: 0 0 20px 0 rgba(255,88,96,0.5); TLA */
+  /* box-shadow: 0 0 20px 0 rgba(255,88,96,0.5); TLA */
   opacity: 0.85;
   font-size: 13px;
   color: #fff;
@@ -3687,6 +3695,8 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
 .page-404__btn:hover {
   opacity: 1;
   color: #fff;
+  -webkit-box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
+  box-shadow: 0 0 20px 0 rgba(255,88,96,0.5);
 }
 @media (min-width: 768px) {
   .page-404__content {
@@ -4168,4 +4178,35 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
   background-image: -webkit-linear-gradient(180deg, #ff55a5 0%, #ff5860 100%);
   background-image: -ms-linear-gradient(180deg, #ff55a5 0%, #ff5860 100%);
   background-image: linear-gradient(180deg, #ff55a5 0%, #ff5860 100%);
+}
+
+/*==============================
+	Ionicons sizes
+==============================*/
+
+.ion-lg:before {
+  position: relative;
+  font-size: 1.33333em;
+  line-height: 0.75em;
+  vertical-align: -15%;
+}
+
+.ion-2x:before {
+  position: relative;
+  font-size: 2em;
+}
+
+.ion-3x:before {
+  position: relative;
+  font-size: 3em;
+}
+
+.ion-4x:before {
+  position: relative;
+  font-size: 4em;
+}
+
+.ion-5x:before {
+  position: relative;
+  font-size: 5em;
 }

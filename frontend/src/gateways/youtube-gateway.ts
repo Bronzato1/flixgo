@@ -1,4 +1,5 @@
-import { Youtube } from './../models/youtube-model';
+import { YoutubePlaylist } from './../models/youtube-playlist-model';
+import { YoutubeVideo } from '../models/youtube-video-model';
 import { HttpClient } from 'aurelia-fetch-client';
 import { autoinject } from "aurelia-framework";
 import environment from 'environment';
@@ -8,18 +9,17 @@ import secret from '../secret';
 export class YoutubeGateway {
 
   constructor() {
-    debugger;
     this.httpClient = new HttpClient();
     gapiReady.then(() => {
       this.gapi = (<any>window).gapi;
       this.initAuth2();
     });
   }
-  
+
   httpClient: HttpClient;
   gapi;
   auth2;
-  
+
   initAuth2() {
     this.gapi.load("client:auth2", () => {
       this.auth2 = this.gapi.auth2.init({ client_id: secret.googleClientId });
@@ -92,7 +92,7 @@ export class YoutubeGateway {
     if (!this.auth2) return false;
     return this.auth2.isSignedIn.get();
   }
-  searchVideos(searchTerms: string, pageToken: string = null) {
+  search_list(searchTerms: string, pageToken: string = null) {
     debugger;
     var url = `${environment.youtubeUrl}search?part=snippet&type=video&videoType=movie&maxResults=50&q=${searchTerms}&key=${secret.googleApiKey}`;
 
@@ -103,12 +103,12 @@ export class YoutubeGateway {
       .fetch(url)
       .then(response => response.json())
       .then(data => {
-        var result1: Youtube[] = data.items.map(Youtube.fromSearch);
+        var result1: YoutubeVideo[] = data.items.map(YoutubeVideo.fromSearch);
         var ids = data.items.map(x => x.id.videoId);
 
-        return this.videoStatistics(ids).then(items => {
-          var result2: Youtube[] = items.map(Youtube.fromStatistics);
-          var merged: Youtube[] = [];
+        return this.videos_list_byIds(ids).then(items => {
+          var result2: YoutubeVideo[] = items.map(YoutubeVideo.fromStatistics);
+          var merged: YoutubeVideo[] = [];
 
           for (var i = 0; i < result1.length; i++) {
             var obj = { ...result1[i], ...result2[i] };
@@ -124,7 +124,7 @@ export class YoutubeGateway {
       })
       .catch(error => console.log(error));
   }
-  searchMoviesByPlaylist(playlistId: string, pageToken: string = null): Promise<any> {
+  playlistItems_list(playlistId: string, pageToken: string = null): Promise<any> {
 
     var url = `${environment.youtubeUrl}playlistItems?part=snippet%2CcontentDetails&maxResults=50&playlistId=${playlistId}&key=${secret.googleApiKey}`;
 
@@ -135,12 +135,12 @@ export class YoutubeGateway {
       .fetch(url)
       .then(response => response.json())
       .then(data => {
-        var result1: Youtube[] = data.items.map(Youtube.fromSearch);
+        var result1: YoutubeVideo[] = data.items.map(YoutubeVideo.fromSearch);
         var ids = result1.map(x => x.contentDetails.videoId);
 
-        return this.videoStatistics(ids).then(items => {
-          var result2: Youtube[] = items.map(Youtube.fromStatistics);
-          var merged: Youtube[] = [];
+        return this.videos_list_byIds(ids).then(items => {
+          var result2: YoutubeVideo[] = items.map(YoutubeVideo.fromStatistics);
+          var merged: YoutubeVideo[] = [];
 
           for (var i = 0; i < result1.length; i++) {
             var obj = { ...result1[i], ...result2[i] };
@@ -156,36 +156,13 @@ export class YoutubeGateway {
       })
       .catch(error => console.log(error));
   }
-  videoStatistics(ids): Promise<any> {
-    return this.httpClient
-      .fetch(`${environment.youtubeUrl}videos?part=statistics&id=${ids}&key=${secret.googleApiKey}`)
-      .then(response => response.json())
-      .then(data => data.items)
-      .catch(error => console.log(error));
-  }
-  searchMovieByVideoId(videoId: string): Promise<void | Youtube> {
-
-    var url = `${environment.youtubeUrl}videos?part=snippet%2CcontentDetails%2Cstatistics&id=${videoId}&key=${secret.googleApiKey}`;
-
-    return this.httpClient
-      .fetch(url)
-      .then(response => response.json())
-      .then(data => {
-        if (data.items.length == 1) {
-          var result: Youtube = Youtube.fromSearch(data.items[0]);
-          result.contentDetails.videoId = videoId;
-          return Promise.resolve(result);
-        }
-      })
-      .catch(error => console.log(error));
-  }
-  searchAllMoviesByPlaylist(playlistId: string, pageToken: string): Promise<any> {
+  playlistItems_list_recursive(playlistId: string, pageToken: string): Promise<any> {
 
     var self = this;
-    var allItems: Array<Youtube> = [];
+    var allItems: Array<YoutubeVideo> = [];
 
     function getData(pageToken) {
-      return self.searchMoviesByPlaylist(playlistId, pageToken).then(data => {
+      return self.playlistItems_list(playlistId, pageToken).then(data => {
         allItems = allItems.concat(data.items);
         if (data.nextPageToken)
           return getData(data.nextPageToken);
@@ -199,17 +176,39 @@ export class YoutubeGateway {
 
     return getData(pageToken);
   }
-  channelsList() {
-    debugger;
-    return (<any>window).gapi.client.youtube.channels.list({
-      "part": "snippet,contentDetails,statistics",
-      "mine": true
-    })
-      .then(function (response) {
-        // Handle the results here (response.result has the parsed body).
-        console.log("Response", response);
-      },
-        function (err) { console.error("Execute error", err); });
+  videos_list_byIds(ids): Promise<any> {
+    return this.httpClient
+      .fetch(`${environment.youtubeUrl}videos?part=statistics&id=${ids}&key=${secret.googleApiKey}`)
+      .then(response => response.json())
+      .then(data => data.items)
+      .catch(error => console.log(error));
+  }
+  videos_list_byId(videoId: string): Promise<void | YoutubeVideo> {
+
+    var url = `${environment.youtubeUrl}videos?part=snippet%2CcontentDetails%2Cstatistics&id=${videoId}&key=${secret.googleApiKey}`;
+
+    return this.httpClient
+      .fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        if (data.items.length == 1) {
+          var result: YoutubeVideo = YoutubeVideo.fromSearch(data.items[0]);
+          result.contentDetails.videoId = videoId;
+          return Promise.resolve(result);
+        }
+      })
+      .catch(error => console.log(error));
+  }
+  playlists_list(channelId: string) {
+
+    return this.httpClient
+      .fetch(`${environment.youtubeUrl}playlists?part=snippet&channelId=${channelId}&maxResults=50&key=${secret.googleApiKey}`)
+      .then(response => response.json())
+      .then(data => {
+        var result: YoutubePlaylist[] = data.items.map(YoutubePlaylist.fromSearch);
+        return result;
+      })
+      .catch(error => console.log(error));
   }
 }
 

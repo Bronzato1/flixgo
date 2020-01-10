@@ -4,15 +4,19 @@ import * as noUiSlider from 'nouislider';
 import * as wNumb from 'wnumb';
 
 export class Catalog {
-  private determineActivationStrategy() {
+
+  channelId: string;
+
+  determineActivationStrategy() {
     return activationStrategy.replace;
   }
-  private activate() {
+  activate(params) {
+    this.channelId = params.channelId;
   }
-  private attached() {
+  attached() {
     this.initializeFirstSlider();
   }
-  private initializeFirstSlider() {
+  initializeFirstSlider() {
     if ($('#filter__releaseYears').length) {
       var secondSlider = document.getElementById('filter__releaseYears');
       noUiSlider.create(secondSlider, {

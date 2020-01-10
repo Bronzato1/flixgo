@@ -10,6 +10,7 @@ import 'bootstrap';
 export function configure(aurelia: Aurelia) {
   aurelia.use
     .standardConfiguration()
+    .plugin('aurelia-validation')
     .feature('resources')
     .globalResources([
       'resources/elements/scriptinjector'

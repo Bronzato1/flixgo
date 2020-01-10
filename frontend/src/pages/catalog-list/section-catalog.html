@@ -6,12 +6,29 @@
       <div class="container">
         <div class="row">
           <!-- card -->
-          <div class="col-6 col-sm-12 col-lg-6" repeat.for="item of items">
+          <div class="col-6 col-sm-12 col-lg-6 full-section" repeat.for="item of items">
             <div class="card card--list">
               <div class="row">
                 <div class="col-12 col-sm-5 left-section">
                   <div>
-                    <img src="${item.snippet.thumbnails.medium.url}" click.trigger="showMovie(item.contentDetails.videoId)" alt="">
+                    <img src="${item.snippet.thumbnails.medium.url}"
+                      click.trigger="showMovie(item.contentDetails.videoId)" alt="">
+                    <div class="show-on-hover">
+                      <ul class="card__list">
+                        <li>HD</li>
+                        <li>16+</li>
+                      </ul>
+                      <span class="card__category">
+                        <a href="#">${item.snippet.channelTitle}</a>
+                      </span>
+                      <div class="card__wrap">
+                        <span class="card__rate">
+                          <i class="icon ion-md-thumbs-up"></i>${item.statistics.likeCount}
+                          &nbsp;&nbsp;
+                          <i class="icon ion-md-thumbs-down"></i>${item.statistics.dislikeCount}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -26,7 +43,6 @@
                     <span class="card__category">
                       <a href="#">${item.snippet.channelTitle}</a>
                     </span>
-
                     <div class="card__wrap">
                       <span class="card__rate">
                         <i class="icon ion-md-thumbs-up"></i>${item.statistics.likeCount}
@@ -36,12 +52,9 @@
                       &nbsp;&nbsp;
                       <span class="card__stat">· Sorti ${item.contentDetails.videoPublishedAt | humanize}</span>
                     </div>
-
                     <div class="card__description">
                       <p>${item.snippet.description}</p>
                     </div>
-
-
                   </div>
                 </div>
               </div>

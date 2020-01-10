@@ -2,34 +2,48 @@
 
   <div class="sign section--bg" data-bg="images/section/section.jpg">
     <div class="container">
-      <div class="row">
-        <div class="col-12">
+      <div class="row justify-content-md-center">
+        <div class="col col-lg-6 col-md-8 col-sm-12">
           <div class="sign__content">
             <!-- authorization form -->
             <form action="#" class="sign__form">
-              <a href="index.html" class="sign__logo">
+              <a route-href="route: index" class="sign__logo">
                 <img src="images/logo.png" alt="">
               </a>
 
               <div class="sign__group">
-                <span class="sign__text">A zkerzkerhjzk <b>dfsdfsdf</b> erjz kerhjezk rj sdkjfhs kdfjhsk j</span>
+                <span class="sign__text">
+                  Replay Productions vous permet dorénavant de vous connecter
+                  à votre compte en utilisant le système d'authentification Google.
+                </span>
               </div>
 
               <div class="sign__group sign__group--checkbox">
                 <input id="privacy" name="privacy" type="checkbox" checked.bind="privacyCheckbox">
-                <label for="privacy">J'ai lu et j'accepte la <a route-href="route: privacy" target="blank"> politique de
-                    confidentialité</a></label>
+                <label for="privacy">
+                  J'ai lu et j'accepte la
+                  <a route-href="route: privacy" target="blank">politique de confidentialité</a>
+                </label>
+                <br />
+                <input id="termsofuse" name="termsofuse" type="checkbox" checked.bind="termsofuseCheckbox">
+                <label for="termsofuse">
+                  J'ai lu et j'accepte les
+                  <a route-href="route: termsofuse" target="blank">conditions générales</a>
+                </label>
               </div>
 
-              <div class="sign__group sign__group--checkbox">
-                <input id="termsofuse" name="termsofuse" type="checkbox" checked.bind="termsofuseCheckbox">
-                <label for="termsofuse">J'ai lu et j'accepte les <a route-href="route: termsofuse" target="blank">
-                    conditions générales</a></label>
+              <div show.bind="validationController.errors.length>0">
+                <span class="sign__text text-danger">
+                  <b>
+                    Veuillez lire et accepter la politique de confidentialité
+                    et les conditions générales avant de vous connecter.
+                  </b>
+                </span>
               </div>
 
               <button class="sign__btn" type="button" click.trigger="signIn()">Se connecter</button>
-              
-              <span class="sign__text">Quels sont les risques ? <a href="signup.html">Cliquez ici</a></span>
+
+              <span class="sign__text"><a route-href="route: index">Retour</a> à la page d'accueil</span>
 
             </form>
             <!-- end authorization form -->

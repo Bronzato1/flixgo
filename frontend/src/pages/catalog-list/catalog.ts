@@ -21,12 +21,12 @@ export class Catalog {
       var secondSlider = document.getElementById('filter__releaseYears');
       noUiSlider.create(secondSlider, {
         range: {
-          'min': 2017,
+          'min': 2000,
           'max': 2020
         },
         step: 1,
         connect: true,
-        start: [2017, 2020],
+        start: [2000, 2020],
         format: wNumb({
           decimals: 0,
         })

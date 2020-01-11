@@ -93,7 +93,7 @@ export class YoutubeGateway {
     return this.auth2.isSignedIn.get();
   }
   search_list(searchTerms: string, pageToken: string = null) {
-    debugger;
+
     var url = `${environment.youtubeUrl}search?part=snippet&type=video&videoType=movie&maxResults=50&q=${searchTerms}&key=${secret.googleApiKey}`;
 
     if (pageToken)

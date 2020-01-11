@@ -35,7 +35,6 @@ export class SectionFilter {
     this.eventAggregatorSubscription();
 
     this.loadPlaylists().then(() => {
-      this.playlists.forEach(playlist => $('#ul-filter-date').append(`<li>${playlist.snippet.title}</li>`));
       this.prepareFilters();
       this.resetFilters();
       this.restoreFilters();
@@ -56,6 +55,7 @@ export class SectionFilter {
   loadPlaylists() {
     return this.youtubeGateway.playlists_list(this.channelId).then(data => {
       this.playlists = data || null;
+      this.playlists.forEach(playlist => $('#ul-filter-date').append(`<li>${playlist.snippet.title}</li>`));
       return Promise.resolve(true);
     });
   }
@@ -108,7 +108,7 @@ export class SectionFilter {
     this.filters.sortOrderText = 'Pertinence';
     this.filters.sortOrderValue = null;
 
-    this.filters.releaseYearStart = 2017;
+    this.filters.releaseYearStart = 2000;
     this.filters.releaseYearEnd = 2020;
   }
   propertyObserverSubscription() {
@@ -195,29 +195,6 @@ export class SectionFilter {
     else
       debugger;
 
-    // switch (this.filters.playlistText) {
-    //   case 'Box office':
-    //     this.filters.playlistValue = 'PLHPTxTxtC0iZaTf4DEe-eQ2_sTWuyVFs_';
-    //     break;
-    //   case 'Populaires':
-    //     this.filters.playlistValue = 'PLHPTxTxtC0iY65VCtQssLFRTQwV1ScueG';
-    //     break;
-    //   case 'Nouveauté à louer':
-    //     this.filters.playlistValue = 'PLHPTxTxtC0iY91P_GT7TzcLY_bF-2VOuy';
-    //     break;
-    //   case 'Mieux notés':
-    //     this.filters.playlistValue = 'PLHPTxTxtC0iY7Q9hbREwkLOxkFpaKnhc6';
-    //     break;
-    //   case 'Nouvelles sorties':
-    //     this.filters.playlistValue = 'PLHPTxTxtC0iYAzVsEjJG3_qXPQ12YcTI1';
-    //     break;
-    //   case 'Top des ventes':
-    //     this.filters.playlistValue = 'PLHPTxTxtC0iZUGnexGOfXIIN_tCQrOU67';
-    //     break;
-    //   case 'Monor':
-    //     this.filters.playlistValue = 'PLLoXF47FunjOwLjF4IRNVx3gaMq2UM0dz';
-    //     break;
-    // }
     this.filtersChanged();
   }
   releaseYearStartChanged() {

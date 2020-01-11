@@ -10,17 +10,9 @@
             <div class="card card--list">
               <div class="row">
                 <div class="col-12 col-sm-5 left-section">
-                  <div>
                     <img src="${item.snippet.thumbnails.medium.url}"
                       click.trigger="showMovie(item.contentDetails.videoId)" alt="">
                     <div class="show-on-hover">
-                      <ul class="card__list">
-                        <li>HD</li>
-                        <li>16+</li>
-                      </ul>
-                      <span class="card__category">
-                        <a href="#">${item.snippet.channelTitle}</a>
-                      </span>
                       <div class="card__wrap">
                         <span class="card__rate">
                           <i class="icon ion-md-thumbs-up"></i>${item.statistics.likeCount}
@@ -29,9 +21,7 @@
                         </span>
                       </div>
                     </div>
-                  </div>
                 </div>
-
                 <div class="col-12 col-sm-7">
                   <div class="card__content">
                     <h3 class="card__title"><a click.trigger="showMovie(item.contentDetails.videoId)"

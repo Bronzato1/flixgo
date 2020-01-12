@@ -215,6 +215,9 @@ ul {
   opacity: 1;
   pointer-events: auto;
 }
+.disabled {
+  pointer-events: none;
+}
 /*==============================
 	Header
 ==============================*/
@@ -1408,7 +1411,7 @@ ul {
 }
 .full-section:hover .left-section img {
   transition-property: all;
-  transition-duration: 0.3s;
+  transition-duration: 1.3s;
   transition-timing-function: cubic-bezier(0,1.05,0,1.04);
   width: 100%;
   cursor: pointer;
@@ -1416,22 +1419,27 @@ ul {
 }
 .left-section img {
   transition-property: all;
-  transition-duration: 0.3s;
+  transition-duration: 2.3s;
   transition-timing-function: cubic-bezier(0,1.05,0,1.0);
   box-shadow: 0 0 .7em black;
-  width: 263%;
+  width: 270%;
   object-fit: cover;
   object-position: left; 
-}
-.full-section .show-on-hover {
-  display: none;
 }
 .full-section:hover .show-on-hover {
   display: block;
   margin-top: 10px;
 }
+.full-section .show-on-hover .card__wrap {
+  transition: opacity 500ms;
+  opacity: 0;
+}
+.full-section:hover .show-on-hover .card__wrap {
+  transition: opacity 500ms;
+  opacity: 1;
+}
 .full-section .card--list {
- margin-bottom: 20px;
+ margin-bottom: 0px;
 }
 .card__cover:hover:before {
   opacity: 0.65;
@@ -1477,9 +1485,9 @@ ul {
   color: #fff;
   margin: 0;
   overflow: hidden;
-  white-space: nowrap;
+  /* white-space: nowrap;
   -o-text-overflow: ellipsis;
-  text-overflow: ellipsis;
+  text-overflow: ellipsis; TLA */
   word-wrap: break-word;
 }
 .card__title a {
@@ -1787,7 +1795,7 @@ ul {
     font-size: 20px;
   }
   .card--list .card__title {
-    font-size: 20px;
+    font-size: 17px; /* TLA 20px */
   }
   .card--list .card__content {
     height: 237px;

@@ -1,8 +1,9 @@
 export class ViewModelBase {
-  public attached() {
+  
+  attached() {
     this.injectBackgroundImage();
   }
-  private injectBackgroundImage() {
+  injectBackgroundImage() {
     /*==============================
         Section bg
     ==============================*/
@@ -10,7 +11,7 @@ export class ViewModelBase {
       if ($(this).attr("data-bg")) {
         $(this).css({
           'background': 'url(' + $(this).data('bg') + ')',
-          'background-position': 'center center',
+          'background-position': 'left center',
           'background-repeat': 'no-repeat',
           'background-size': 'cover'
         });

@@ -7,6 +7,7 @@ export class YoutubePlaylist {
 
   id: string;
   snippet: Snippet;
+  contentDetails: ContentDetails;
 }
 
 class Snippet {
@@ -17,6 +18,10 @@ class Snippet {
   liveBroadcastContent: string;
   publishedAt: Date;
   thumbnails: Thumbnail[];
+}
+
+class ContentDetails {
+  itemCount: number;
 }
 
 class Thumbnail {

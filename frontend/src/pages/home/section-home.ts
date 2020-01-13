@@ -1,21 +1,32 @@
 import { autoinject } from 'aurelia-framework';
 import { Router } from 'aurelia-router';
+import { YoutubeChannel } from 'models/youtube-channel-model';
+import { YoutubeChannels } from 'youtube-channels';
+import { YoutubeGateway } from 'gateways/youtube-gateway';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel';
-import { Channels } from 'channels';
 
 @autoinject()
 export class SectionHome {
 
-  constructor(router: Router) {
+  constructor(router: Router, youtubeGateway: YoutubeGateway) {
     this.router = router;
+    this.youtubeGateway = youtubeGateway;
   }
 
   router: Router;
+  youtubeGateway: YoutubeGateway;
+  channels: any; //YoutubeChannel[];
 
+  bind() {
+  }
   attached() {
-    this.initializeCarousel();
-    window.setTimeout(this.triggerResize, 500);
+    let ids = YoutubeChannels.Ids;
+    this.youtubeGateway.channels_list_byIds(ids).then(data => {
+      this.channels = data;
+      window.setTimeout(this.initializeCarousel, 100);
+      window.setTimeout(this.triggerResize, 500);
+    });
   }
   initializeCarousel() {
 
@@ -86,9 +97,6 @@ export class SectionHome {
   triggerResize() {
     // Pas sur que ce soit vraiment utile.
     $(window).trigger('resize');
-  }
-  get channels() {
-    return Channels.Items;
   }
   nFormatter(num, digits) {
     var si = [

@@ -47,7 +47,7 @@ export class SectionFilter {
     this.eventAggregatorUnsubscription();
   }
   attached() {
-      this.startObserveDOM();
+    this.startObserveDOM();
   }
   detached() {
     this.stopObserveDOM();
@@ -99,11 +99,15 @@ export class SectionFilter {
   resetFilters() {
     this.filters.searchTerms = null;
 
-    this.filters.playlistText = this.playlists[0].snippet.title;
-    this.filters.playlistValue = this.playlists[0].id;
+    var playlist = this.playlists.reduce((prev, current) => {
+      return (prev.contentDetails.itemCount > current.contentDetails.itemCount) ? prev : current;
+    });
 
-    this.filters.pageSizeText = '10 éléments';
-    this.filters.pageSizeValue = 10;
+    this.filters.playlistText = playlist.snippet.title;
+    this.filters.playlistValue = playlist.id;
+
+    this.filters.pageSizeText = '15 éléments';
+    this.filters.pageSizeValue = 15;
 
     this.filters.sortOrderText = 'Pertinence';
     this.filters.sortOrderValue = null;

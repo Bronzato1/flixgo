@@ -12,6 +12,7 @@ export class YoutubeVideo {
   snippet: Snippet;
   contentDetails: ContentDetails;
   statistics: Statistics;
+  status: Status;
 }
 
 class Snippet {
@@ -56,4 +57,12 @@ class Statistics {
   dislikeCount: number;
   likeCount: number;
   viewCount: number;
+}
+
+class Status {
+  uploadStatus: string;
+  privacyStatus: string;
+  license: string;
+  embeddable: string;
+  publicStatsViewable: string;
 }

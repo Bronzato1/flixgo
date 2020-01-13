@@ -4,6 +4,7 @@ import { HttpClient } from 'aurelia-fetch-client';
 import { autoinject } from "aurelia-framework";
 import environment from 'environment';
 import secret from '../secret';
+import { YoutubeChannel } from 'models/youtube-channel-model';
 
 @autoinject()
 export class YoutubeGateway {
@@ -124,9 +125,19 @@ export class YoutubeGateway {
       })
       .catch(error => console.log(error));
   }
+  channels_list_byIds(ids): Promise<any> {
+    return this.httpClient
+      .fetch(`${environment.youtubeUrl}channels?part=snippet%2Cstatistics&id=${ids}&key=${secret.googleApiKey}`)
+      .then(response => response.json())
+      .then(data => {
+        var result1: YoutubeChannel[] = data.items.map(YoutubeChannel.fromSearch);
+        return result1;
+      })
+      .catch(error => console.log(error));
+  }
   playlistItems_list(playlistId: string, pageToken: string = null): Promise<any> {
 
-    var url = `${environment.youtubeUrl}playlistItems?part=snippet%2CcontentDetails&maxResults=50&playlistId=${playlistId}&key=${secret.googleApiKey}`;
+    var url = `${environment.youtubeUrl}playlistItems?part=snippet%2CcontentDetails%2Cstatus&maxResults=50&playlistId=${playlistId}&key=${secret.googleApiKey}`;
 
     if (pageToken)
       url += `&pageToken=${pageToken}`;
@@ -202,7 +213,7 @@ export class YoutubeGateway {
   playlists_list(channelId: string) {
 
     return this.httpClient
-      .fetch(`${environment.youtubeUrl}playlists?part=snippet&channelId=${channelId}&maxResults=50&key=${secret.googleApiKey}`)
+      .fetch(`${environment.youtubeUrl}playlists?part=snippet%2CcontentDetails&channelId=${channelId}&maxResults=50&key=${secret.googleApiKey}`)
       .then(response => response.json())
       .then(data => {
         var result: YoutubePlaylist[] = data.items.map(YoutubePlaylist.fromSearch);

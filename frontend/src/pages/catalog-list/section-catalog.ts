@@ -69,10 +69,11 @@ export class SectionCatalog {
   }
   refreshData() {
 
+    var self = this;
     this.playlistItems = JSON.parse(localStorage.getItem(this.filters.playlistValue));
 
     if (!this.playlistItems)
-      this.fetchFirstMovies().then(() => { this.fetchAllMovies(); });
+      fetchFirstMovies().then(() => { fetchAllMovies(); });
     else {
       if (sessionStorage.getItem('items')) {
         this.items = JSON.parse(sessionStorage.getItem('items'));
@@ -83,24 +84,25 @@ export class SectionCatalog {
         this.setPage(1);
       }
     }
-  }
-  fetchFirstMovies() {
-    return this.youtubeGateway.playlistItems_list(this.filters.playlistValue).then(data => {
-      this.nextPageToken = data.nextPageToken;
-      this.playlistItems = data.items || null;
-      this.setPage(1);
-    });
-  }
-  fetchAllMovies() {
-    if (localStorage.getItem(this.filters.playlistValue)) return;
-    if (!this.nextPageToken) return;
-    return this.youtubeGateway.playlistItems_list_recursive(this.filters.playlistValue, this.nextPageToken).then(data => {
-      this.nextPageToken = null;
-      this.playlistItems = this.playlistItems.concat(data);
-      localStorage.setItem(this.filters.playlistValue, JSON.stringify(this.playlistItems));
-    }).catch(error => {
-      debugger;
-    });
+
+    function fetchFirstMovies() {
+      return self.youtubeGateway.playlistItems_list(self.filters.playlistValue).then(data => {
+        self.nextPageToken = data.nextPageToken;
+        self.playlistItems = data.items || null;
+        self.setPage(1);
+      });
+    }
+    function fetchAllMovies() {
+      if (localStorage.getItem(self.filters.playlistValue)) return;
+      if (!self.nextPageToken) return;
+      return self.youtubeGateway.playlistItems_list_recursive(self.filters.playlistValue, self.nextPageToken).then(data => {
+        self.nextPageToken = null;
+        self.playlistItems = self.playlistItems.concat(data);
+        localStorage.setItem(self.filters.playlistValue, JSON.stringify(self.playlistItems));
+      }).catch(error => {
+        debugger;
+      });
+    }
   }
   nFormatter(num, digits) {
     var si = [
@@ -119,21 +121,22 @@ export class SectionCatalog {
         break;
       }
     }
-    return (num / si[i].value).toFixed(digits).replace(rx, "$1") + si[i].symbol;
+    return (num / si[i].value).toFixed(digits).replace(rx, "$1") + ' ' + si[i].symbol;
   }
   range(start, end) {
     return Array.from(new Array(end - start), (x, i) => i + start)
   }
   setPage(page) {
-    //debugger;
-    var self = this;
 
-    // if (page < 1 || (this.pager && (page > this.pager.totalPages))) {
-    //   return;
-    // }
+    var self = this;
 
     // get pager object from service
     this.pager = this.getPager(this.filteredItems.length, page, this.filters.pageSizeValue);
+
+    if (page < 1 || this.pager && page > this.pager.totalPages) {
+      this.items = [];
+      return;
+    }
 
     // get current page of items
     this.items = this.filteredItems.slice(this.pager.startIndex, this.pager.endIndex + 1);
@@ -199,6 +202,8 @@ export class SectionCatalog {
 
     var filteredItems: YoutubeVideo[] = this.playlistItems.slice();
 
+    filteredItems = filteredItems.filter(x => x.status && x.status.privacyStatus.startsWith('public'));
+
     if (this.filters.searchTerms)
       filteredItems = filteredItems.filter(x => x.snippet.title.toLocaleLowerCase().includes(this.filters.searchTerms.toLocaleLowerCase()));
 
@@ -246,6 +251,8 @@ export class SectionCatalog {
 
     if (this.filters.sortOrderValue == 'likeCount') {
       filteredItems = filteredItems.sort((n1, n2) => {
+        if (!n1.statistics || !n2.statistics) return 1;
+        
         if (+n1.statistics.likeCount < +n2.statistics.likeCount) {
           return 1;
         }

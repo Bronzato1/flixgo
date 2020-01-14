@@ -21,7 +21,7 @@ export class SectionHome {
   bind() {
   }
   attached() {
-    let ids = YoutubeChannels.Ids;
+    let ids = YoutubeChannels.Items.map(x => x.id);
     this.youtubeGateway.channels_list_byIds(ids).then(data => {
       this.channels = data;
       window.setTimeout(this.initializeCarousel, 100);
@@ -117,7 +117,7 @@ export class SectionHome {
     }
     return (num / si[i].value).toFixed(digits).replace(rx, "$1") + ' ' + si[i].symbol;
   }
-  showCatalogList(channelId) {
-    this.router.navigateToRoute('catalogList', { channelId: channelId });
+  showCatalogList(channel: YoutubeChannel) {
+    this.router.navigateToRoute('catalogList', { channelId: channel.id });
   }
 }

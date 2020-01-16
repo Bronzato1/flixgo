@@ -14,6 +14,10 @@ export class YoutubeChannel {
   get hashtags() { 
     return YoutubeChannels.Items.find(x => x.id == this.id).hashtags;
   }
+
+  get order() {
+    return YoutubeChannels.Items.find(x => x.id == this.id).order;
+  }
 }
 
 class Snippet {

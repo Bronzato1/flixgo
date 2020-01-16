@@ -94,7 +94,10 @@ export class SectionCatalog {
     }
     function fetchAllMovies() {
       if (localStorage.getItem(self.filters.playlistValue)) return;
-      if (!self.nextPageToken) return;
+      if (!self.nextPageToken) {
+        localStorage.setItem(self.filters.playlistValue, JSON.stringify(self.playlistItems));
+        return;
+      }
       return self.youtubeGateway.playlistItems_list_recursive(self.filters.playlistValue, self.nextPageToken).then(data => {
         self.nextPageToken = null;
         self.playlistItems = self.playlistItems.concat(data);

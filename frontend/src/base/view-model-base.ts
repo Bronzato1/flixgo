@@ -11,7 +11,7 @@ export class ViewModelBase {
       if ($(this).attr("data-bg")) {
         $(this).css({
           'background': 'url(' + $(this).data('bg') + ')',
-          'background-position': 'left center',
+          'background-position': 'center center',
           'background-repeat': 'no-repeat',
           'background-size': 'cover'
         });

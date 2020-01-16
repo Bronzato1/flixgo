@@ -157,7 +157,7 @@ export class YoutubeGateway {
             var obj = { ...result1[i], ...result2[i] };
             merged.push(obj);
           }
-
+          
           return {
             nextPageToken: data.nextPageToken,
             totalItems: data.nextPageToken ? 999 : merged.length,

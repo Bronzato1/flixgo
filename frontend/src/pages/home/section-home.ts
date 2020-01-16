@@ -23,7 +23,7 @@ export class SectionHome {
   attached() {
     let ids = YoutubeChannels.Items.map(x => x.id);
     this.youtubeGateway.channels_list_byIds(ids).then(data => {
-      this.channels = data;
+      this.channels = data.sort((a, b) => a.order < b.order ? -1 : a.order > b.order ? 1 : 0);
       window.setTimeout(this.initializeCarousel, 100);
       window.setTimeout(this.triggerResize, 500);
     });
@@ -38,7 +38,7 @@ export class SectionHome {
       items: 1,
       dots: false,
       loop: true,
-      autoplay: false,
+      autoplay: true,
       smartSpeed: 600,
       margin: 0,
     });
@@ -59,34 +59,42 @@ export class SectionHome {
       touchDrag: false,
       dots: false,
       loop: true,
-      autoplay: false,
+      autoplay: true,
       smartSpeed: 600,
       margin: 30,
       responsive: {
         0: {
-          items: 2,
+          items: 1,
         },
         576: {
-          items: 2,
+          items: 1,
         },
         768: {
-          items: 3,
+          items: 1,
         },
         992: {
-          items: 4,
+          items: 1,
         },
         1200: {
-          items: 4,
+          items: 1,
           margin: 50
         },
       }
     });
 
     $('.home__nav--next').on('click', function () {
+      // synchro des 2 carousels au clic du bouton suivant 
       $('.home__carousel, .home__bg').trigger('next.owl.carousel');
+      // reset de l'autoplay
+      $('.home__carousel, .home__bg').trigger('stop.owl.autoplay',[5000]);
+      $('.home__carousel, .home__bg').trigger('play.owl.autoplay',[5000]);
     });
     $('.home__nav--prev').on('click', function () {
+      // synchro des 2 carousels au clic du bouton précédent 
       $('.home__carousel, .home__bg').trigger('prev.owl.carousel');
+      // reset de l'autoplay
+      $('.home__carousel, .home__bg').trigger('stop.owl.autoplay',[5000]);
+      $('.home__carousel, .home__bg').trigger('play.owl.autoplay',[5000]);
     });
 
     $(window).on('resize', function () {

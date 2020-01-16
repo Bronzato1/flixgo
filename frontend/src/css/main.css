@@ -774,7 +774,8 @@ ul {
   position: relative;
   display: block;
   background-color: #2b2b31;
-  padding: 40px 0;
+  /* padding: 40px 0; TLA */
+  padding-bottom: calc((100vw - 10px) / 12 - 1px);
   overflow: hidden;
 }
 .home .container {
@@ -791,7 +792,11 @@ ul {
   z-index: 1;
 }
 .home__cover {
-  opacity: 0.07;
+  height: auto !important;
+  opacity: 0.99;
+  padding-top: 145px;
+  padding-bottom: calc((100vw -280px) / 13 - 1px);
+  /* margin-top: 90px; */
 }
 .home__title {
   color: #fff;
@@ -856,7 +861,7 @@ ul {
 @media (min-width: 768px) {
   .home {
     margin-top: 90px;
-    padding: 60px 0;
+    /* padding: 60px 0; TLA */
   }
   .home__title {
     font-size: 32px;
@@ -866,9 +871,9 @@ ul {
   }
 }
 @media (min-width: 1200px) {
-  .home {
+  /* .home {
     padding: 70px 0;
-  }
+  } TLA */
   .home__title {
     font-size: 36px;
   }
@@ -1068,7 +1073,7 @@ ul {
     line-height: 50px;
     color: #fff;
     position: relative;
-    text-transform: uppercase;
+    /* text-transform: uppercase; TLA */
     font-size: 14px;
     font-weight: 300;
     letter-spacing: 0.2px;
@@ -1489,9 +1494,9 @@ ul {
   color: #fff;
   margin: 0;
   overflow: hidden;
-  /* white-space: nowrap;
+  white-space: nowrap;
   -o-text-overflow: ellipsis;
-  text-overflow: ellipsis; TLA */
+  text-overflow: ellipsis;
   word-wrap: break-word;
 }
 .card__title a {
@@ -1512,6 +1517,7 @@ ul {
   font-size: 14px;
   position: relative;
   background-image: -webkit-linear-gradient(0deg, #ff55a5 0%, #ff5860 100%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   color: #ff5860;
@@ -1526,10 +1532,12 @@ ul {
   left: 100%;
   top: 0;
   background-image: -webkit-linear-gradient(0deg, #ff55a5 0%, #ff5860 100%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   color: #ff5860;
 }
+.home .card__category a,
 .section__wrap .card__category a {
   background-image: -webkit-linear-gradient(0deg, #ffffff 0%, #ffffff 100%);
 }
@@ -1559,6 +1567,7 @@ ul {
 }
 .card__rate i:before {
   background-image: -webkit-linear-gradient(0deg, #ff55a5 0%, #ff5860 100%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   color: #ff5860;
@@ -1580,6 +1589,7 @@ ul {
 }
 .card__stat i:before {
   background-image: -webkit-linear-gradient(0deg, #ff55a5 0%, #ff5860 100%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   color: #ff5860;
@@ -1671,6 +1681,7 @@ ul {
   font-size: 15px;
   position: relative;
   background-image: -webkit-linear-gradient(0deg, #ff55a5 0%, #ff5860 100%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   color: #ff5860;
@@ -1684,6 +1695,7 @@ ul {
   left: 100%;
   top: 0;
   background-image: -webkit-linear-gradient(0deg, #ff55a5 0%, #ff5860 100%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   color: #ff5860;
@@ -1829,7 +1841,7 @@ ul {
   left: 0;
   height: 400px;
   z-index: 1;
-  opacity: 0.07;
+  opacity: 0.99;
 }
 .details:before {
   content: '';
@@ -1894,6 +1906,7 @@ ul {
 }
 .details__devices-list li i:before {
   background-image: -webkit-linear-gradient(0deg, #ff55a5 0%, #ff5860 100%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   color: #ff5860;
@@ -1935,6 +1948,7 @@ ul {
 }
 .details__share-list li.instagram a i:before {
   background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285aeb 90%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   color: #ff5860;
@@ -2065,6 +2079,7 @@ ul {
   margin-bottom: 10px;
   display: inline-block;
   background-image: -webkit-linear-gradient(0deg, #ff55a5 0%, #ff5860 100%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   color: #ff5860;
@@ -2198,6 +2213,7 @@ ul {
 .price__item--first span:last-child {
   font-weight: 500;
   background-image: -webkit-linear-gradient(0deg, #ff55a5 0%, #ff5860 100%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   color: #ff5860;
@@ -2268,6 +2284,7 @@ ul {
   top: 0;
   left: 15px;
   background-image: -webkit-linear-gradient(0deg, #ff55a5 0%, #ff5860 100%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   color: #ff5860;
@@ -2298,6 +2315,7 @@ ul {
 }
 .feature__icon:before {
   background-image: -webkit-linear-gradient(0deg, #ff55a5 0%, #ff5860 100%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   color: #ff5860;
@@ -2794,6 +2812,7 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
   display: block;
   font-family: "Ionicons";
   background-image: -webkit-linear-gradient(0deg, rgba(255,85,165,0.12) 0%, rgba(255,88,96,0.12) 100%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   color: #ff5860;
@@ -2984,6 +3003,7 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
 }
 .reviews__rating i:before {
   background-image: -webkit-linear-gradient(0deg, #ff55a5 0%, #ff5860 100%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   color: #ff5860;
@@ -3171,6 +3191,7 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
   position: absolute;
   display: block;
   background-image: -webkit-linear-gradient(0deg, #ff55a5 0%, #ff5860 100%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   color: #ff5860;
@@ -3325,6 +3346,7 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
 }
 .footer__social li.instagram a i:before {
   background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285aeb 90%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   color: #ff5860;
@@ -3517,6 +3539,7 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
 .sign__group--checkbox input:not(:checked) + label a,
 .sign__group--checkbox input:checked + label a {
   background-image: -webkit-linear-gradient(0deg, #ff55a5 0%, #ff5860 100%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   color: #ff5860;
@@ -3610,6 +3633,7 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
 .sign__text a {
   position: relative;
   background-image: -webkit-linear-gradient(0deg, #ff55a5 0%, #ff5860 100%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   color: #ff5860;
@@ -3678,6 +3702,7 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
 .page-404__title {
   position: relative;
   background-image: -webkit-linear-gradient(0deg, #ff55a5 0%, #ff5860 100%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   color: #ff5860;

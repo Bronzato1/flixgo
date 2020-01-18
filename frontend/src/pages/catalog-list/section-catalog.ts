@@ -70,7 +70,7 @@ export class SectionCatalog {
   refreshData() {
 
     var self = this;
-    this.playlistItems = JSON.parse(localStorage.getItem(this.filters.playlistValue));
+    //this.playlistItems = JSON.parse(localStorage.getItem(this.filters.playlistValue));
 
     if (!this.playlistItems)
       fetchFirstMovies().then(() => { fetchAllMovies(); });
@@ -93,15 +93,15 @@ export class SectionCatalog {
       });
     }
     function fetchAllMovies() {
-      if (localStorage.getItem(self.filters.playlistValue)) return;
-      if (!self.nextPageToken) {
-        localStorage.setItem(self.filters.playlistValue, JSON.stringify(self.playlistItems));
-        return;
-      }
+      // if (localStorage.getItem(self.filters.playlistValue)) return;
+      // if (!self.nextPageToken) {
+      //   localStorage.setItem(self.filters.playlistValue, JSON.stringify(self.playlistItems));
+      //   return;
+      // }
       return self.youtubeGateway.playlistItems_list_recursive(self.filters.playlistValue, self.nextPageToken).then(data => {
         self.nextPageToken = null;
         self.playlistItems = self.playlistItems.concat(data);
-        localStorage.setItem(self.filters.playlistValue, JSON.stringify(self.playlistItems));
+        //localStorage.setItem(self.filters.playlistValue, JSON.stringify(self.playlistItems));
       }).catch(error => {
         debugger;
       });

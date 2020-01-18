@@ -93,9 +93,11 @@ export class YoutubeGateway {
     if (!this.auth2) return false;
     return this.auth2.isSignedIn.get();
   }
-  search_list(searchTerms: string, pageToken: string = null) {
-
-    var url = `${environment.youtubeUrl}search?part=snippet&type=video&videoType=movie&maxResults=50&q=${searchTerms}&key=${secret.googleApiKey}`;
+  search_list(searchTerms: string, pageToken: string = null): Promise<any> {
+    // input: searchTerms, (optional) pageToken
+    // output: array of video data
+    var terms = escape(searchTerms);
+    var url = `${environment.youtubeUrl}search?part=snippet&type=video&maxResults=14&q=${terms}&key=${secret.googleApiKey}`;
 
     if (pageToken)
       url += `&pageToken=${pageToken}`;
@@ -125,18 +127,21 @@ export class YoutubeGateway {
       })
       .catch(error => console.log(error));
   }
-  channels_list_byIds(ids): Promise<any> {
+  channels_list_byId(id): Promise<any> {
+    // input: channel's id or array of channel's id
+    // output: array of channel data
     return this.httpClient
-      .fetch(`${environment.youtubeUrl}channels?part=snippet%2Cstatistics&id=${ids}&key=${secret.googleApiKey}`)
+      .fetch(`${environment.youtubeUrl}channels?part=snippet%2Cstatistics&id=${id}&key=${secret.googleApiKey}`)
       .then(response => response.json())
       .then(data => {
-        var result1: YoutubeChannel[] = data.items.map(YoutubeChannel.fromSearch);
-        return result1;
+        var result: YoutubeChannel[] = data.items.map(YoutubeChannel.fromSearch);
+        return result.length==1 ? result[0] : result;
       })
       .catch(error => console.log(error));
   }
   playlistItems_list(playlistId: string, pageToken: string = null): Promise<any> {
-
+    // input: playlist id, (optional) pageToken
+    // output: array of playlist items
     var url = `${environment.youtubeUrl}playlistItems?part=snippet%2CcontentDetails%2Cstatus&maxResults=50&playlistId=${playlistId}&key=${secret.googleApiKey}`;
 
     if (pageToken)
@@ -167,8 +172,21 @@ export class YoutubeGateway {
       })
       .catch(error => console.log(error));
   }
+  playlists_list(channelId: string): Promise<any> {
+    // input: channel id
+    // output: array of playlist items
+    return this.httpClient
+      .fetch(`${environment.youtubeUrl}playlists?part=snippet%2CcontentDetails&channelId=${channelId}&maxResults=50&key=${secret.googleApiKey}`)
+      .then(response => response.json())
+      .then(data => {
+        var result: YoutubePlaylist[] = data.items.map(YoutubePlaylist.fromSearch);
+        return result;
+      })
+      .catch(error => console.log(error));
+  }
   playlistItems_list_recursive(playlistId: string, pageToken: string): Promise<any> {
-
+    // input: playlist id, pageToken
+    // output: array of playlist items
     var self = this;
     var allItems: Array<YoutubeVideo> = [];
 
@@ -187,7 +205,9 @@ export class YoutubeGateway {
 
     return getData(pageToken);
   }
-  videos_list_byIds(ids): Promise<any> {
+  videos_list_byIds(ids): Promise<YoutubeVideo[]> {
+    // input: array of video id's
+    // output: array of video's statistics
     return this.httpClient
       .fetch(`${environment.youtubeUrl}videos?part=statistics&id=${ids}&key=${secret.googleApiKey}`)
       .then(response => response.json())
@@ -195,7 +215,8 @@ export class YoutubeGateway {
       .catch(error => console.log(error));
   }
   videos_list_byId(videoId: string): Promise<void | YoutubeVideo> {
-
+    // input: 1 video id
+    // output: 1 video data
     var url = `${environment.youtubeUrl}videos?part=snippet%2CcontentDetails%2Cstatistics&id=${videoId}&key=${secret.googleApiKey}`;
 
     return this.httpClient
@@ -207,17 +228,6 @@ export class YoutubeGateway {
           result.contentDetails.videoId = videoId;
           return Promise.resolve(result);
         }
-      })
-      .catch(error => console.log(error));
-  }
-  playlists_list(channelId: string) {
-
-    return this.httpClient
-      .fetch(`${environment.youtubeUrl}playlists?part=snippet%2CcontentDetails&channelId=${channelId}&maxResults=50&key=${secret.googleApiKey}`)
-      .then(response => response.json())
-      .then(data => {
-        var result: YoutubePlaylist[] = data.items.map(YoutubePlaylist.fromSearch);
-        return result;
       })
       .catch(error => console.log(error));
   }

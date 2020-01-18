@@ -1,16 +1,28 @@
-import { YoutubeChannels } from 'youtube-channels';
+import { autoinject } from 'aurelia-framework';
+import { YoutubeGateway } from 'gateways/youtube-gateway';
+import { Preferences } from 'preferences';
 import { YoutubeChannel } from 'models/youtube-channel-model';
 import { ViewModelBase } from "base/view-model-base";
+import { bind } from 'bluebird';
 
+@autoinject()
 export class SectionTitle extends ViewModelBase {
-  
-  channelId: string; // of the channel
+
+  constructor(youtubeGateway: YoutubeGateway) {
+    super();
+    this.youtubeGateway = youtubeGateway;
+  }
+
+  channelId: string;
   channelTitle: string;
-  channelHashtags: string[];
+  channelVideoCount: number;
+  youtubeGateway: YoutubeGateway;
 
   created(bindingContext) {
     this.channelId = bindingContext.container.viewModel.channelId;
-    this.channelTitle = YoutubeChannels.Items.find(x => x.id == this.channelId).title;
-    this.channelHashtags = YoutubeChannels.Items.find(x => x.id == this.channelId).hashtags;
+    this.youtubeGateway.channels_list_byId(this.channelId).then((data: YoutubeChannel) => {
+      this.channelTitle = data.snippet.title;
+      this.channelVideoCount = data.statistics.videoCount;
+    });
   }
 }

@@ -1,7 +1,7 @@
 import { autoinject } from 'aurelia-framework';
 import { Router } from 'aurelia-router';
 import { YoutubeChannel } from 'models/youtube-channel-model';
-import { YoutubeChannels } from 'youtube-channels';
+import { Preferences } from 'preferences';
 import { YoutubeGateway } from 'gateways/youtube-gateway';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel';
@@ -21,9 +21,9 @@ export class SectionHome {
   bind() {
   }
   attached() {
-    let ids = YoutubeChannels.Items.map(x => x.id);
-    this.youtubeGateway.channels_list_byIds(ids).then(data => {
-      this.channels = data.sort((a, b) => a.order < b.order ? -1 : a.order > b.order ? 1 : 0);
+    let ids = Preferences.Channels;
+    this.youtubeGateway.channels_list_byId(ids).then(data => {
+      this.channels = data.sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
       window.setTimeout(this.initializeCarousel, 100);
       window.setTimeout(this.triggerResize, 500);
     });

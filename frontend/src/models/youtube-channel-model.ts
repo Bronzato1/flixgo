@@ -1,4 +1,4 @@
-import { YoutubeChannels } from 'youtube-channels';
+import { Preferences } from 'preferences';
 
 export class YoutubeChannel {
 
@@ -10,14 +10,6 @@ export class YoutubeChannel {
   id: string;
   snippet: Snippet;
   statistics: Statistics;
-
-  get hashtags() { 
-    return YoutubeChannels.Items.find(x => x.id == this.id).hashtags;
-  }
-
-  get order() {
-    return YoutubeChannels.Items.find(x => x.id == this.id).order;
-  }
 }
 
 class Snippet {

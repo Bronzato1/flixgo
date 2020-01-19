@@ -1,0 +1,55 @@
+<template>
+
+  <!-- home -->
+  <section class="home">
+    <!-- home bg -->
+    <div class="owl-carousel home__bg">
+      <div class="item home__cover" repeat.for="channel of channels" data-bg="images/channels/${channel.id}.jpg"></div>
+    </div>
+
+    <!-- end home bg -->
+
+    <div class="container" ssstyle="top: -65px;">
+      <div class="row">
+
+
+        <div class="col-8">
+          <div class="owl-carousel home__carousel">
+            <div class="item" repeat.for="channel of channels">
+              <!-- card -->
+              <div class="card card--big">
+                <!-- <div class="card__cover" click.trigger="showCatalogList(channel)">
+                  <img src="${channel.snippet.thumbnails.medium.url}" alt="">
+                  <a href="#" class="card__play">
+                    <i class="icon ion-ios-play"></i>
+                  </a>
+                </div> -->
+                <div class="card__content">
+                  <h3 class="card__title">
+                    <a href="#" click.trigger="showCatalogList(channel)" style="font-size: 36px; font-weight: 700;">
+                      ${channel.snippet.title}
+                    </a>
+                  </h3>
+                  <span class="card__rate">${channel.statistics.videoCount} vidéos</span>
+                </div>
+              </div>
+              <!-- end card -->
+            </div>
+          </div>
+        </div>
+        <div class="col-4">
+          <!-- <h1 class="home__title">ABONNEMENTS <b>YOUTUBE</b></h1> -->
+
+          <button class="home__nav home__nav--prev" type="button">
+            <i class="icon ion-ios-arrow-dropleft-circle"></i>
+          </button>
+          <button class="home__nav home__nav--next" type="button">
+            <i class="icon ion-ios-arrow-dropright-circle"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- end home -->
+
+</template>

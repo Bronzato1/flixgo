@@ -1,0 +1,421 @@
+<template>
+    <!-- main content -->
+	<main class="main">
+		<div class="container-fluid">
+			<div class="row">
+				<!-- main title -->
+				<div class="col-12">
+					<div class="main__title">
+						<h2>Reviews</h2>
+
+						<span class="main__title-stat">9,071 Total</span>
+
+						<div class="main__title-wrap">
+							<!-- filter sort -->
+							<div class="filter" id="filter__sort">
+								<span class="filter__item-label">Sort by:</span>
+
+								<div class="filter__item-btn dropdown-toggle" role="navigation" id="filter-sort" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<input type="button" value="Date created">
+									<span></span>
+								</div>
+
+								<ul class="filter__item-menu dropdown-menu scrollbar-dropdown" aria-labelledby="filter-sort">
+									<li>Date created</li>
+									<li>Rating</li>
+								</ul>
+							</div>
+							<!-- end filter sort -->
+
+							<!-- search -->
+							<form action="#" class="main__title-form">
+								<input type="text" placeholder="Key word..">
+								<button type="button">
+									<i class="icon ion-ios-search"></i>
+								</button>
+							</form>
+							<!-- end search -->
+						</div>
+					</div>
+				</div>
+				<!-- end main title -->
+
+				<!-- reviews -->
+				<div class="col-12">
+					<div class="main__table-wrap">
+						<table class="main__table">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>ITEM</th>
+									<th>AUTHOR</th>
+									<th>TEXT</th>
+									<th>RATING</th>
+									<th>LIKE / DISLIKE</th>
+									<th>CREATED DATE</th>
+									<th>ACTIONS</th>
+								</tr>
+							</thead>
+
+							<tbody>
+								<tr>
+									<td>
+										<div class="main__table-text">23</div>
+									</td>
+									<td>
+										<div class="main__table-text">I Dream in Another Language</div>
+									</td>
+									<td>
+										<div class="main__table-text">John Doe</div>
+									</td>
+									<td>
+										<div class="main__table-text">Lorem Ipsum is simply dummy text...</div>
+									</td>
+									<td>
+										<div class="main__table-text main__table-text--rate"><i class="icon ion-ios-star"></i> 7.9</div>
+									</td>
+									<td>
+										<div class="main__table-text">12 / 7</div>
+									</td>
+									<td>
+										<div class="main__table-text">24 Oct 2019</div>
+									</td>
+									<td>
+										<div class="main__table-btns">
+											<a href="#modal-view" class="main__table-btn main__table-btn--view open-modal">
+												<i class="icon ion-ios-eye"></i>
+											</a>
+											<a href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal">
+												<i class="icon ion-ios-trash"></i>
+											</a>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div class="main__table-text">24</div>
+									</td>
+									<td>
+										<div class="main__table-text">Benched</div>
+									</td>
+									<td>
+										<div class="main__table-text">John Doe</div>
+									</td>
+									<td>
+										<div class="main__table-text">Lorem Ipsum is simply dummy text...</div>
+									</td>
+									<td>
+										<div class="main__table-text main__table-text--rate"><i class="icon ion-ios-star"></i> 8.6</div>
+									</td>
+									<td>
+										<div class="main__table-text">67 / 22</div>
+									</td>
+									<td>
+										<div class="main__table-text">24 Oct 2019</div>
+									</td>
+									<td>
+										<div class="main__table-btns">
+											<a href="#modal-view" class="main__table-btn main__table-btn--view open-modal">
+												<i class="icon ion-ios-eye"></i>
+											</a>
+											<a href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal">
+												<i class="icon ion-ios-trash"></i>
+											</a>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div class="main__table-text">25</div>
+									</td>
+									<td>
+										<div class="main__table-text">Whitney</div>
+									</td>
+									<td>
+										<div class="main__table-text">John Doe</div>
+									</td>
+									<td>
+										<div class="main__table-text">Lorem Ipsum is simply dummy text...</div>
+									</td>
+									<td>
+										<div class="main__table-text main__table-text--rate"><i class="icon ion-ios-star"></i> 6.0</div>
+									</td>
+									<td>
+										<div class="main__table-text">44 / 5</div>
+									</td>
+									<td>
+										<div class="main__table-text">24 Oct 2019</div>
+									</td>
+									<td>
+										<div class="main__table-btns">
+											<a href="#modal-view" class="main__table-btn main__table-btn--view open-modal">
+												<i class="icon ion-ios-eye"></i>
+											</a>
+											<a href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal">
+												<i class="icon ion-ios-trash"></i>
+											</a>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div class="main__table-text">26</div>
+									</td>
+									<td>
+										<div class="main__table-text">Blindspotting</div>
+									</td>
+									<td>
+										<div class="main__table-text">John Doe</div>
+									</td>
+									<td>
+										<div class="main__table-text">Lorem Ipsum is simply dummy text...</div>
+									</td>
+									<td>
+										<div class="main__table-text main__table-text--rate"><i class="icon ion-ios-star"></i> 9.1</div>
+									</td>
+									<td>
+										<div class="main__table-text">20 / 6</div>
+									</td>
+									<td>
+										<div class="main__table-text">24 Oct 2019</div>
+									</td>
+									<td>
+										<div class="main__table-btns">
+											<a href="#modal-view" class="main__table-btn main__table-btn--view open-modal">
+												<i class="icon ion-ios-eye"></i>
+											</a>
+											<a href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal">
+												<i class="icon ion-ios-trash"></i>
+											</a>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div class="main__table-text">27</div>
+									</td>
+									<td>
+										<div class="main__table-text">I Dream in Another Language</div>
+									</td>
+									<td>
+										<div class="main__table-text">John Doe</div>
+									</td>
+									<td>
+										<div class="main__table-text">Lorem Ipsum is simply dummy text...</div>
+									</td>
+									<td>
+										<div class="main__table-text main__table-text--rate"><i class="icon ion-ios-star"></i> 5.5</div>
+									</td>
+									<td>
+										<div class="main__table-text">8 / 132</div>
+									</td>
+									<td>
+										<div class="main__table-text">24 Oct 2019</div>
+									</td>
+									<td>
+										<div class="main__table-btns">
+											<a href="#modal-view" class="main__table-btn main__table-btn--view open-modal">
+												<i class="icon ion-ios-eye"></i>
+											</a>
+											<a href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal">
+												<i class="icon ion-ios-trash"></i>
+											</a>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div class="main__table-text">28</div>
+									</td>
+									<td>
+										<div class="main__table-text">Benched</div>
+									</td>
+									<td>
+										<div class="main__table-text">John Doe</div>
+									</td>
+									<td>
+										<div class="main__table-text">Lorem Ipsum is simply dummy text...</div>
+									</td>
+									<td>
+										<div class="main__table-text main__table-text--rate"><i class="icon ion-ios-star"></i> 7.0</div>
+									</td>
+									<td>
+										<div class="main__table-text">6 / 1</div>
+									</td>
+									<td>
+										<div class="main__table-text">24 Oct 2019</div>
+									</td>
+									<td>
+										<div class="main__table-btns">
+											<a href="#modal-view" class="main__table-btn main__table-btn--view open-modal">
+												<i class="icon ion-ios-eye"></i>
+											</a>
+											<a href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal">
+												<i class="icon ion-ios-trash"></i>
+											</a>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div class="main__table-text">29</div>
+									</td>
+									<td>
+										<div class="main__table-text">Whitney</div>
+									</td>
+									<td>
+										<div class="main__table-text">John Doe</div>
+									</td>
+									<td>
+										<div class="main__table-text">Lorem Ipsum is simply dummy text...</div>
+									</td>
+									<td>
+										<div class="main__table-text main__table-text--rate"><i class="icon ion-ios-star"></i> 9.0</div>
+									</td>
+									<td>
+										<div class="main__table-text">10 / 0</div>
+									</td>
+									<td>
+										<div class="main__table-text">24 Oct 2019</div>
+									</td>
+									<td>
+										<div class="main__table-btns">
+											<a href="#modal-view" class="main__table-btn main__table-btn--view open-modal">
+												<i class="icon ion-ios-eye"></i>
+											</a>
+											<a href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal">
+												<i class="icon ion-ios-trash"></i>
+											</a>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div class="main__table-text">30</div>
+									</td>
+									<td>
+										<div class="main__table-text">Blindspotting</div>
+									</td>
+									<td>
+										<div class="main__table-text">John Doe</div>
+									</td>
+									<td>
+										<div class="main__table-text">Lorem Ipsum is simply dummy text...</div>
+									</td>
+									<td>
+										<div class="main__table-text main__table-text--rate"><i class="icon ion-ios-star"></i> 6.2</div>
+									</td>
+									<td>
+										<div class="main__table-text">13 / 14</div>
+									</td>
+									<td>
+										<div class="main__table-text">24 Oct 2019</div>
+									</td>
+									<td>
+										<div class="main__table-btns">
+											<a href="#modal-view" class="main__table-btn main__table-btn--view open-modal">
+												<i class="icon ion-ios-eye"></i>
+											</a>
+											<a href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal">
+												<i class="icon ion-ios-trash"></i>
+											</a>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div class="main__table-text">31</div>
+									</td>
+									<td>
+										<div class="main__table-text">I Dream in Another Language</div>
+									</td>
+									<td>
+										<div class="main__table-text">John Doe</div>
+									</td>
+									<td>
+										<div class="main__table-text">Lorem Ipsum is simply dummy text...</div>
+									</td>
+									<td>
+										<div class="main__table-text main__table-text--rate"><i class="icon ion-ios-star"></i> 7.9</div>
+									</td>
+									<td>
+										<div class="main__table-text">12 / 7</div>
+									</td>
+									<td>
+										<div class="main__table-text">24 Oct 2019</div>
+									</td>
+									<td>
+										<div class="main__table-btns">
+											<a href="#modal-view" class="main__table-btn main__table-btn--view open-modal">
+												<i class="icon ion-ios-eye"></i>
+											</a>
+											<a href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal">
+												<i class="icon ion-ios-trash"></i>
+											</a>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div class="main__table-text">32</div>
+									</td>
+									<td>
+										<div class="main__table-text">Benched</div>
+									</td>
+									<td>
+										<div class="main__table-text">John Doe</div>
+									</td>
+									<td>
+										<div class="main__table-text">Lorem Ipsum is simply dummy text...</div>
+									</td>
+									<td>
+										<div class="main__table-text main__table-text--rate"><i class="icon ion-ios-star"></i> 8.6</div>
+									</td>
+									<td>
+										<div class="main__table-text">67 / 22</div>
+									</td>
+									<td>
+										<div class="main__table-text">24 Oct 2019</div>
+									</td>
+									<td>
+										<div class="main__table-btns">
+											<a href="#modal-view" class="main__table-btn main__table-btn--view open-modal">
+												<i class="icon ion-ios-eye"></i>
+											</a>
+											<a href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal">
+												<i class="icon ion-ios-trash"></i>
+											</a>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- end reviews -->
+
+				<!-- paginator -->
+				<div class="col-12">
+					<div class="paginator-wrap">
+						<span>10 from 9 071</span>
+
+						<ul class="paginator">
+							<li class="paginator__item paginator__item--prev">
+								<a href="#"><i class="icon ion-ios-arrow-back"></i></a>
+							</li>
+							<li class="paginator__item"><a href="#">1</a></li>
+							<li class="paginator__item paginator__item--active"><a href="#">2</a></li>
+							<li class="paginator__item"><a href="#">3</a></li>
+							<li class="paginator__item"><a href="#">4</a></li>
+							<li class="paginator__item paginator__item--next">
+								<a href="#"><i class="icon ion-ios-arrow-forward"></i></a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- end paginator -->
+			</div>
+		</div>
+	</main>
+	<!-- end main content -->
+</template>

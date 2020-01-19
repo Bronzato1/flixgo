@@ -1,0 +1,130 @@
+<template>
+
+  <!-- header -->
+  <header class="header">
+      <div class="header__wrap">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <div class="header__content">
+                <!-- header logo -->
+                <a route-href="route: index" class="header__logo">
+                  <img src="images/logo.png" alt="">
+                </a>
+                <!-- end header logo -->
+  
+                <!-- header nav -->
+                <ul class="header__nav">
+                  <!-- dropdown -->
+                  <li class="header__nav-item">
+                    <a class="dropdown-toggle header__nav-link" href="#" role="button" id="dropdownMenuHome"
+                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Home</a>
+  
+                    <ul class="dropdown-menu header__dropdown-menu" aria-labelledby="dropdownMenuHome">
+                      <li><a href="index.html">Home slideshow bg</a></li>
+                      <li><a href="index2.html">Home static bg</a></li>
+                    </ul>
+                  </li>
+                  <!-- end dropdown -->
+  
+                  <!-- dropdown -->
+                  <li class="header__nav-item">
+                    <a class="dropdown-toggle header__nav-link" href="#" role="button" id="dropdownMenuCatalog"
+                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Catalog</a>
+  
+                    <ul class="dropdown-menu header__dropdown-menu" aria-labelledby="dropdownMenuCatalog">
+                      <li><a route-href="route: detail2">Details TV Serie</a></li>
+                    </ul>
+                  </li>
+                  <!-- end dropdown -->
+  
+                  <li class="header__nav-item">
+                    <a route-href="route: pricing" class="header__nav-link">Pricing Plan</a>
+                  </li>
+  
+                  <li class="header__nav-item">
+                    <a route-href="route: faq" class="header__nav-link">Help</a>
+                  </li>
+  
+                  <!-- dropdown -->
+                  <li class="dropdown header__nav-item">
+                    <a class="dropdown-toggle header__nav-link header__nav-link--more" href="#" role="button"
+                      id="dropdownMenuMore" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+                        class="icon ion-ios-more"></i></a>
+  
+                    <ul class="dropdown-menu header__dropdown-menu" aria-labelledby="dropdownMenuMore">
+                      <li><a route-href="route: about">About</a></li>
+                      <li><a route-href="route: privacy">Privacy policy</a></li>
+                      <li><a route-href="route: termsofuse">Terms of use</a></li>
+                      <li><a route-href="route: profile">Profile</a></li>
+                      <li><a route-href="route: signin">Sign In</a></li>
+                      <li><a route-href="route: signup">Sign Up</a></li>
+                      <li><a route-href="route: notFound">404 Page</a></li>
+                    </ul>
+                  </li>
+                  <!-- end dropdown -->
+                </ul>
+                <!-- end header nav -->
+  
+                <!-- header auth -->
+                <div class="header__auth">
+                  <button class="header__search-btn" type="button">
+                    <i class="icon ion-ios-search"></i>
+                  </button>
+  
+                  <!-- dropdown -->
+                  <div class="dropdown header__lang">
+                    <a class="dropdown-toggle header__nav-link" href="#" role="button" id="dropdownMenuLang"
+                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">EN</a>
+  
+                    <ul class="dropdown-menu header__dropdown-menu" aria-labelledby="dropdownMenuLang">
+                      <li><a href="#">English</a></li>
+                      <li><a href="#">Spanish</a></li>
+                      <li><a href="#">Russian</a></li>                    
+                    </ul>
+                  </div>
+                  <!-- end dropdown -->
+  
+                  <a href="#" click.trigger="signIn()" class="header__sign-in" show.bind="!authenticationGateway.isAuthenticated()">
+                    <i class="icon ion-ios-log-in"></i>
+                    <span>Se connecter</span>
+                  </a>
+
+                  <a href="#" click.trigger="signOut()" class="header__sign-in" show.bind="authenticationGateway.isAuthenticated()">
+                    <i class="icon ion-ios-log-in"></i>
+                    <span>Se déconnecter</span>
+                  </a>
+                </div>
+                <!-- end header auth -->
+  
+                <!-- header menu btn -->
+                <button class="header__btn" type="button">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </button>
+                <!-- end header menu btn -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- header search -->
+      <form submit.delegate="submitSearch()" action="#" class="header__search">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <div class="header__search-content">
+                <input type="text" value.bind="filters.searchTerms" placeholder="Search for a movie, TV Series that you are looking for">
+                <button type="submit" click.trigger="submitSearch()">CHERCHER</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      <!-- end header search -->
+    </header>
+    <!-- end header -->
+  
+</template>

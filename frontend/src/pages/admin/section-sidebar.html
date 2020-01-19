@@ -1,0 +1,71 @@
+<template>
+    <!-- sidebar -->
+    <div class="sidebar">
+        <!-- sidebar logo -->
+        <a href="index.html" class="sidebar__logo">
+            <img src="images/logo.png" alt="">
+        </a>
+        <!-- end sidebar logo -->
+
+        <!-- sidebar user -->
+        <div class="sidebar__user">
+            <div class="sidebar__user-img">
+                <img src="images/user.svg" alt="">
+            </div>
+
+            <div class="sidebar__user-title">
+                <span>Admin</span>
+                <p>John Doe</p>
+            </div>
+
+            <button class="sidebar__user-btn" type="button" click.trigger="logout()">
+                <i class="icon ion-ios-log-out"></i>
+            </button>
+        </div>
+        <!-- end sidebar user -->
+
+        <!-- sidebar nav -->
+        <ul class="sidebar__nav">
+            <li class="sidebar__nav-item">
+                <a route-href="route: index" class="sidebar__nav-link" class.bind="(currentRouteIs('index')) ? 'sidebar__nav-link--active' : '' "><i
+                        class="icon ion-ios-keypad"></i> Dashboard</a>
+            </li>
+
+            <li class="sidebar__nav-item">
+                <a route-href="route: catalog" class="sidebar__nav-link" class.bind="(currentRouteIs('catalog')) ? 'sidebar__nav-link--active' : '' "><i class="icon ion-ios-film"></i> Catalog</a>
+            </li>
+
+            <li class="sidebar__nav-item">
+                <a route-href="route: user" class="sidebar__nav-link" class.bind="(currentRouteIs('user')) ? 'sidebar__nav-link--active' : '' "><i class="icon ion-ios-contacts"></i> Users</a>
+            </li>
+
+            <li class="sidebar__nav-item">
+                <a route-href="route: comment" class="sidebar__nav-link" class.bind="(currentRouteIs('comment')) ? 'sidebar__nav-link--active' : '' "><i class="icon ion-ios-chatbubbles"></i> Comments</a>
+            </li>
+
+            <li class="sidebar__nav-item">
+                <a route-href="route: review" class="sidebar__nav-link" class.bind="(currentRouteIs('review')) ? 'sidebar__nav-link--active' : '' "><i class="icon ion-ios-star-half"></i> Reviews</a>
+            </li>
+
+            <!-- dropdown -->
+            <li class="dropdown sidebar__nav-item">
+                <a class="dropdown-toggle sidebar__nav-link" href="#" role="button" id="dropdownMenuMore"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="icon ion-ios-copy"></i>
+                    Pages</a>
+
+                <ul class="dropdown-menu sidebar__dropdown-menu scrollbar-dropdown" aria-labelledby="dropdownMenuMore">
+                    <li><a route-href="route: addItem">Add item</a></li>
+                    <li><a route-href="route: editUser">Edit user</a></li>
+                </ul>
+            </li>
+            <!-- end dropdown -->
+        </ul>
+        <!-- end sidebar nav -->
+
+        <!-- sidebar copyright -->
+        <div class="sidebar__copyright">© 2019 FlixGo. <br>Create by <a
+                href="https://themeforest.net/user/dmitryvolkov/portfolio" target="_blank">Dmitry Volkov</a></div>
+        <!-- end sidebar copyright -->
+    </div>
+    <!-- end sidebar -->
+</template>

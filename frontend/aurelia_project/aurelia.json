@@ -101,6 +101,22 @@
             ]
           },
           {
+            "name": "jquery.magnific-popup.min",
+            "path": "../javascript",
+            "main": "jquery.magnific-popup.min",
+            "deps": [
+              "jquery"
+            ]
+          },
+          {
+            "name": "select2.min",
+            "path": "../javascript",
+            "main": "select2.min",
+            "deps": [
+              "jquery"
+            ]
+          },
+          {
             "name": "nouislider",
             "path": "../node_modules/nouislider",
             "main": "distribute/nouislider",

@@ -1,6 +1,6 @@
-import {Aurelia} from 'aurelia-framework'
+import { Aurelia } from 'aurelia-framework'
 import environment from './environment';
-
+import { AuthenticationGateway } from './gateways/authentication-gateway';
 import 'nouislider/nouislider.css';
 
 // Bootstrap
@@ -14,7 +14,7 @@ export function configure(aurelia: Aurelia) {
     .feature('resources')
     .globalResources([
       'resources/elements/scriptinjector'
-  ]);
+    ]);
 
   aurelia.use.developmentLogging(environment.debug ? 'debug' : 'warn');
 
@@ -22,5 +22,9 @@ export function configure(aurelia: Aurelia) {
     aurelia.use.plugin('aurelia-testing');
   }
 
-  return aurelia.start().then(() => aurelia.setRoot());
+  return aurelia.start().then(() => {
+    var auth = aurelia.container.get(AuthenticationGateway);
+    let root = auth.isAuthenticated() ? 'private' : 'public';
+    aurelia.setRoot(root);
+  });
 }

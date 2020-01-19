@@ -2,6 +2,10 @@ interface JQuery {
   moreLines(options: MoreLines): void;
 }
 
+interface JQueryStatic {
+  magnificPopup: any;
+}
+
 type MoreLines = {
   linecount: number;
   baseclass: string;

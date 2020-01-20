@@ -1,6 +1,6 @@
 <template>
-    <!-- main content -->
-	<main class="main" if.bind="users.length>0">
+	<!-- main content -->
+	<main class="main">
 		<div class="container-fluid">
 			<div class="row">
 				<!-- main title -->
@@ -8,19 +8,21 @@
 					<div class="main__title">
 						<h2>Users</h2>
 
-						<span class="main__title-stat">3,702 Total</span>
+						<span class="main__title-stat">${totalItems.length} Total</span>
 
 						<div class="main__title-wrap">
 							<!-- filter sort -->
 							<div class="filter" id="filter__sort">
 								<span class="filter__item-label">Sort by:</span>
 
-								<div class="filter__item-btn dropdown-toggle" role="navigation" id="filter-sort" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<div class="filter__item-btn dropdown-toggle" role="navigation" id="filter-sort"
+									data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 									<input type="button" value="Date created">
 									<span></span>
 								</div>
 
-								<ul class="filter__item-menu dropdown-menu scrollbar-dropdown" aria-labelledby="filter-sort">
+								<ul class="filter__item-menu dropdown-menu scrollbar-dropdown"
+									aria-labelledby="filter-sort">
 									<li>Date created</li>
 									<li>Pricing plan</li>
 									<li>Status</li>
@@ -30,7 +32,7 @@
 
 							<!-- search -->
 							<form action="#" class="main__title-form">
-								<input type="text" placeholder="Find user..">
+								<input type="text" placeholder="Find user..." value.bind="filter">
 								<button type="button">
 									<i class="icon ion-ios-search"></i>
 								</button>
@@ -59,7 +61,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr repeat.for="user of users">
+								<tr repeat.for="user of pagedItems">
 									<td>
 										<div class="main__table-text">${user.id}</div>
 									</td>
@@ -87,20 +89,24 @@
 										<div class="main__table-text">1</div>
 									</td>
 									<td>
-										<div class="main__table-text ${getStatusClass(user.status)}">${getStatusText(user.status)}</div>
+										<div class="main__table-text ${getStatusClass(user.status)}">
+											${getStatusText(user.status)}</div>
 									</td>
 									<td>
 										<div class="main__table-text">24 Oct 2019</div>
 									</td>
 									<td>
 										<div class="main__table-btns">
-											<a href="#modal-status" class="main__table-btn main__table-btn--banned open-modal">
+											<a href="#modal-status"
+												class="main__table-btn main__table-btn--banned open-modal">
 												<i class="icon ion-ios-lock"></i>
 											</a>
 											<a href="edit-user.html" class="main__table-btn main__table-btn--edit">
 												<i class="icon ion-ios-create"></i>
 											</a>
-											<a href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal" data-user-id="${user.id}">
+											<a href="#modal-delete"
+												class="main__table-btn main__table-btn--delete open-modal"
+												data-user-id="${user.id}">
 												<i class="icon ion-ios-trash"></i>
 											</a>
 										</div>
@@ -115,18 +121,23 @@
 				<!-- paginator -->
 				<div class="col-12">
 					<div class="paginator-wrap">
-						<span>10 from 3 702</span>
+						<span>${ 10 * (pager.currentPage - 1) + 1 } from ${totalItems.length}</span>
 
 						<ul class="paginator">
 							<li class="paginator__item paginator__item--prev">
-								<a href="#"><i class="icon ion-ios-arrow-back"></i></a>
+								<a href="#" click.trigger="setPage(pager.currentPage - 1)" class.bind="(pager.currentPage == 1) ? 'disabled' : ''">
+									<i class="icon ion-ios-arrow-back"></i>
+								</a>
+
+							<li class="paginator__item ${pager.currentPage === page ? 'paginator__item--active' : ''} "
+								repeat.for="page of pager.pages">
+								<a href="#" click.trigger="setPage(page)">${page}</a>
 							</li>
-							<li class="paginator__item"><a href="#">1</a></li>
-							<li class="paginator__item paginator__item--active"><a href="#">2</a></li>
-							<li class="paginator__item"><a href="#">3</a></li>
-							<li class="paginator__item"><a href="#">4</a></li>
+
 							<li class="paginator__item paginator__item--next">
-								<a href="#"><i class="icon ion-ios-arrow-forward"></i></a>
+								<a href="#" click.trigger="setPage(pager.currentPage + 1)" class.bind="(pager.currentPage == pager.totalPages) ? 'disabled' : ''">
+									<i class="icon ion-ios-arrow-forward"></i>
+								</a>
 							</li>
 						</ul>
 					</div>

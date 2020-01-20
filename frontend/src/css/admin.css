@@ -2888,3 +2888,7 @@ ul {
     display: none !important;
   }
 }
+
+.disabled {
+  pointer-events: none;
+}

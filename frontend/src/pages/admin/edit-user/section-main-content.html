@@ -1,6 +1,8 @@
 <template>
-    <!-- main content -->
-	<main class="main">
+	<require from="../../../resources/attributes/select2"></require>
+
+	<!-- main content -->
+	<main class="main" if.bind="user != null">
 		<div class="container-fluid">
 			<div class="row">
 				<!-- main title -->
@@ -20,9 +22,9 @@
 								<img src="images/user.svg" alt="">
 							</div>
 							<!-- red -->
-							<div class="profile__meta profile__meta--green">
-								<h3>Username <span>(Approved)</span></h3>
-								<span>FlixGo ID: 23562</span>
+							<div class="profile__meta ${getStatusClass(user.status)}">
+								<h3>${user.firstName} ${user.lastName} <span>(${getStatusText(user.status)})</span></h3>
+								<span>ID: ${user.id}</span>
 							</div>
 						</div>
 						<!-- end profile user -->
@@ -30,33 +32,41 @@
 						<!-- profile tabs nav -->
 						<ul class="nav nav-tabs profile__tabs" id="profile__tabs" role="tablist">
 							<li class="nav-item">
-								<a class="nav-link active" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="true">Profile</a>
+								<a class="nav-link active" data-toggle="tab" href="#tab-1" role="tab"
+									aria-controls="tab-1" aria-selected="true">Profile</a>
 							</li>
 
 							<li class="nav-item">
-								<a class="nav-link" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false">Comments</a>
+								<a class="nav-link" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2"
+									aria-selected="false">Comments</a>
 							</li>
 
 							<li class="nav-item">
-								<a class="nav-link" data-toggle="tab" href="#tab-3" role="tab" aria-controls="tab-3" aria-selected="false">Reviews</a>
+								<a class="nav-link" data-toggle="tab" href="#tab-3" role="tab" aria-controls="tab-3"
+									aria-selected="false">Reviews</a>
 							</li>
 						</ul>
 						<!-- end profile tabs nav -->
 
 						<!-- profile mobile tabs nav -->
 						<div class="profile__mobile-tabs" id="profile__mobile-tabs">
-							<div class="profile__mobile-tabs-btn dropdown-toggle" role="navigation" id="mobile-tabs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<div class="profile__mobile-tabs-btn dropdown-toggle" role="navigation" id="mobile-tabs"
+								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								<input type="button" value="Profile">
 								<span></span>
 							</div>
 
 							<div class="profile__mobile-tabs-menu dropdown-menu" aria-labelledby="mobile-tabs">
 								<ul class="nav nav-tabs" role="tablist">
-									<li class="nav-item"><a class="nav-link active" id="1-tab" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="true">Profile</a></li>
+									<li class="nav-item"><a class="nav-link active" id="1-tab" data-toggle="tab"
+											href="#tab-1" role="tab" aria-controls="tab-1"
+											aria-selected="true">Profile</a></li>
 
-									<li class="nav-item"><a class="nav-link" id="2-tab" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false">Comments</a></li>
+									<li class="nav-item"><a class="nav-link" id="2-tab" data-toggle="tab" href="#tab-2"
+											role="tab" aria-controls="tab-2" aria-selected="false">Comments</a></li>
 
-									<li class="nav-item"><a class="nav-link" id="3-tab" data-toggle="tab" href="#tab-3" role="tab" aria-controls="tab-3" aria-selected="false">Reviews</a></li>
+									<li class="nav-item"><a class="nav-link" id="3-tab" data-toggle="tab" href="#tab-3"
+											role="tab" aria-controls="tab-3" aria-selected="false">Reviews</a></li>
 								</ul>
 							</div>
 						</div>
@@ -64,8 +74,10 @@
 
 						<!-- profile btns -->
 						<div class="profile__actions">
-							<a href="#modal-status3" class="profile__action profile__action--banned open-modal"><i class="icon ion-ios-lock"></i></a>
-							<a href="#modal-delete3" class="profile__action profile__action--delete open-modal"><i class="icon ion-ios-trash"></i></a>
+							<a href="#modal-status3" class="profile__action profile__action--banned open-modal"><i
+									class="icon ion-ios-lock"></i></a>
+							<a href="#modal-delete3" class="profile__action profile__action--delete open-modal"><i
+									class="icon ion-ios-trash"></i></a>
 						</div>
 						<!-- end profile btns -->
 					</div>
@@ -88,38 +100,48 @@
 											<div class="col-12 col-md-6 col-lg-12 col-xl-6">
 												<div class="profile__group">
 													<label class="profile__label" for="username">Username</label>
-													<input id="username" type="text" name="username" class="profile__input" placeholder="User 123">
+													<input id="username" type="text" name="username"
+														class="profile__input" placeholder=""
+														value.bind="user.userName">
 												</div>
 											</div>
 
 											<div class="col-12 col-md-6 col-lg-12 col-xl-6">
 												<div class="profile__group">
 													<label class="profile__label" for="email">Email</label>
-													<input id="email" type="text" name="email" class="profile__input" placeholder="email@email.com">
+													<input id="email" type="text" name="email" class="profile__input"
+														placeholder="" value.bind="user.email">
 												</div>
 											</div>
 
 											<div class="col-12 col-md-6 col-lg-12 col-xl-6">
 												<div class="profile__group">
 													<label class="profile__label" for="firstname">First Name</label>
-													<input id="firstname" type="text" name="firstname" class="profile__input" placeholder="John">
+													<input id="firstname" type="text" name="firstname"
+														class="profile__input" placeholder=""
+														value.bind="user.firstName">
 												</div>
 											</div>
 
 											<div class="col-12 col-md-6 col-lg-12 col-xl-6">
 												<div class="profile__group">
 													<label class="profile__label" for="lastname">Last Name</label>
-													<input id="lastname" type="text" name="lastname" class="profile__input" placeholder="Doe">
+													<input id="lastname" type="text" name="lastname"
+														class="profile__input" placeholder=""
+														value.bind="user.lastName">
 												</div>
 											</div>
 
 											<div class="col-12 col-md-6 col-lg-12 col-xl-6">
 												<div class="profile__group">
-													<label class="profile__label" for="subscription">Subscription</label>
-													<select class="js-example-basic-single" id="subscription">
-														<option value="Basic">Basic</option>
-														<option value="Premium">Premium</option>
-														<option value="Cinematic">Cinematic</option>
+													<label class="profile__label"
+														for="subscription">Subscription</label>
+													<select class="js-example-basic-single" id="subscription"
+														value.bind="user.subscription"
+														select2="value.bind: user.subscription; allow-clear: false">
+														<option value.bind="0">Basic</option>
+														<option value.bind="1">Premium</option>
+														<option value.bind="2">Cinematic</option>
 													</select>
 												</div>
 											</div>
@@ -127,16 +149,19 @@
 											<div class="col-12 col-md-6 col-lg-12 col-xl-6">
 												<div class="profile__group">
 													<label class="profile__label" for="rights">Rights</label>
-													<select class="js-example-basic-single" id="rights">
-														<option value="User">User</option>
-														<option value="Moderator">Moderator</option>
-														<option value="Admin">Admin</option>
+													<select class="js-example-basic-single" id="rights"
+													value.bind="user.rights"
+													select2="value.bind: user.rights; allow-clear: false">
+														<option value.bind="0">User</option>
+														<option value.bind="1">Moderator</option>
+														<option value.bind="2">Admin</option>
 													</select>
 												</div>
 											</div>
 
 											<div class="col-12">
-												<button class="profile__btn" type="button">Save</button>
+												<button class="profile__btn" type="button"
+													click.trigger="saveChanges()">Save</button>
 											</div>
 										</div>
 									</form>
@@ -154,21 +179,25 @@
 											<div class="col-12 col-md-6 col-lg-12 col-xl-6">
 												<div class="profile__group">
 													<label class="profile__label" for="oldpass">Old Password</label>
-													<input id="oldpass" type="password" name="oldpass" class="profile__input">
+													<input id="oldpass" type="password" name="oldpass"
+														class="profile__input">
 												</div>
 											</div>
 
 											<div class="col-12 col-md-6 col-lg-12 col-xl-6">
 												<div class="profile__group">
 													<label class="profile__label" for="newpass">New Password</label>
-													<input id="newpass" type="password" name="newpass" class="profile__input">
+													<input id="newpass" type="password" name="newpass"
+														class="profile__input">
 												</div>
 											</div>
 
 											<div class="col-12 col-md-6 col-lg-12 col-xl-6">
 												<div class="profile__group">
-													<label class="profile__label" for="confirmpass">Confirm New Password</label>
-													<input id="confirmpass" type="password" name="confirmpass" class="profile__input">
+													<label class="profile__label" for="confirmpass">Confirm New
+														Password</label>
+													<input id="confirmpass" type="password" name="confirmpass"
+														class="profile__input">
 												</div>
 											</div>
 
@@ -180,7 +209,7 @@
 								</div>
 								<!-- end password form -->
 							</div>
-						</div>	
+						</div>
 					</div>
 
 					<div class="tab-pane fade" id="tab-2" role="tabpanel" aria-labelledby="2-tab">
@@ -222,10 +251,12 @@
 											</td>
 											<td>
 												<div class="main__table-btns">
-													<a href="#modal-view" class="main__table-btn main__table-btn--view open-modal">
+													<a href="#modal-view"
+														class="main__table-btn main__table-btn--view open-modal">
 														<i class="icon ion-ios-eye"></i>
 													</a>
-													<a href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal">
+													<a href="#modal-delete"
+														class="main__table-btn main__table-btn--delete open-modal">
 														<i class="icon ion-ios-trash"></i>
 													</a>
 												</div>
@@ -252,10 +283,12 @@
 											</td>
 											<td>
 												<div class="main__table-btns">
-													<a href="#modal-view" class="main__table-btn main__table-btn--view open-modal">
+													<a href="#modal-view"
+														class="main__table-btn main__table-btn--view open-modal">
 														<i class="icon ion-ios-eye"></i>
 													</a>
-													<a href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal">
+													<a href="#modal-delete"
+														class="main__table-btn main__table-btn--delete open-modal">
 														<i class="icon ion-ios-trash"></i>
 													</a>
 												</div>
@@ -282,10 +315,12 @@
 											</td>
 											<td>
 												<div class="main__table-btns">
-													<a href="#modal-view" class="main__table-btn main__table-btn--view open-modal">
+													<a href="#modal-view"
+														class="main__table-btn main__table-btn--view open-modal">
 														<i class="icon ion-ios-eye"></i>
 													</a>
-													<a href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal">
+													<a href="#modal-delete"
+														class="main__table-btn main__table-btn--delete open-modal">
 														<i class="icon ion-ios-trash"></i>
 													</a>
 												</div>
@@ -312,10 +347,12 @@
 											</td>
 											<td>
 												<div class="main__table-btns">
-													<a href="#modal-view" class="main__table-btn main__table-btn--view open-modal">
+													<a href="#modal-view"
+														class="main__table-btn main__table-btn--view open-modal">
 														<i class="icon ion-ios-eye"></i>
 													</a>
-													<a href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal">
+													<a href="#modal-delete"
+														class="main__table-btn main__table-btn--delete open-modal">
 														<i class="icon ion-ios-trash"></i>
 													</a>
 												</div>
@@ -342,10 +379,12 @@
 											</td>
 											<td>
 												<div class="main__table-btns">
-													<a href="#modal-view" class="main__table-btn main__table-btn--view open-modal">
+													<a href="#modal-view"
+														class="main__table-btn main__table-btn--view open-modal">
 														<i class="icon ion-ios-eye"></i>
 													</a>
-													<a href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal">
+													<a href="#modal-delete"
+														class="main__table-btn main__table-btn--delete open-modal">
 														<i class="icon ion-ios-trash"></i>
 													</a>
 												</div>
@@ -372,10 +411,12 @@
 											</td>
 											<td>
 												<div class="main__table-btns">
-													<a href="#modal-view" class="main__table-btn main__table-btn--view open-modal">
+													<a href="#modal-view"
+														class="main__table-btn main__table-btn--view open-modal">
 														<i class="icon ion-ios-eye"></i>
 													</a>
-													<a href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal">
+													<a href="#modal-delete"
+														class="main__table-btn main__table-btn--delete open-modal">
 														<i class="icon ion-ios-trash"></i>
 													</a>
 												</div>
@@ -402,10 +443,12 @@
 											</td>
 											<td>
 												<div class="main__table-btns">
-													<a href="#modal-view" class="main__table-btn main__table-btn--view open-modal">
+													<a href="#modal-view"
+														class="main__table-btn main__table-btn--view open-modal">
 														<i class="icon ion-ios-eye"></i>
 													</a>
-													<a href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal">
+													<a href="#modal-delete"
+														class="main__table-btn main__table-btn--delete open-modal">
 														<i class="icon ion-ios-trash"></i>
 													</a>
 												</div>
@@ -432,10 +475,12 @@
 											</td>
 											<td>
 												<div class="main__table-btns">
-													<a href="#modal-view" class="main__table-btn main__table-btn--view open-modal">
+													<a href="#modal-view"
+														class="main__table-btn main__table-btn--view open-modal">
 														<i class="icon ion-ios-eye"></i>
 													</a>
-													<a href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal">
+													<a href="#modal-delete"
+														class="main__table-btn main__table-btn--delete open-modal">
 														<i class="icon ion-ios-trash"></i>
 													</a>
 												</div>
@@ -462,10 +507,12 @@
 											</td>
 											<td>
 												<div class="main__table-btns">
-													<a href="#modal-view" class="main__table-btn main__table-btn--view open-modal">
+													<a href="#modal-view"
+														class="main__table-btn main__table-btn--view open-modal">
 														<i class="icon ion-ios-eye"></i>
 													</a>
-													<a href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal">
+													<a href="#modal-delete"
+														class="main__table-btn main__table-btn--delete open-modal">
 														<i class="icon ion-ios-trash"></i>
 													</a>
 												</div>
@@ -492,10 +539,12 @@
 											</td>
 											<td>
 												<div class="main__table-btns">
-													<a href="#modal-view" class="main__table-btn main__table-btn--view open-modal">
+													<a href="#modal-view"
+														class="main__table-btn main__table-btn--view open-modal">
 														<i class="icon ion-ios-eye"></i>
 													</a>
-													<a href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal">
+													<a href="#modal-delete"
+														class="main__table-btn main__table-btn--delete open-modal">
 														<i class="icon ion-ios-trash"></i>
 													</a>
 												</div>
@@ -562,7 +611,8 @@
 												<div class="main__table-text">Lorem Ipsum is simply dummy text...</div>
 											</td>
 											<td>
-												<div class="main__table-text main__table-text--rate"><i class="icon ion-ios-star"></i> 7.9</div>
+												<div class="main__table-text main__table-text--rate"><i
+														class="icon ion-ios-star"></i> 7.9</div>
 											</td>
 											<td>
 												<div class="main__table-text">12 / 7</div>
@@ -572,10 +622,12 @@
 											</td>
 											<td>
 												<div class="main__table-btns">
-													<a href="#modal-view2" class="main__table-btn main__table-btn--view open-modal">
+													<a href="#modal-view2"
+														class="main__table-btn main__table-btn--view open-modal">
 														<i class="icon ion-ios-eye"></i>
 													</a>
-													<a href="#modal-delete2" class="main__table-btn main__table-btn--delete open-modal">
+													<a href="#modal-delete2"
+														class="main__table-btn main__table-btn--delete open-modal">
 														<i class="icon ion-ios-trash"></i>
 													</a>
 												</div>
@@ -595,7 +647,8 @@
 												<div class="main__table-text">Lorem Ipsum is simply dummy text...</div>
 											</td>
 											<td>
-												<div class="main__table-text main__table-text--rate"><i class="icon ion-ios-star"></i> 8.6</div>
+												<div class="main__table-text main__table-text--rate"><i
+														class="icon ion-ios-star"></i> 8.6</div>
 											</td>
 											<td>
 												<div class="main__table-text">67 / 22</div>
@@ -605,10 +658,12 @@
 											</td>
 											<td>
 												<div class="main__table-btns">
-													<a href="#modal-view2" class="main__table-btn main__table-btn--view open-modal">
+													<a href="#modal-view2"
+														class="main__table-btn main__table-btn--view open-modal">
 														<i class="icon ion-ios-eye"></i>
 													</a>
-													<a href="#modal-delete2" class="main__table-btn main__table-btn--delete open-modal">
+													<a href="#modal-delete2"
+														class="main__table-btn main__table-btn--delete open-modal">
 														<i class="icon ion-ios-trash"></i>
 													</a>
 												</div>
@@ -628,7 +683,8 @@
 												<div class="main__table-text">Lorem Ipsum is simply dummy text...</div>
 											</td>
 											<td>
-												<div class="main__table-text main__table-text--rate"><i class="icon ion-ios-star"></i> 6.0</div>
+												<div class="main__table-text main__table-text--rate"><i
+														class="icon ion-ios-star"></i> 6.0</div>
 											</td>
 											<td>
 												<div class="main__table-text">44 / 5</div>
@@ -638,10 +694,12 @@
 											</td>
 											<td>
 												<div class="main__table-btns">
-													<a href="#modal-view2" class="main__table-btn main__table-btn--view open-modal">
+													<a href="#modal-view2"
+														class="main__table-btn main__table-btn--view open-modal">
 														<i class="icon ion-ios-eye"></i>
 													</a>
-													<a href="#modal-delete2" class="main__table-btn main__table-btn--delete open-modal">
+													<a href="#modal-delete2"
+														class="main__table-btn main__table-btn--delete open-modal">
 														<i class="icon ion-ios-trash"></i>
 													</a>
 												</div>
@@ -661,7 +719,8 @@
 												<div class="main__table-text">Lorem Ipsum is simply dummy text...</div>
 											</td>
 											<td>
-												<div class="main__table-text main__table-text--rate"><i class="icon ion-ios-star"></i> 9.1</div>
+												<div class="main__table-text main__table-text--rate"><i
+														class="icon ion-ios-star"></i> 9.1</div>
 											</td>
 											<td>
 												<div class="main__table-text">20 / 6</div>
@@ -671,10 +730,12 @@
 											</td>
 											<td>
 												<div class="main__table-btns">
-													<a href="#modal-view2" class="main__table-btn main__table-btn--view open-modal">
+													<a href="#modal-view2"
+														class="main__table-btn main__table-btn--view open-modal">
 														<i class="icon ion-ios-eye"></i>
 													</a>
-													<a href="#modal-delete2" class="main__table-btn main__table-btn--delete open-modal">
+													<a href="#modal-delete2"
+														class="main__table-btn main__table-btn--delete open-modal">
 														<i class="icon ion-ios-trash"></i>
 													</a>
 												</div>
@@ -694,7 +755,8 @@
 												<div class="main__table-text">Lorem Ipsum is simply dummy text...</div>
 											</td>
 											<td>
-												<div class="main__table-text main__table-text--rate"><i class="icon ion-ios-star"></i> 5.5</div>
+												<div class="main__table-text main__table-text--rate"><i
+														class="icon ion-ios-star"></i> 5.5</div>
 											</td>
 											<td>
 												<div class="main__table-text">8 / 132</div>
@@ -704,10 +766,12 @@
 											</td>
 											<td>
 												<div class="main__table-btns">
-													<a href="#modal-view2" class="main__table-btn main__table-btn--view open-modal">
+													<a href="#modal-view2"
+														class="main__table-btn main__table-btn--view open-modal">
 														<i class="icon ion-ios-eye"></i>
 													</a>
-													<a href="#modal-delete2" class="main__table-btn main__table-btn--delete open-modal">
+													<a href="#modal-delete2"
+														class="main__table-btn main__table-btn--delete open-modal">
 														<i class="icon ion-ios-trash"></i>
 													</a>
 												</div>
@@ -727,7 +791,8 @@
 												<div class="main__table-text">Lorem Ipsum is simply dummy text...</div>
 											</td>
 											<td>
-												<div class="main__table-text main__table-text--rate"><i class="icon ion-ios-star"></i> 7.0</div>
+												<div class="main__table-text main__table-text--rate"><i
+														class="icon ion-ios-star"></i> 7.0</div>
 											</td>
 											<td>
 												<div class="main__table-text">6 / 1</div>
@@ -737,10 +802,12 @@
 											</td>
 											<td>
 												<div class="main__table-btns">
-													<a href="#modal-view2" class="main__table-btn main__table-btn--view open-modal">
+													<a href="#modal-view2"
+														class="main__table-btn main__table-btn--view open-modal">
 														<i class="icon ion-ios-eye"></i>
 													</a>
-													<a href="#modal-delete2" class="main__table-btn main__table-btn--delete open-modal">
+													<a href="#modal-delete2"
+														class="main__table-btn main__table-btn--delete open-modal">
 														<i class="icon ion-ios-trash"></i>
 													</a>
 												</div>
@@ -760,7 +827,8 @@
 												<div class="main__table-text">Lorem Ipsum is simply dummy text...</div>
 											</td>
 											<td>
-												<div class="main__table-text main__table-text--rate"><i class="icon ion-ios-star"></i> 9.0</div>
+												<div class="main__table-text main__table-text--rate"><i
+														class="icon ion-ios-star"></i> 9.0</div>
 											</td>
 											<td>
 												<div class="main__table-text">10 / 0</div>
@@ -770,10 +838,12 @@
 											</td>
 											<td>
 												<div class="main__table-btns">
-													<a href="#modal-view2" class="main__table-btn main__table-btn--view open-modal">
+													<a href="#modal-view2"
+														class="main__table-btn main__table-btn--view open-modal">
 														<i class="icon ion-ios-eye"></i>
 													</a>
-													<a href="#modal-delete2" class="main__table-btn main__table-btn--delete open-modal">
+													<a href="#modal-delete2"
+														class="main__table-btn main__table-btn--delete open-modal">
 														<i class="icon ion-ios-trash"></i>
 													</a>
 												</div>
@@ -793,7 +863,8 @@
 												<div class="main__table-text">Lorem Ipsum is simply dummy text...</div>
 											</td>
 											<td>
-												<div class="main__table-text main__table-text--rate"><i class="icon ion-ios-star"></i> 6.2</div>
+												<div class="main__table-text main__table-text--rate"><i
+														class="icon ion-ios-star"></i> 6.2</div>
 											</td>
 											<td>
 												<div class="main__table-text">13 / 14</div>
@@ -803,10 +874,12 @@
 											</td>
 											<td>
 												<div class="main__table-btns">
-													<a href="#modal-view2" class="main__table-btn main__table-btn--view open-modal">
+													<a href="#modal-view2"
+														class="main__table-btn main__table-btn--view open-modal">
 														<i class="icon ion-ios-eye"></i>
 													</a>
-													<a href="#modal-delete2" class="main__table-btn main__table-btn--delete open-modal">
+													<a href="#modal-delete2"
+														class="main__table-btn main__table-btn--delete open-modal">
 														<i class="icon ion-ios-trash"></i>
 													</a>
 												</div>
@@ -826,7 +899,8 @@
 												<div class="main__table-text">Lorem Ipsum is simply dummy text...</div>
 											</td>
 											<td>
-												<div class="main__table-text main__table-text--rate"><i class="icon ion-ios-star"></i> 7.9</div>
+												<div class="main__table-text main__table-text--rate"><i
+														class="icon ion-ios-star"></i> 7.9</div>
 											</td>
 											<td>
 												<div class="main__table-text">12 / 7</div>
@@ -836,10 +910,12 @@
 											</td>
 											<td>
 												<div class="main__table-btns">
-													<a href="#modal-view2" class="main__table-btn main__table-btn--view open-modal">
+													<a href="#modal-view2"
+														class="main__table-btn main__table-btn--view open-modal">
 														<i class="icon ion-ios-eye"></i>
 													</a>
-													<a href="#modal-delete2" class="main__table-btn main__table-btn--delete open-modal">
+													<a href="#modal-delete2"
+														class="main__table-btn main__table-btn--delete open-modal">
 														<i class="icon ion-ios-trash"></i>
 													</a>
 												</div>
@@ -859,7 +935,8 @@
 												<div class="main__table-text">Lorem Ipsum is simply dummy text...</div>
 											</td>
 											<td>
-												<div class="main__table-text main__table-text--rate"><i class="icon ion-ios-star"></i> 8.6</div>
+												<div class="main__table-text main__table-text--rate"><i
+														class="icon ion-ios-star"></i> 8.6</div>
 											</td>
 											<td>
 												<div class="main__table-text">67 / 22</div>
@@ -869,10 +946,12 @@
 											</td>
 											<td>
 												<div class="main__table-btns">
-													<a href="#modal-view2" class="main__table-btn main__table-btn--view open-modal">
+													<a href="#modal-view2"
+														class="main__table-btn main__table-btn--view open-modal">
 														<i class="icon ion-ios-eye"></i>
 													</a>
-													<a href="#modal-delete2" class="main__table-btn main__table-btn--delete open-modal">
+													<a href="#modal-delete2"
+														class="main__table-btn main__table-btn--delete open-modal">
 														<i class="icon ion-ios-trash"></i>
 													</a>
 												</div>

@@ -18,11 +18,27 @@ namespace API.Models
         public string LastName { get; set; }
         [Required]
         public EnumStatus Status { get; set; }
+        [Required]
+        public EnumSubscription Subscription { get; set; }
+        [Required]
+        public EnumRights Rights { get; set; }
     }
 
     public enum EnumStatus {
         Approved,
         Banned,
         Deleted
+    }
+
+    public enum EnumSubscription {
+        Basic,
+        Premium,
+        Cinematic
+    }
+
+    public enum EnumRights {
+        User,
+        Moderator,
+        Admin
     }
 }

@@ -58,6 +58,22 @@ namespace API.Controllers
             return new ObjectResult(item);
         }
 
+        [HttpPost("ApproveUser")]
+        public IActionResult ApproveUser([FromBody] JObject obj)
+        {
+            var userId = (int)obj.GetValue("userId");
+            _FlixGoRepository.ApproveUser(userId);
+            return Ok();
+        }
+
+        [HttpPost("BanUser")]
+        public IActionResult BanUser([FromBody] JObject obj)
+        {
+            var userId = (int)obj.GetValue("userId");
+            _FlixGoRepository.BanUser(userId);
+            return Ok();
+        }
+
         [HttpGet("GetUserByName/{name}")]
         public IActionResult GetByUserName(string userName)
         {

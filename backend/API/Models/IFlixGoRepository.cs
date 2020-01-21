@@ -50,5 +50,7 @@ namespace API.Models
         User GetUserByUserName(string userName);    // READ
         void UpdateUser(User item);                 // UPDATE
         void DeleteUser(int userId);                // DELETE
+        void ApproveUser(int userId);               // UPDATE
+        void BanUser(int userId);                   // UPDATE
     }
 }

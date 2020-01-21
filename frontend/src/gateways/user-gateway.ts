@@ -1,6 +1,6 @@
 import { Router } from 'aurelia-router';
 import { Aurelia, inject, autoinject } from 'aurelia-framework';
-import { HttpClient } from 'aurelia-fetch-client';
+import { HttpClient, json } from 'aurelia-fetch-client';
 import environment from 'environment';
 import { User } from '../models/user-model';
 
@@ -41,5 +41,13 @@ export class UserGateway {
             .catch(error => {
                 console.log('Result ' + error.status + ': ' + error.statusText);
             });
+    }
+    approveUser(id) {
+        var data = { userId: id };
+        return this.httpClient.fetch(`api/user/approveUser`, { method: 'POST', body: json(data) });
+    }
+    banUser(id) {
+        var data = { userId: id };
+        return this.httpClient.fetch(`api/user/banUser`, { method: 'POST', body: json(data) });
     }
 }

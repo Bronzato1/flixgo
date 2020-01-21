@@ -98,7 +98,8 @@
 									<td>
 										<div class="main__table-btns">
 											<a href="#modal-status"
-												class="main__table-btn main__table-btn--banned open-modal">
+												class="main__table-btn main__table-btn--banned open-modal"
+												data-user-id="${user.id}">
 												<i class="icon ion-ios-lock"></i>
 											</a>
 											<a href="edit-user.html" class="main__table-btn main__table-btn--edit">
@@ -125,7 +126,8 @@
 
 						<ul class="paginator">
 							<li class="paginator__item paginator__item--prev">
-								<a href="#" click.trigger="setPage(pager.currentPage - 1)" class.bind="(pager.currentPage == 1) ? 'disabled' : ''">
+								<a href="#" click.trigger="setPage(pager.currentPage - 1)"
+									class.bind="(pager.currentPage == 1) ? 'disabled' : ''">
 									<i class="icon ion-ios-arrow-back"></i>
 								</a>
 
@@ -135,7 +137,8 @@
 							</li>
 
 							<li class="paginator__item paginator__item--next">
-								<a href="#" click.trigger="setPage(pager.currentPage + 1)" class.bind="(pager.currentPage == pager.totalPages) ? 'disabled' : ''">
+								<a href="#" click.trigger="setPage(pager.currentPage + 1)"
+									class.bind="(pager.currentPage == pager.totalPages) ? 'disabled' : ''">
 									<i class="icon ion-ios-arrow-forward"></i>
 								</a>
 							</li>

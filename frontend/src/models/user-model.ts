@@ -9,7 +9,6 @@ export class User {
 
     static fromObject(src) {
         var tmpObj: User = Object.assign(new User(), src);
-        tmpObj.status = 0;
         return tmpObj;
     }
 }

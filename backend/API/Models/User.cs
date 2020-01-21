@@ -16,5 +16,13 @@ namespace API.Models
         public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
+        [Required]
+        public EnumStatus Status { get; set; }
+    }
+
+    public enum EnumStatus {
+        Approved,
+        Banned,
+        Deleted
     }
 }

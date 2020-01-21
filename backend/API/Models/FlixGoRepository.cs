@@ -267,5 +267,26 @@ namespace API.Models
                 _context.SaveChanges();
             }
         }
+
+        public void ApproveUser(int userId)
+        {
+            var entity = _context.Users.Where(x => x.Id == userId).SingleOrDefault();
+            if (entity != null)
+            {
+                entity.Status = EnumStatus.Approved;
+                _context.SaveChanges();
+            }
+        }
+
+        public void BanUser(int userId)
+        {
+            var entity = _context.Users.Where(x => x.Id == userId).SingleOrDefault();
+            if (entity != null)
+            {
+                entity.Status = EnumStatus.Banned;
+                _context.SaveChanges();
+            }
+        }
+
     }
 }

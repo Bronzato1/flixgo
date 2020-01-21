@@ -33,16 +33,8 @@ export class SectionMainContent {
         this.eventAggregatorUnsubscription();
     }
     eventAggregatorSubscription() {
-        this.subscription = this.ea.subscribe('userToDeleted', (userId) => {
-            this.userGateway
-                .deleteById(userId)
-                .then(() => {
-                    console.log(`User #${userId} deleted`);
-                    var user = this.pagedItems.find(x => x.id == userId);
-                    user.status = 2; // Deleted
-                })
-                .catch((err) => console.log('Error: ' + err));
-        });
+        this.subscription = this.ea.subscribe('userToDelete', (userId) => this.deleteUser(userId));
+        this.subscription = this.ea.subscribe('statusChange', (userId) => this.statusChange(userId));
     }
     eventAggregatorUnsubscription() {
         this.subscription.dispose();
@@ -54,6 +46,45 @@ export class SectionMainContent {
         this.setPage(1);
         await wait(100);
         this.initializeMagnificPopup();
+    }
+    deleteUser(userId) {
+        this.userGateway
+            .deleteById(userId)
+            .then(() => {
+                console.log(`User #${userId} deleted`);
+                var user = this.pagedItems.find(x => x.id == userId);
+                user.status = 2; // Deleted
+            })
+            .catch((err) => console.log('Error: ' + err));
+    }
+    statusChange(userId) {
+        var user = this.pagedItems.find(x => x.id == userId);
+        var newStatus;
+
+        switch (user.status) {
+            case 0:
+                this.userGateway
+                    .banUser(userId)
+                    .then(() => {
+                        console.log(`User #${userId} banned`);
+                        user.status = 1;
+                    })
+                    .catch((err) => console.log('Error: ' + err));
+                break;
+            case 1:
+                this.userGateway
+                    .approveUser(userId)
+                    .then(() => {
+                        console.log(`User #${userId} approved`);
+                        user.status = 0;
+                    })
+                    .catch((err) => console.log('Error: ' + err));
+                break;
+            case 2:
+                alert('Status change denied. Reason: user already deleted.');
+                return;
+                break;
+        }
     }
     initializeMagnificPopup() {
         (<any>$('.open-modal')).magnificPopup({

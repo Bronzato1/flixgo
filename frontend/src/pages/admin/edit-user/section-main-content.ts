@@ -3,7 +3,7 @@
 import 'jquery.magnific-popup.min';
 import { UserGateway } from 'gateways/user-gateway';
 import { User } from 'models/user-model';
-import { BindingEngine, autoinject } from 'aurelia-framework';
+import { BindingEngine, autoinject, observable } from 'aurelia-framework';
 
 @autoinject()
 export class SectionMainContent {
@@ -15,13 +15,30 @@ export class SectionMainContent {
     userGateway: UserGateway;
     userId: number;
     user: User;
+    subscriptionOptions = [];
+    rightsOptions = [];
 
     async bind(params) {
         this.userId = params.userId;
         this.user = await this.userGateway.getById(this.userId);
     }
     attached() {
+        this.initializeSelect2Options();
         this.initializeMagnificPopup();
+    }
+    initializeSelect2Options() {
+
+        this.subscriptionOptions = [
+            { label: 'Basic', value: 0 },
+            { label: 'Premium', value: 1 },
+            { label: 'Cinematic', value: 2 }
+        ];
+
+        this.rightsOptions = [
+            { label: 'User', value: 0 },
+            { label: 'Moderator', value: 1 },
+            { label: 'Administrator', value: 2 }
+        ];
     }
     initializeMagnificPopup() {
         (<any>$('.open-modal')).magnificPopup({
@@ -68,7 +85,9 @@ export class SectionMainContent {
         }
     }
     saveChanges() {
-        //debugger;
         alert(this.user.subscription);
+    }
+    changePassword() {
+        this.user.subscription = 1;
     }
 }

@@ -1,8 +1,8 @@
 <template>
-	<require from="../../../resources/attributes/select2"></require>
+	<require from="../../../resources/elements/select2"></require>
 
 	<!-- main content -->
-	<main class="main" if.bind="user != null">
+	<main class="main" if.bind="user.id > 0">
 		<div class="container-fluid">
 			<div class="row">
 				<!-- main title -->
@@ -135,27 +135,20 @@
 											<div class="col-12 col-md-6 col-lg-12 col-xl-6">
 												<div class="profile__group">
 													<label class="profile__label"
-														for="subscription">Subscription</label>
-													<select class="js-example-basic-single" id="subscription"
-														value.bind="user.subscription"
-														select2="value.bind: user.subscription; allow-clear: false">
-														<option value.bind="0">Basic</option>
-														<option value.bind="1">Premium</option>
-														<option value.bind="2">Cinematic</option>
-													</select>
+														for="subscription">Subscription ${user.subscription}</label>
+													<select2 multiple="false" name="subscription" id="subscription" selected.bind="user.subscription"
+														options.bind="subscriptionOptions">
+													</select2>
+
 												</div>
 											</div>
 
 											<div class="col-12 col-md-6 col-lg-12 col-xl-6">
 												<div class="profile__group">
 													<label class="profile__label" for="rights">Rights</label>
-													<select class="js-example-basic-single" id="rights"
-													value.bind="user.rights"
-													select2="value.bind: user.rights; allow-clear: false">
-														<option value.bind="0">User</option>
-														<option value.bind="1">Moderator</option>
-														<option value.bind="2">Admin</option>
-													</select>
+													<select2 multiselect="false" name="rights" id="rights"
+														selected.two-way="user.rights" options.bind="rightsOptions">
+													</select2>
 												</div>
 											</div>
 
@@ -202,7 +195,8 @@
 											</div>
 
 											<div class="col-12">
-												<button class="profile__btn" type="button">Change</button>
+												<button class="profile__btn" type="button"
+													click.trigger="changePassword()">Change</button>
 											</div>
 										</div>
 									</form>

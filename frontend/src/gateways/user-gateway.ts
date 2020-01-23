@@ -42,6 +42,20 @@ export class UserGateway {
                 console.log('Result ' + error.status + ': ' + error.statusText);
             });
     }
+    updateById(user: User): Promise<void> {
+        var data = user;
+        return this.httpClient.fetch(`api/user/${user.id}`, {
+            method: 'put',
+            body: json(user)
+        })
+            .then((response: Response) => {
+                console.log('Result ' + response.status + ': ' + response.statusText);
+            })
+            .catch(error => {
+                console.log('Result ' + error.status + ': ' + error.statusText);
+                throw error;
+            });
+    }
     approveUser(id) {
         var data = { userId: id };
         return this.httpClient.fetch(`api/user/approveUser`, { method: 'POST', body: json(data) });

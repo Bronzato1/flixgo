@@ -87,7 +87,7 @@ namespace API.Controllers
 
         [HttpPut("{id}")]
         public IActionResult UpdateUser(int id, [FromBody] User item)
-        {
+        {            
             if (item == null || item.Id != id)
             {
                 return BadRequest();
@@ -102,6 +102,9 @@ namespace API.Controllers
             author.UserName = item.UserName;
             author.FirstName = item.FirstName;
             author.LastName = item.LastName;
+            author.Email = item.Email;
+            author.Subscription = item.Subscription;
+            author.Rights = item.Rights;
 
             _FlixGoRepository.UpdateUser(author);
             return new NoContentResult();

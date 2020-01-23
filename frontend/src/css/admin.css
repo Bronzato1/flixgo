@@ -798,6 +798,7 @@ ul {
 }
 .main__avatar img {
   width: 100%;
+  min-height: 50px; /* TLA */
 }
 @media (min-width: 576px) {
   .main__title h2 {

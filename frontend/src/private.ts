@@ -41,4 +41,23 @@ export class Private {
     ]);
     config.mapUnknownRoutes('./pages/admin/not-found/not-found');
   }
+  attached() {
+    this.initializeScripts():
+  }
+  initializeScripts() {
+
+    //==============================
+    // Filter
+    //==============================
+    $('.filter__item-menu li').each(function () {
+      $(this).attr('data-value', $(this).text().toLowerCase());
+    });
+
+    $(document).on('click', '.filter__item-menu li', function () {
+      var text = $(this).text();
+      var item = $(this);
+      var id = item.closest('.filter').attr('id');
+      $('#' + id).find('.filter__item-btn input').val(text);
+    });
+  }
 }

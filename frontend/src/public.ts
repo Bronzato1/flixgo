@@ -50,23 +50,24 @@ export class Public {
     config.mapUnknownRoutes('./pages/main/not-found/not-found');
   }
   attached() {
-    $(document).ready(function () {
+    this.initializeScripts();
+  }
+  initializeScripts() {
 
-      /*==============================
-        Tabs
-        ==============================*/
-      $('.content__mobile-tabs-menu li').each(function () {
-        $(this).attr('data-value', $(this).text().toLowerCase());
-      });
-
-      $('.content__mobile-tabs-menu li').on('click', function () {
-        var text = $(this).text();
-        var item = $(this);
-        var id = item.closest('.content__mobile-tabs').attr('id');
-        $('#' + id).find('.content__mobile-tabs-btn input').val(text);
-      });
-
+    //==============================
+    //  Tabs
+    //==============================
+    $('.content__mobile-tabs-menu li').each(function () {
+      $(this).attr('data-value', $(this).text().toLowerCase());
     });
+
+    $(document).on('click', '.content__mobile-tabs-menu li', function () {
+      var text = $(this).text();
+      var item = $(this);
+      var id = item.closest('.content__mobile-tabs').attr('id');
+      $('#' + id).find('.content__mobile-tabs-btn input').val(text);
+    });
+
   }
   // signIn() {
   //   debugger;

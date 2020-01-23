@@ -10,6 +10,8 @@ import 'jquery.magnific-popup.min';
 @autoinject()
 export class SectionMainContent {
 
+    wait = (ms) => new Promise(res => setTimeout(res, ms));
+
     constructor(userGateway: UserGateway, eventAgregator: EventAggregator) {
         this.userGateway = userGateway;
         this.ea = eventAgregator;
@@ -21,8 +23,11 @@ export class SectionMainContent {
     totalItems: User[];
     pagedItems: User[];
     pager: IPager;
+    loading: boolean;
     @observable()
     filter: string;
+    @observable()
+    sort: string;
 
     created() {
     }
@@ -40,12 +45,29 @@ export class SectionMainContent {
         this.subscription.dispose();
     }
     async attached() {
-
         const wait = (ms) => new Promise(res => setTimeout(res, ms));
         await this.userGateway.getAll().then((data) => this.totalItems = data);
         this.setPage(1);
-        await wait(100);
-        this.initializeMagnificPopup();
+        this.filterSortEventHandler();
+    }
+    filterSortEventHandler() {
+        
+        var self = this;
+
+        $(document).on('click', '.filter__item-menu li', function () {
+            switch ($(this).text().toUpperCase()) {
+                case 'DATE CREATED':
+                    self.sort = 'creationDate';
+                    break;
+                case 'PRICING PLAN':
+                    self.sort = 'pricingPlan';
+                    break;
+                case 'STATUS':
+                    self.sort = 'status';
+                    break;
+            }
+            self.setPage(self.pager.currentPage);
+        });
     }
     deleteUser(userId) {
         this.userGateway
@@ -59,7 +81,6 @@ export class SectionMainContent {
     }
     statusChange(userId) {
         var user = this.pagedItems.find(x => x.id == userId);
-        var newStatus;
 
         switch (user.status) {
             case 0:
@@ -133,12 +154,10 @@ export class SectionMainContent {
     range(start, end) {
         return Array.from(new Array(end - start), (x, i) => i + start)
     }
-    setPage(page) {
-
-        var self = this;
+    async setPage(page) {
 
         // get pager object from service
-        this.pager = this.getPager(this.filteredItems.length, page, 10);
+        this.pager = this.getPager(this.filteredItems.length, page, 8);
 
         if (page < 1 || this.pager && page > this.pager.totalPages) {
             this.pagedItems = [];
@@ -148,6 +167,10 @@ export class SectionMainContent {
         // get current page of items
         this.pagedItems = this.filteredItems.slice(this.pager.startIndex, this.pager.endIndex + 1);
 
+        await this.wait(1);
+
+        // needed for newly showed elements
+        this.initializeMagnificPopup();
     }
     getPager(totalItems, currentPage, pageSize): IPager {
 
@@ -199,6 +222,7 @@ export class SectionMainContent {
     filterChanged() {
         this.setPage(1);
     }
+    @computedFrom('filter', 'sort')
     get filteredItems() {
 
         if (!this.totalItems) return [];
@@ -207,6 +231,18 @@ export class SectionMainContent {
 
         if (this.filter)
             filteredItems = filteredItems.filter(x => x.userName.toLocaleLowerCase().includes(this.filter.toLocaleLowerCase()));
+
+        if (this.sort == 'status') {
+            filteredItems = filteredItems.sort((n1, n2) => {
+                if (n1.status > n2.status) {
+                    return 1;
+                }
+
+                if (n1.status < n2.status) {
+                    return -1;
+                }
+            });
+        }
 
         return filteredItems;
     }

@@ -2,7 +2,7 @@
 	<require from="../../../resources/elements/select2"></require>
 
 	<!-- main content -->
-	<main class="main" if.bind="user.id > 0">
+	<main class="main">
 		<div class="container-fluid">
 			<div class="row">
 				<!-- main title -->
@@ -74,10 +74,14 @@
 
 						<!-- profile btns -->
 						<div class="profile__actions">
-							<a href="#modal-status3" class="profile__action profile__action--banned open-modal"><i
-									class="icon ion-ios-lock"></i></a>
-							<a href="#modal-delete3" class="profile__action profile__action--delete open-modal"><i
-									class="icon ion-ios-trash"></i></a>
+							<a href="#modal-status3" class="profile__action profile__action--banned open-modal"
+								data-user-id="${user.id}">
+								<i class="icon ion-ios-lock"></i>
+							</a>
+							<a href="#modal-delete3" class="profile__action profile__action--delete open-modal"
+								data-user-id="${user.id}">
+								<i class="icon ion-ios-trash"></i>
+							</a>
 						</div>
 						<!-- end profile btns -->
 					</div>
@@ -135,8 +139,9 @@
 											<div class="col-12 col-md-6 col-lg-12 col-xl-6">
 												<div class="profile__group">
 													<label class="profile__label"
-														for="subscription">Subscription ${user.subscription}</label>
-													<select2 multiple="false" name="subscription" id="subscription" selected.bind="user.subscription"
+														for="subscription">Subscription</label>
+													<select2 multiple="false" name="subscription"
+														selected.bind="user.subscription"
 														options.bind="subscriptionOptions">
 													</select2>
 
@@ -146,7 +151,7 @@
 											<div class="col-12 col-md-6 col-lg-12 col-xl-6">
 												<div class="profile__group">
 													<label class="profile__label" for="rights">Rights</label>
-													<select2 multiselect="false" name="rights" id="rights"
+													<select2 multiselect="false" name="rights"
 														selected.two-way="user.rights" options.bind="rightsOptions">
 													</select2>
 												</div>

@@ -2,10 +2,10 @@ import { YoutubeGateway } from '../../../gateways/youtube-gateway';
 import { IFilter } from '../../../interfaces/filter-interface';
 import { Subscription, EventAggregator } from 'aurelia-event-aggregator';
 import { BindingEngine, bindable, observable, Disposable, autoinject } from 'aurelia-framework';
+import { YoutubePlaylist } from 'models/youtube-playlist-model';
 import 'malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css';
 import 'malihu-custom-scrollbar-plugin';
 import 'jquery.mousewheel';
-import { YoutubePlaylist } from 'models/youtube-playlist-model';
 
 @autoinject()
 export class SectionFilter {

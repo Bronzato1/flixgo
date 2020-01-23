@@ -8,7 +8,6 @@ export class Select2Thing {
     @bindable({ defaultBindingMode: bindingMode.twoWay }) labelproperty: string = 'label';
     @bindable({ defaultBindingMode: bindingMode.twoWay }) valueproperty: string = 'value';
     @bindable({ defaultBindingMode: bindingMode.twoWay }) multiselect: string = "false";
-
     @bindable({ defaultBindingMode: bindingMode.twoWay }) options: any[] = [];
     @bindable({ defaultBindingMode: bindingMode.twoWay, changeHandler: 'selectedIsChanged' }) selected: any = null;
 
@@ -32,8 +31,7 @@ export class Select2Thing {
             }
         }
     }
-
-    private getMultiValues() {
+    getMultiValues() {
         let select = [];
         if (this.select2.val() == null)
             return select;
@@ -43,15 +41,13 @@ export class Select2Thing {
         }
         return select;
     }
-
-    private getSingleValue() {
+    getSingleValue() {
         let value = this.select2.val();
         if (value == null || value === "")
             return null;
         return parseInt(value);
     }
-
-    private shouldISetSelected() {
+    shouldISetSelected() {
         if (this.multiselect == "true") {
             let mh = this.getMultiValues();
             if (JSON.stringify(this.selected.sort()) === JSON.stringify(mh.sort())) {
@@ -61,13 +57,11 @@ export class Select2Thing {
         }
         else {
             if (this.selected !== NaN && this.selected != this.select2.val() && this.select2.val() !== undefined) {
-            //if (this.selected !== NaN && this.selected != "" && this.select2.val() !== undefined) {
                 return true;
             }
             return false;
         }
     }
-
     attached() {
 
         //Create the select2 dropdown
@@ -88,7 +82,6 @@ export class Select2Thing {
             }
         });
     };
-
     detached() {
         this.select2.select2('destroy');
     }

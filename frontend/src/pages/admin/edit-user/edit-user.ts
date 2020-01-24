@@ -6,6 +6,6 @@ export class Edituser {
     userId: number;
 
     activate(params) {
-        this.userId = params.id;
+        this.userId = params.id || null;
     }
 }

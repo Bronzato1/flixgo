@@ -4,6 +4,7 @@ import 'select2.min';
 @customElement('select2')
 @autoinject()
 export class Select2Thing {
+
     @bindable({ defaultBindingMode: bindingMode.twoWay }) name: string = 'select';
     @bindable({ defaultBindingMode: bindingMode.twoWay }) labelproperty: string = 'label';
     @bindable({ defaultBindingMode: bindingMode.twoWay }) valueproperty: string = 'value';
@@ -11,8 +12,11 @@ export class Select2Thing {
     @bindable({ defaultBindingMode: bindingMode.twoWay }) options: any[] = [];
     @bindable({ defaultBindingMode: bindingMode.twoWay, changeHandler: 'selectedIsChanged' }) selected: any = null;
 
-    select2 = null;
-    constructor(private element: Element) {
+    select2: any = null;
+    element: any;
+
+    constructor(element: Element) {
+        this.element = element;
     }
 
     selectedIsChanged() {

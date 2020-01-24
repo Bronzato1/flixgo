@@ -24,14 +24,21 @@ export class UserGateway {
             .then(response => response.json())
             .then(dto => {
                 return dto.map(User.fromObject);
+            }).catch((error) => {
+                console.log('Result ' + error.status + ': ' + error.statusText);
+                throw error;
             });
     }
     getById(id): Promise<User> {
         return this.httpClient.fetch(`api/user/${id}`)
             .then(response => response.json())
-            .then(User.fromObject);
+            .then(User.fromObject)
+            .catch((error) => {
+                console.log('Result ' + error.status + ': ' + error.statusText);
+                throw error;
+            });
     }
-    deleteById(id): Promise<void> {
+    deleteUser(id): Promise<void> {
         return this.httpClient.fetch(`api/user/${id}`, {
             method: 'delete'
         })
@@ -40,10 +47,24 @@ export class UserGateway {
             })
             .catch(error => {
                 console.log('Result ' + error.status + ': ' + error.statusText);
+                throw error;
             });
     }
-    updateById(user: User): Promise<void> {
-        var data = user;
+    createUser(user: User): Promise<void | User> {
+
+        return this.httpClient.fetch(`api/user`, {
+            method: 'post',
+            body: json(user)
+        })
+            .then(response => response.json())
+            .then(User.fromObject)
+            .catch(error => {
+                console.log('Result ' + error.status + ': ' + error.statusText);
+                throw error;
+            });
+    }
+    updateUser(user: User): Promise<void | User> {
+
         return this.httpClient.fetch(`api/user/${user.id}`, {
             method: 'put',
             body: json(user)
@@ -58,10 +79,20 @@ export class UserGateway {
     }
     approveUser(id) {
         var data = { userId: id };
-        return this.httpClient.fetch(`api/user/approveUser`, { method: 'POST', body: json(data) });
+        return this.httpClient.fetch(`api/user/approveUser`, {
+            method: 'POST', body: json(data)
+        }).catch((error) => {
+            console.log('Result ' + error.status + ': ' + error.statusText);
+            throw error;
+        });
     }
     banUser(id) {
         var data = { userId: id };
-        return this.httpClient.fetch(`api/user/banUser`, { method: 'POST', body: json(data) });
+        return this.httpClient.fetch(`api/user/banUser`, {
+            method: 'POST', body: json(data)
+        }).catch((error) => {
+            console.log('Result ' + error.status + ': ' + error.statusText);
+            throw error;
+        });
     }
 }

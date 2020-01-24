@@ -4,41 +4,57 @@ import { UserGateway } from 'gateways/user-gateway';
 import { User } from 'models/user-model';
 import { BindingEngine, autoinject, observable } from 'aurelia-framework';
 import { EventAggregator, Subscription } from 'aurelia-event-aggregator';
+import { Router } from 'aurelia-router';
 import 'jquery.magnific-popup.min';
-import { threadId } from 'worker_threads';
 
 @autoinject()
 export class SectionMainContent {
 
-    constructor(userGateway: UserGateway, eventAgregator: EventAggregator) {
+    constructor(userGateway: UserGateway, eventAgregator: EventAggregator, router: Router) {
         this.userGateway = userGateway;
         this.ea = eventAgregator;
+        this.router = router;
     }
 
     userGateway: UserGateway;
     ea: EventAggregator;
-    subscription: Subscription;
+    router: Router;
+    subscriptions: Subscription[] = [];
     userId: number;
     user: User;
     subscriptionOptions = [];
     rightsOptions = [];
 
-    async bind(params) {
-        this.userId = params.userId;
-        this.user = await this.userGateway.getById(this.userId);
+    wait = (ms) => new Promise(res => setTimeout(res, ms));
+
+    bind(params) {
+
+        if (params.userId)
+            this.userId = params.userId;
+
         this.eventAggregatorSubscription();
     }
     unbind() {
         this.eventAggregatorUnsubscription();
     }
     eventAggregatorSubscription() {
-        this.subscription = this.ea.subscribe('userToDelete', (userId) => this.deleteUser(userId));
-        this.subscription = this.ea.subscribe('statusChange', (userId) => this.statusChange(userId));
+        this.subscriptions.push(this.ea.subscribe('userToDelete', (userId) => this.deleteUser(userId)));
+        this.subscriptions.push(this.ea.subscribe('statusChange', (userId) => this.statusChange(userId)));
     }
     eventAggregatorUnsubscription() {
-        this.subscription.dispose();
+        this.subscriptions.forEach(x => x.dispose());
     }
-    attached() {
+    async attached() {
+
+        if (this.userId) {
+            await this.userGateway.getById(this.userId).then((data) => this.user = data);
+            await this.wait(10);
+        }
+        else {
+            this.user = new User();
+            this.user.status = 0; // Approved
+        }
+
         this.initializeSelect2Options();
         this.initializeMagnificPopup();
     }
@@ -102,56 +118,158 @@ export class SectionMainContent {
         }
     }
     saveChanges() {
-        this.userGateway.updateById(this.user)
-            .then(() => {
-                $.magnificPopup.open({
-                    fixedContentPos: true,
-                    fixedBgPos: true,
-                    overflowY: 'auto',
-                    type: 'inline',
-                    preloader: false,
-                    focus: '#username',
-                    modal: false,
-                    removalDelay: 300,
-                    mainClass: 'my-mfp-zoom-in',
-                    closeOnContentClick: true,
-                    items: {
-                        src: '#modal-saved'
-                    }
-                });
-            })
-            .catch((err) => {
-                $.magnificPopup.open({
-                    fixedContentPos: true,
-                    fixedBgPos: true,
-                    overflowY: 'auto',
-                    type: 'inline',
-                    preloader: false,
-                    focus: '#username',
-                    modal: false,
-                    removalDelay: 300,
-                    mainClass: 'my-mfp-zoom-in',
-                    closeOnContentClick: true,
-                    items: {
-                        src: '#modal-error'
-                    },
-                    callbacks: {
-                        beforeOpen: function () {
-                            var div = document.getElementById('errorMessage');
-                            div.innerHTML = err.status + ' ' + err.statusText;
+        
+        var self = this;
+
+        if (this.userId)
+
+            this.userGateway.updateUser(this.user)
+                .then(() => {
+                    $.magnificPopup.open({
+                        fixedContentPos: true,
+                        fixedBgPos: true,
+                        overflowY: 'auto',
+                        type: 'inline',
+                        preloader: false,
+                        focus: '#username',
+                        modal: false,
+                        removalDelay: 300,
+                        mainClass: 'my-mfp-zoom-in',
+                        closeOnContentClick: true,
+                        items: {
+                            src: '#modal-notification'
+                        },
+                        callbacks: {
+                            beforeOpen: function () {
+                                var h6 = document.getElementById('title-notification');
+                                h6.innerHTML = 'Data saved';
+                                var p = document.getElementById('text-notification');
+                                p.innerHTML = 'Data saved successfully in DB.<br/>Click anywhere to close this message';
+                            },
+                            afterClose: function () {
+                                self.router.navigate('user');
+                            }
                         }
-                    }
+                    });
+                })
+                .catch((err) => {
+                    $.magnificPopup.open({
+                        fixedContentPos: true,
+                        fixedBgPos: true,
+                        overflowY: 'auto',
+                        type: 'inline',
+                        preloader: false,
+                        focus: '#username',
+                        modal: false,
+                        removalDelay: 300,
+                        mainClass: 'my-mfp-zoom-in',
+                        closeOnContentClick: true,
+                        items: {
+                            src: '#modal-notification'
+                        },
+                        callbacks: {
+                            beforeOpen: function () {
+                                var h6 = document.getElementById('title-notification');
+                                h6.innerHTML = 'Error';
+                                var p = document.getElementById('text-notification');
+                                p.innerHTML = err.status + ' ' + err.statusText;
+                            }
+                        }
+                    });
                 });
-            });
+
+        else
+
+            this.userGateway.createUser(this.user)
+                .then(() => {
+                    $.magnificPopup.open({
+                        fixedContentPos: true,
+                        fixedBgPos: true,
+                        overflowY: 'auto',
+                        type: 'inline',
+                        preloader: false,
+                        focus: '#username',
+                        modal: false,
+                        removalDelay: 300,
+                        mainClass: 'my-mfp-zoom-in',
+                        closeOnContentClick: true,
+                        items: {
+                            src: '#modal-notification'
+                        },
+                        callbacks: {
+                            beforeOpen: function () {
+                                var h6 = document.getElementById('title-notification');
+                                h6.innerHTML = 'Data saved';
+                                var p = document.getElementById('text-notification');
+                                p.innerHTML = 'Data saved successfully in DB.<br/>Click anywhere to close this message';
+                            },
+                            afterClose: function () {
+                                self.router.navigate('user');
+                            }
+                        }
+                    });
+                })
+                .catch((err) => {
+                    $.magnificPopup.open({
+                        fixedContentPos: true,
+                        fixedBgPos: true,
+                        overflowY: 'auto',
+                        type: 'inline',
+                        preloader: false,
+                        focus: '#username',
+                        modal: false,
+                        removalDelay: 300,
+                        mainClass: 'my-mfp-zoom-in',
+                        closeOnContentClick: true,
+                        items: {
+                            src: '#modal-notification'
+                        },
+                        callbacks: {
+                            beforeOpen: function () {
+                                var h6 = document.getElementById('title-notification');
+                                h6.innerHTML = 'Error';
+                                var p = document.getElementById('text-notification');
+                                p.innerHTML = err.status + ' ' + err.statusText;
+                            }
+                        }
+                    });
+                });
     }
     changePassword() {
     }
     deleteUser(userId) {
+
+        var self = this;
+
         this.userGateway
-            .deleteById(userId)
+            .deleteUser(userId)
             .then(() => {
-                console.log(`User #${userId} deleted`);
-                this.user.status = 2; // Deleted
+                $.magnificPopup.open({
+                    fixedContentPos: true,
+                    fixedBgPos: true,
+                    overflowY: 'auto',
+                    type: 'inline',
+                    preloader: false,
+                    focus: '#username',
+                    modal: false,
+                    removalDelay: 300,
+                    mainClass: 'my-mfp-zoom-in',
+                    closeOnContentClick: true,
+                    items: {
+                        src: '#modal-notification'
+                    },
+                    callbacks: {
+                        beforeOpen: function () {
+                            var h6 = document.getElementById('title-notification');
+                            h6.innerHTML = 'User deleted';
+                            var p = document.getElementById('text-notification');
+                            p.innerHTML = 'User deleted in DB.<br/>Click anywhere to close this message';
+                        },
+                        afterClose: function () {
+                            self.router.navigate('user');
+                        }
+                    }
+                });
             })
             .catch((err) => console.log('Error: ' + err));
     }

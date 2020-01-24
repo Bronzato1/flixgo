@@ -10,8 +10,6 @@ import 'jquery.magnific-popup.min';
 @autoinject()
 export class SectionMainContent {
 
-    wait = (ms) => new Promise(res => setTimeout(res, ms));
-
     constructor(userGateway: UserGateway, eventAgregator: EventAggregator) {
         this.userGateway = userGateway;
         this.ea = eventAgregator;
@@ -19,15 +17,16 @@ export class SectionMainContent {
 
     userGateway: UserGateway;
     ea: EventAggregator;
-    subscription: Subscription;
+    subscriptions: Subscription[] = [];
     totalItems: User[];
     pagedItems: User[];
     pager: IPager;
-    loading: boolean;
     @observable()
     filter: string;
     @observable()
     sort: string;
+
+    wait = (ms) => new Promise(res => setTimeout(res, ms));
 
     created() {
     }
@@ -38,14 +37,13 @@ export class SectionMainContent {
         this.eventAggregatorUnsubscription();
     }
     eventAggregatorSubscription() {
-        this.subscription = this.ea.subscribe('userToDelete', (userId) => this.deleteUser(userId));
-        this.subscription = this.ea.subscribe('statusChange', (userId) => this.statusChange(userId));
+        this.subscriptions.push(this.ea.subscribe('userToDelete', (userId) => this.deleteUser(userId)));
+        this.subscriptions.push(this.ea.subscribe('statusChange', (userId) => this.statusChange(userId)));
     }
     eventAggregatorUnsubscription() {
-        this.subscription.dispose();
+        this.subscriptions.forEach((x) => x.dispose());
     }
     async attached() {
-        const wait = (ms) => new Promise(res => setTimeout(res, ms));
         await this.userGateway.getAll().then((data) => this.totalItems = data);
         this.setPage(1);
         this.filterSortEventHandler();
@@ -70,8 +68,9 @@ export class SectionMainContent {
         });
     }
     deleteUser(userId) {
+
         this.userGateway
-            .deleteById(userId)
+            .deleteUser(userId)
             .then(() => {
                 console.log(`User #${userId} deleted`);
                 var user = this.pagedItems.find(x => x.id == userId);

@@ -14,7 +14,7 @@ export class SectionModalDelete3 {
         var mp = $.magnificPopup.instance;
         var target = $(mp.currItem.el[0]);
         var userId = target.data('user-id');
-        this.ea.publish('userToDelete', userId);
         $.magnificPopup.close();
+        this.ea.publish('userToDelete', userId);
     }
 }

@@ -1,4 +1,4 @@
-export class Edituser {
+export class userDetail {
 
     constructor() {
     }

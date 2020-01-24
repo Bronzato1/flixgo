@@ -562,9 +562,24 @@ ul {
   width: 100%;
   margin-top: 20px;
 }
+.main__title-refresh {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  color: rgba(255,255,255,0.7);
+  font-size: 16px;
+  margin-top: 20px;
+}
+.main__title-refresh:hover {
+  color: #ff55a5;
+}
 .main__title-form {
   position: relative;
   margin-top: 20px;
+  margin-left: 20px;
 }
 .main__title-form input {
   border: none;
@@ -808,6 +823,9 @@ ul {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+  }
+  .main__title-refresh {
+    margin-top: 0;
   }
   .main__title-form {
     margin-top: 0;

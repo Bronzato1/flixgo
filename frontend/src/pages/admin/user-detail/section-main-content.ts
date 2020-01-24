@@ -4,21 +4,24 @@ import { UserGateway } from 'gateways/user-gateway';
 import { User } from 'models/user-model';
 import { BindingEngine, autoinject, observable } from 'aurelia-framework';
 import { EventAggregator, Subscription } from 'aurelia-event-aggregator';
+import { ValidationRules, ValidationController, ValidationControllerFactory, } from "aurelia-validation";
 import { Router } from 'aurelia-router';
 import 'jquery.magnific-popup.min';
 
 @autoinject()
 export class SectionMainContent {
 
-    constructor(userGateway: UserGateway, eventAgregator: EventAggregator, router: Router) {
+    constructor(userGateway: UserGateway, eventAgregator: EventAggregator, router: Router, validationController: ValidationControllerFactory) {
         this.userGateway = userGateway;
         this.ea = eventAgregator;
         this.router = router;
+        this.validationController = validationController.createForCurrentScope();
     }
 
     userGateway: UserGateway;
     ea: EventAggregator;
     router: Router;
+    validationController: ValidationController;
     subscriptions: Subscription[] = [];
     userId: number;
     user: User;
@@ -57,6 +60,7 @@ export class SectionMainContent {
 
         this.initializeSelect2Options();
         this.initializeMagnificPopup();
+        this.manageValidationRules();
     }
     initializeSelect2Options() {
 
@@ -91,6 +95,19 @@ export class SectionMainContent {
             $.magnificPopup.close();
         });
     }
+    manageValidationRules() {
+        ValidationRules
+            .ensure((x: User) => x.userName).required()
+            .ensure((x: User) => x.firstName).required()
+            .ensure((x: User) => x.lastName).required()
+            .ensure((x: User) => x.email).required()
+            .ensure((x: User) => x.status).required()
+            .ensure((x: User) => x.subscription).required()
+            .ensure((x: User) => x.rights).required()
+            .on(this.user);
+
+        this.validationController.addObject(this.user);
+    }
     getStatusText(status) {
         switch (status) {
             case 0:
@@ -117,9 +134,37 @@ export class SectionMainContent {
                 break;
         }
     }
-    saveChanges() {
-        
+    async saveChanges() {
+
         var self = this;
+        var validation = await this.validationController.validate();
+
+        if (!validation.valid) {
+            $.magnificPopup.open({
+                fixedContentPos: true,
+                fixedBgPos: true,
+                overflowY: 'auto',
+                type: 'inline',
+                preloader: false,
+                focus: '#username',
+                modal: false,
+                removalDelay: 300,
+                mainClass: 'my-mfp-zoom-in',
+                closeOnContentClick: true,
+                items: {
+                    src: '#modal-notification'
+                },
+                callbacks: {
+                    beforeOpen: function () {
+                        var h6 = document.getElementById('title-notification');
+                        h6.innerHTML = 'Validation failed';
+                        var p = document.getElementById('text-notification');
+                        p.innerHTML = 'Please check your changes before trying to save.';
+                    }
+                }
+            });
+            return;
+        }
 
         if (this.userId)
 
@@ -144,10 +189,10 @@ export class SectionMainContent {
                                 var h6 = document.getElementById('title-notification');
                                 h6.innerHTML = 'Data saved';
                                 var p = document.getElementById('text-notification');
-                                p.innerHTML = 'Data saved successfully in DB.<br/>Click anywhere to close this message';
+                                p.innerHTML = 'Data saved successfully in DB<br/>Click to close';
                             },
                             afterClose: function () {
-                                self.router.navigate('user');
+                                self.router.navigate('users');
                             }
                         }
                     });
@@ -201,10 +246,10 @@ export class SectionMainContent {
                                 var h6 = document.getElementById('title-notification');
                                 h6.innerHTML = 'Data saved';
                                 var p = document.getElementById('text-notification');
-                                p.innerHTML = 'Data saved successfully in DB.<br/>Click anywhere to close this message';
+                                p.innerHTML = 'Data saved successfully in DB<br/>Click to close';
                             },
                             afterClose: function () {
-                                self.router.navigate('user');
+                                self.router.navigate('users');
                             }
                         }
                     });
@@ -263,10 +308,10 @@ export class SectionMainContent {
                             var h6 = document.getElementById('title-notification');
                             h6.innerHTML = 'User deleted';
                             var p = document.getElementById('text-notification');
-                            p.innerHTML = 'User deleted in DB.<br/>Click anywhere to close this message';
+                            p.innerHTML = 'User deleted in DB<br/>Click to close';
                         },
                         afterClose: function () {
-                            self.router.navigate('user');
+                            self.router.navigate('users');
                         }
                     }
                 });

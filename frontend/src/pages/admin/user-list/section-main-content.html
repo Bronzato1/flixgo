@@ -30,6 +30,12 @@
 							</div>
 							<!-- end filter sort -->
 
+							<!-- refresh  -->
+							<a class="main__title-refresh" href="#" click.trigger="refresh()">
+								<i class="icon ion-ios-refresh"></i>
+							</a>
+							<!-- end refresh  -->
+
 							<!-- search -->
 							<form action="#" class="main__title-form">
 								<input type="text" placeholder="Find user..." value.bind="filter">
@@ -102,7 +108,8 @@
 												data-user-id="${user.id}">
 												<i class="icon ion-ios-lock"></i>
 											</a>
-											<a route-href="route: editUser; params.bind: { id: user.id }" class="main__table-btn main__table-btn--edit">
+											<a route-href="route: user; params.bind: { id: user.id }"
+												class="main__table-btn main__table-btn--edit">
 												<i class="icon ion-ios-create"></i>
 											</a>
 											<a href="#modal-delete"

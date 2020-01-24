@@ -1,7 +1,7 @@
 /// <reference path="../../../global.d.ts" />
 
 import { User } from 'models/user-model';
-import { UserGateway } from './../../../gateways/user-gateway';
+import { UserGateway } from '../../../gateways/user-gateway';
 import { autoinject, computedFrom, observable } from 'aurelia-framework';
 import { EventAggregator, Subscription } from 'aurelia-event-aggregator';
 import { IFilter, IPager } from '../../../interfaces/filter-interface';
@@ -244,5 +244,9 @@ export class SectionMainContent {
         }
 
         return filteredItems;
+    }
+    async refresh() {
+        await this.userGateway.getAll().then((data) => this.totalItems = data);
+        this.setPage(1);
     }
 }

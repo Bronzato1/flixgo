@@ -60,5 +60,3 @@ export class SigninGoogle extends ViewModelBase {
         function (err) { console.error("Execute error", err); });
   }
 }
-
-;

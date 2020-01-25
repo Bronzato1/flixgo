@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json.Linq;
 using API.Models;
+using System.Security.Claims;
 
 namespace API.Controllers
 {

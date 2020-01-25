@@ -9,6 +9,13 @@ export class User {
     public subscription: number;
     public rights: number;
 
+    public createdBy: string;
+    public updatedBy: string;
+    public deletedBy: string;
+    public createdTime: Date;
+    public updatedTime: Date;
+    public deletedTime: Date;
+
     static fromObject(src) {
         var tmpObj: User = Object.assign(new User(), src);
         return tmpObj;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -260,10 +261,10 @@ namespace API.Models
 
         public void DeleteUser(int id)
         {
-            var aut = _context.Users.Where(x => x.Id == id).SingleOrDefault();
-            if (aut != null)
+            var user = _context.Users.Where(x => x.Id == id).SingleOrDefault();
+            if (user != null)
             {
-                _context.Users.Remove(aut);
+                _context.Users.Remove(user);
                 _context.SaveChanges();
             }
         }

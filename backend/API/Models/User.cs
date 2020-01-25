@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -22,6 +23,13 @@ namespace API.Models
         public EnumSubscription Subscription { get; set; }
         [Required]
         public EnumRights Rights { get; set; }
+
+        public string CreatedBy { get; set; }
+        public string UpdatedBy { get; set; }
+        public string DeletedBy { get; set; }
+        public DateTime CreatedTime { get; set; }
+        public DateTime UpdatedTime { get; set; }
+        public DateTime DeletedTime { get; set; }
     }
 
     public enum EnumStatus {
